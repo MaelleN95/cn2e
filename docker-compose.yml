@@ -1,0 +1,51 @@
+services:
+  php:
+    container_name: cn2e-php
+    build:
+      context: ./docker/php
+    volumes:
+      - ./cn2e-app:/var/www/html
+    working_dir: /var/www/html
+    depends_on:
+      - mariadb
+
+  apache:
+    container_name: cn2e-apache
+    build:
+      context: ./docker/apache
+    ports:
+      - '8080:80'
+    volumes:
+      - ./cn2e-app:/var/www/html
+    depends_on:
+      - mariadb
+
+  mariadb:
+    container_name: cn2e-db
+    image: mariadb:10.11
+    restart: always
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker/mariadb/custom.cnf:/etc/mysql/conf.d/custom.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cn2e
+      MYSQL_USER: symfony
+      MYSQL_PASSWORD: symfony
+
+  phpmyadmin:
+    container_name: cn2e-phpmyadmin
+    image: phpmyadmin:latest
+    restart: always
+    ports:
+      - '8081:80'
+    environment:
+      PMA_HOST: cn2e-db
+      PMA_PORT: 3306
+      PMA_USER: symfony
+      PMA_PASSWORD: symfony
+    depends_on:
+      - mariadb
+
+volumes:
+  db_data:
