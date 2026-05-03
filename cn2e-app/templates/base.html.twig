@@ -21,7 +21,7 @@
     </head>
     <body class="min-h-screen flex flex-col">
         {% include 'layout/header.html.twig' %}
-        <main class="flex-1 pt-16">
+        <main class="flex-1 pt-16 selection:bg-primary selection:text-primary-foreground">
             {% block body %}{% endblock %}
         </main>
         {% include 'layout/footer.html.twig' %}
