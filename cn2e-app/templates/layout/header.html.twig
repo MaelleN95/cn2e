@@ -15,7 +15,12 @@
 
     <div class="flex justify-between items-center h-16">
 
-      <a href="/" class="flex items-center gap-3">
+      <a href="/" 
+        class="flex items-center gap-3 
+        {% if app.request.get('_route') == "app_home" %} 
+          pointer-events-none
+        {% endif %}"
+      >
         <div class="w-12 h-12 bg-primary rounded flex items-center justify-center">
           <span class="text-primary-foreground font-semibold">CN2E</span>
         </div>
@@ -27,7 +32,7 @@
           <a href="{{ path(link.route) }}"
              class="transition-colors
               {% if app.request.get('_route') == link.route %}
-                text-primary font-semibold
+                text-primary font-semibold pointer-events-none
               {% else %}
                 text-foreground hover:text-primary
               {% endif %}">
@@ -84,7 +89,7 @@
            data-action="click->mobile-menu#close"
            class="transition-colors
             {% if app.request.get('_route') == link.route %}
-              text-primary font-semibold
+              text-primary font-semibold pointer-events-none
             {% else %}
               text-foreground hover:text-primary
             {% endif %}">
