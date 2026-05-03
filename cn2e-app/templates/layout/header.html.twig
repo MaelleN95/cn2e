@@ -6,41 +6,97 @@
   { route: 'app_contact', label: 'Contact' }
 ] %}
 
-<header 
+<header
+  class="fixed top-0 left-0 w-full z-50 bg-white border-b border-border shadow-sm transition-transform duration-300"
   data-controller="scroll-header-movement mobile-menu"
   data-scroll-header-movement-target="header"
-  data-action="change->mobile-menu#toggleMenu"
 >
-  <div class="header-content">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-    <a href="{{ path('app_home') }}" class="logo">
-      <div class="logo-box">
-        <span class="logo-text">CN2E</span>
-      </div>
-    </a>
+    <div class="flex justify-between items-center h-16">
 
-    <nav data-mobile-menu-target="headerNavLinks">
+      <a href="/" class="flex items-center gap-3">
+        <div class="w-12 h-12 bg-primary rounded flex items-center justify-center">
+          <span class="text-primary-foreground font-semibold">CN2E</span>
+        </div>
+      </a>
+
+      {# Desktop #}
+      <nav class="hidden md:flex items-center gap-6">
+        {% for link in navLinks %}
+          <a href="{{ path(link.route) }}"
+             class="transition-colors
+              {% if app.request.get('_route') == link.route %}
+                text-primary font-semibold
+              {% else %}
+                text-foreground hover:text-primary
+              {% endif %}">
+            {{ link.label }}
+          </a>
+        {% endfor %}
+
+        <a href="#"
+           class="px-4 py-2 border border-primary text-primary rounded hover:bg-primary hover:text-white transition-colors">
+          Connexion
+        </a>
+      </nav>
+
+      {# Burger #}
+      <button
+        class="md:hidden p-2 cursor-pointer relative w-10 h-10 flex items-center justify-center"
+        data-mobile-menu-target="button"
+        data-action="click->mobile-menu#toggle"
+        aria-label="Menu"
+        aria-expanded="false"
+      >
+        <span class="relative w-6 h-6">
+          
+          <!-- Line 1 -->
+          <span
+            data-mobile-menu-target="line1"
+            class="absolute left-0 top-0 w-6 h-0.5 bg-foreground transition-all duration-300"
+          ></span>
+
+          <!-- Line 2 -->
+          <span
+            data-mobile-menu-target="line2"
+            class="absolute left-0 top-2.5 w-6 h-0.5 bg-foreground transition-all duration-300"
+          ></span>
+
+          <!-- Line 3 -->
+          <span
+            data-mobile-menu-target="line3"
+            class="absolute left-0 top-5 w-6 h-0.5 bg-foreground transition-all duration-300"
+          ></span>
+
+        </span>
+      </button>
+
+    </div>
+
+    {# Mobile menu #}
+    <nav
+      class="hidden md:hidden flex pb-4 flex-col gap-3 z-50"
+      data-mobile-menu-target="menu"
+    >
       {% for link in navLinks %}
         <a href="{{ path(link.route) }}"
-          class="nav-link
-          {% if app.request.get('_route') == link.route %} active {% endif %}"
-        >
+           data-action="click->mobile-menu#close"
+           class="transition-colors
+            {% if app.request.get('_route') == link.route %}
+              text-primary font-semibold
+            {% else %}
+              text-foreground hover:text-primary
+            {% endif %}">
           {{ link.label }}
         </a>
       {% endfor %}
 
-      <a href="#" class="nav-link connexion">Connexion</a>
+      <a href="/connexion"
+         data-action="click->mobile-menu#close"
+         class="text-primary hover:underline">
+        Connexion
+      </a>
     </nav>
-
-    <input type="checkbox" id="burger" data-mobile-menu-target="burger"/>
-    <label class="burger" for="burger">
-        <span></span>
-        <span></span>
-        <span></span>
-    </label>
-
-    <div class="header-overlay"
-        data-mobile-menu-target="overlay"
-        data-action="click->mobile-menu#closeMenu">
-    </div>
+  </div>
 </header>
