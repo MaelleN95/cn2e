@@ -1,0 +1,38 @@
+<nav class="bg-secondary py-3 px-4" aria-label="Fil d'Ariane">
+  <div class="max-w-7xl mx-auto">
+    
+    <ol class="flex items-center gap-2 text-sm">
+
+      {# Home #}
+      <li>
+        <a href="{{ path('app_home') }}" class="text-muted-foreground hover:text-primary transition-colors">
+          Accueil
+        </a>
+      </li>
+
+      {# Items dynamiques #}
+      {% for item in items %}
+        <li class="flex items-center gap-2">
+
+          {# ChevronRight (SVG Lucide équivalent) #}
+          <svg class="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+
+          {% if item.path is defined and item.path %}
+            <a href="{{ item.path }}" class="text-muted-foreground hover:text-primary transition-colors">
+              {{ item.label }}
+            </a>
+          {% else %}
+            <span class="text-foreground">
+              {{ item.label }}
+            </span>
+          {% endif %}
+
+        </li>
+      {% endfor %}
+
+    </ol>
+
+  </div>
+</nav>
