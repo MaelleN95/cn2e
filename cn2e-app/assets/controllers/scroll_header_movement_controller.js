@@ -5,29 +5,20 @@ export default class extends Controller {
 
   connect() {
     this.lastScroll = 0;
-    this.onScroll = this.handleScroll.bind(this);
-    window.addEventListener('scroll', this.onScroll)
+    window.addEventListener('scroll', this.onScroll.bind(this));
   }
 
-  disconnect() {
-    window.removeEventListener('scroll', this.onScroll);
-  }
+  onScroll() {
+    const current = window.scrollY;
 
-  handleScroll() {
-    const currentScroll = window.scrollY;
-
-    if (currentScroll <= 0) {
-      this.headerTarget.classList.remove('slide-up');
-      this.lastScroll = 0;
-      return;
-    }
-
-    if (currentScroll > this.lastScroll) {
-      this.headerTarget.classList.add('slide-up');
+    if (current < 50) {
+      this.headerTarget.classList.remove('-translate-y-full');
+    } else if (current > this.lastScroll) {
+      this.headerTarget.classList.add('-translate-y-full');
     } else {
-      this.headerTarget.classList.remove('slide-up');
+      this.headerTarget.classList.remove('-translate-y-full');
     }
 
-    this.lastScroll = currentScroll;
+    this.lastScroll = current;
   }
 }
