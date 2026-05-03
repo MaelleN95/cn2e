@@ -88,3 +88,107 @@
   font-weight: 900;
   src: url('../fonts/roboto/roboto-v51-latin-900.woff2') format('woff2');
 }
+
+
+html {
+  font-size: var(--font-size);
+  font-family: 'Roboto', sans-serif;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background-color: white;
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  transition: transform 0.3s ease;
+  z-index: 50;
+  padding: 0;
+}
+
+header.slide-up {
+  transform: translateY(-100%);
+}
+
+.header-content {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+  height: 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (min-width: 640px) {
+  .header-content {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .header-content {
+    padding: 0 2rem;
+  }
+}
+
+.logo-box {
+  width: 3rem;
+  height: 3rem;
+  background-color: var(--primary);
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-text {
+  color: var(--primary-foreground);
+  font-weight: 600;
+}
+
+header nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  transition: color 0.15s;
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  color: var(--primary);
+}
+
+.nav-link.active {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.connexion {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  border-radius: 0.25rem;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+
+.connexion:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+.burger {
+  display: none;
+}
+
+.header-overlay {
+  display: none;
+}
