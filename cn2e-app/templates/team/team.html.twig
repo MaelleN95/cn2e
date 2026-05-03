@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+{% include 'components/breadcrumb.html.twig' with {
+  items: [
+    { label: "L'équipe du CN2E" }
+  ]
+} %}
+
+<div class="max-w-7xl mx-auto px-4 py-12">
+
+  <div class="text-center mb-12">
+    <h1 class="mb-4">L'équipe du CN2E</h1>
+
+    <p class="text-muted-foreground max-w-3xl mx-auto">
+      Le CN2E réunit des représentants des établissements EREA, LEA et ERPD.
+      Ils contribuent aux travaux du comité et assurent le lien entre les établissements et les instances nationales.
+    </p>
+  </div>
+
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    {% for user in members %}
+      {% include 'components/team_member.html.twig' with {
+        prenom: user.firstName,
+        nom: user.lastName,
+        fonctionCN2E: user.cn2eRole,
+        etablissement: user.establishment ? user.establishment.name : null,
+        profession: user.profession,
+        photo: user.profilePicture,
+        email: user.email
+      } %}
+    {% endfor %}
+
+  </div>
+
+</div>
+
+{% endblock %}

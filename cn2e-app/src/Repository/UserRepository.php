@@ -32,4 +32,13 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
+
+    public function findCn2eMembers(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.isCn2eMember = true')
+            ->orderBy('u.lastName', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }
