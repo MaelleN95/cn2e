@@ -1,0 +1,47 @@
+{% set navLinks = [
+  { route: 'app_home', label: 'Accueil' },
+  { route: 'app_establishment', label: 'Établissements' },
+  { route: 'app_article', label: 'Actualités' },
+  { route: 'app_event', label: 'Agenda' },
+  { route: 'app_contact', label: 'Contact' }
+] %}
+
+<header 
+  data-controller="scroll-header-movement mobile-menu"
+  data-scroll-header-movement-target="header"
+  data-action="change->mobile-menu#toggleMenu"
+>
+  <div class="header-content">
+
+    <a href="{{ path('app_home') }}" class="logo">
+      <div class="logo-box">
+        <span class="logo-text">CN2E</span>
+      </div>
+    </a>
+
+    <nav data-mobile-menu-target="headerNavLinks">
+      {% for link in navLinks %}
+        <a href="{{ path(link.route) }}"
+          class="nav-link
+          {% if app.request.get('_route') == link.route %} active {% endif %}"
+        >
+          {{ link.label }}
+        </a>
+      {% endfor %}
+
+
+      {# @todo lien de connexion #}
+    </nav>
+
+    <input type="checkbox" id="burger" data-mobile-menu-target="burger"/>
+    <label class="burger" for="burger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </label>
+
+    <div class="header-overlay"
+        data-mobile-menu-target="overlay"
+        data-action="click->mobile-menu#closeMenu">
+    </div>
+</header>
