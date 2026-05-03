@@ -46,7 +46,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setFirstName($faker->firstName());
             $user->setLastName($faker->lastName());
             $user->setProfession($faker->randomElement($professions));
-            $user->setProfilePicture($faker->imageUrl(300, 300, 'people'));
+            $user->setProfilePicture('https://picsum.photos/200?random=' . $i);
 
             $user->setIsCn2eMember(true);
             $user->setCn2eRole($faker->randomElement($rolesCN2E));
