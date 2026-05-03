@@ -1,0 +1,110 @@
+<footer class="bg-primary text-primary-foreground py-12 px-4 mt-auto selection:bg-primary-foreground selection:text-primary">
+  <div class="max-w-7xl mx-auto">
+    
+    <div class="grid md:grid-cols-3 gap-8 mb-8">
+      
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 bg-white rounded flex items-center justify-center">
+            <span class="text-primary font-semibold text-sm">CN2E</span>
+          </div>
+          <span>Comité National des EREA/LEA et ERPD</span>
+        </div>
+
+        <p class="text-primary-foreground/80 text-sm mb-6">
+          Instance de coordination et de représentation de l'enseignement adapté
+        </p>
+
+        <div class="flex items-center gap-4">
+          <a
+            href="https://www.linkedin.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-primary-foreground/80 hover:text-white transition-colors"
+            aria-label="LinkedIn"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M4.98 3.5C4.98 4.88 3.87 6 2.49 6S0 4.88 0 3.5 1.11 1 2.49 1s2.49 1.12 2.49 2.5zM0 8h5v16H0V8zm7.5 0h4.8v2.2h.07c.67-1.27 2.3-2.6 4.73-2.6 5.05 0 6 3.3 6 7.6V24h-5v-7.5c0-1.8-.03-4.1-2.5-4.1-2.5 0-2.9 2-2.9 4v7.6h-5V8z"/>
+            </svg>
+          </a>
+
+          <a
+            href="https://www.instagram.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-primary-foreground/80 hover:text-white transition-colors"
+            aria-label="Instagram"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm5 5.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5zm0 7.5A3 3 0 1 0 9 12a3 3 0 0 0 3 3zm4.5-8.75a1.25 1.25 0 1 1-1.25-1.25 1.25 1.25 0 0 1 1.25 1.25z"/>
+            </svg>
+          </a>
+
+          <a
+            href="https://www.facebook.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-primary-foreground/80 hover:text-white transition-colors"
+            aria-label="Facebook"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M22 12a10 10 0 1 0-11.6 9.87v-6.99H7.9V12h2.5V9.8c0-2.47 1.47-3.84 3.73-3.84 1.08 0 2.2.19 2.2.19v2.42h-1.24c-1.22 0-1.6.76-1.6 1.54V12h2.72l-.43 2.88h-2.29v6.99A10 10 0 0 0 22 12z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="mb-4">Informations</h4>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a href="{{ path('app_contact') }}" class="text-primary-foreground/80 hover:text-white">
+              Contact
+            </a>
+          </li>
+          <li>
+            <a href="{{ path('app_legal_notice') }}" class="text-primary-foreground/80 hover:text-white">
+              Mentions légales
+            </a>
+          </li>
+          <li>
+            <a href="{{ path('app_privacy_policy') }}" class="text-primary-foreground/80 hover:text-white">
+              Politique de confidentialité
+            </a>
+          </li>
+          <li>
+            <a href="#" class="text-primary-foreground/80 hover:text-white">
+              Connexion administrateur
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="mb-4">Contact</h4>
+        <ul class="space-y-2 text-sm text-primary-foreground/80">
+          <li>Comité National des EREA/LEA - ERPD - CN2E</li>
+          <li>29 Rue de Cronstadt</li>
+          <li>75015 Paris</li>
+          <li>France</li>
+          <li>
+            <a href="mailto:secretariat.cn2e@gmail.com" class="hover:text-white">
+              secretariat.cn2e@gmail.com
+            </a>
+          </li>
+          <li>
+            <a href="tel:+33123456789" class="hover:text-white">
+              01 23 45 67 89
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="border-t border-primary-foreground/20 pt-8 text-center text-sm text-primary-foreground/80">
+      <p>&copy; {{ "now"|date("Y") }} CN2E - Tous droits réservés</p>
+    </div>
+
+  </div>
+</footer>
