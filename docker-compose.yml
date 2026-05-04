@@ -8,6 +8,10 @@ services:
     working_dir: /var/www/html
     depends_on:
       - mariadb
+    expose:
+      - "9000"
+    networks:
+      - cn2e-network
 
   apache:
     container_name: cn2e-apache
@@ -18,7 +22,10 @@ services:
     volumes:
       - ./cn2e-app:/var/www/html
     depends_on:
+      - php
       - mariadb
+    networks:
+      - cn2e-network
 
   mariadb:
     container_name: cn2e-db
@@ -32,6 +39,8 @@ services:
       MYSQL_DATABASE: cn2e
       MYSQL_USER: symfony
       MYSQL_PASSWORD: symfony
+    networks:
+      - cn2e-network
 
   phpmyadmin:
     container_name: cn2e-phpmyadmin
@@ -46,6 +55,12 @@ services:
       PMA_PASSWORD: symfony
     depends_on:
       - mariadb
+    networks:
+      - cn2e-network
 
 volumes:
   db_data:
+
+networks:
+  cn2e-network:
+    driver: bridge

@@ -1,15 +1,16 @@
-FROM php:8.4-apache
+FROM httpd:2.4-alpine
 
-RUN apt-get update && apt-get install -y \
-    libpng-dev libzip-dev libonig-dev libxml2-dev \
-    && docker-php-ext-install pdo pdo_mysql mysqli
+RUN sed -i \
+    -e 's|#LoadModule proxy_module modules/mod_proxy.so|LoadModule proxy_module modules/mod_proxy.so|' \
+    -e 's|#LoadModule proxy_fcgi_module modules/mod_proxy_fcgi.so|LoadModule proxy_fcgi_module modules/mod_proxy_fcgi.so|' \
+    -e 's|#LoadModule rewrite_module modules/mod_rewrite.so|LoadModule rewrite_module modules/mod_rewrite.so|' \
+    -e 's|#LoadModule headers_module modules/mod_headers.so|LoadModule headers_module modules/mod_headers.so|' \
+    /usr/local/apache2/conf/httpd.conf
 
-RUN a2enmod rewrite headers proxy proxy_fcgi
+RUN printf '\nServerName localhost\nDocumentRoot "/var/www/html/public"\n<Directory "/var/www/html/public">\n    AllowOverride All\n    Require all granted\n</Directory>\nDirectoryIndex index.php\n' >> /usr/local/apache2/conf/httpd.conf
 
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+RUN printf '\n<FilesMatch "\\.php$">\n    SetHandler "proxy:fcgi://cn2e-php:9000"\n</FilesMatch>\n' >> /usr/local/apache2/conf/httpd.conf
 
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
-    /etc/apache2/sites-available/*.conf
+EXPOSE 80
 
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' \
-    /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+CMD ["httpd", "-D", "FOREGROUND"]
