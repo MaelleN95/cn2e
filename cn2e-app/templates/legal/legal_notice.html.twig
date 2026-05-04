@@ -1,20 +1,155 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello LegalNoticeController!{% endblock %}
-
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+{% include 'components/breadcrumb.html.twig' with {
+  items: [
+    { label: 'Mentions légales' }
+  ]
+} %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/var/www/html/src/Controller/LegalController.php</code></li>
-        <li>Your template at <code>/var/www/html/templates/legal/legal_notice.html.twig</code></li>
-    </ul>
+<div class="max-w-4xl mx-auto px-4 py-12">
+
+  <h1 class="mb-8">Mentions légales</h1>
+
+  <div class="space-y-10 text-base leading-relaxed">
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">1. Éditeur du site</h2>
+
+      <div class="bg-accent p-6 rounded-lg">
+        <p class="mb-2">
+          <strong>Comité National des EREA/LEA et ERPD (CN2E)</strong>
+        </p>
+
+        <p class="text-muted-foreground mb-1">29 Rue de Cronstadt</p>
+        <p class="text-muted-foreground mb-1">75015 Paris</p>
+        <p class="text-muted-foreground mb-1">France</p>
+
+        <p class="text-muted-foreground mt-3">
+          Email :
+          <a href="mailto:secretariat.cn2e@gmail.com" class="text-primary hover:underline">
+            secretariat.cn2e@gmail.com
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">2. Responsable de la publication</h2>
+
+      <p class="text-muted-foreground mb-4">
+        La responsable de la publication est la présidente du CN2E ou toute personne habilitée.
+      </p>
+
+      <p class="text-muted-foreground">
+        La gestion éditoriale est assurée par les membres du CN2E et les directeurs des établissements partenaires.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">3. Conception et développement</h2>
+
+      <p class="text-muted-foreground mb-4">
+        Le site a été conçu et développé par une prestataire technique indépendante.
+      </p>
+
+      <div class="bg-accent p-6 rounded-lg">
+        <p class="mb-2"><strong>Prestataire technique</strong></p>
+        <p class="text-muted-foreground">
+          (À compléter)
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">4. Hébergement</h2>
+
+      <div class="bg-accent p-6 rounded-lg">
+        <p class="mb-2"><strong>Hébergeur</strong></p>
+        <p class="text-muted-foreground">(À compléter)</p>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">5. Propriété intellectuelle</h2>
+
+      <p class="text-muted-foreground mb-4">
+        L’ensemble des contenus du site est protégé par le droit de la propriété intellectuelle.
+      </p>
+
+      <p class="text-muted-foreground mb-4">
+        Sauf mention contraire, ces contenus sont la propriété du CN2E ou de ses partenaires.
+      </p>
+
+      <p class="text-muted-foreground">
+        Toute reproduction ou exploitation sans autorisation est interdite.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">6. Responsabilité</h2>
+
+      <p class="text-muted-foreground mb-4">
+        Le CN2E s’efforce de garantir l’exactitude des informations, mais des erreurs peuvent survenir.
+      </p>
+
+      <p class="text-muted-foreground mb-4">
+        Le CN2E ne peut être tenu responsable des dommages liés à l’utilisation du site.
+      </p>
+
+      <p class="text-muted-foreground">
+        Les contenus des établissements partenaires relèvent de leur responsabilité.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">7. Données personnelles</h2>
+
+      <p class="text-muted-foreground mb-4">
+        Les données sont traitées conformément au RGPD.
+      </p>
+
+      <p class="text-muted-foreground mb-4">
+        Elles servent uniquement au fonctionnement du site et aux réponses aux demandes.
+      </p>
+
+      <p class="text-muted-foreground mb-4">
+        Vous disposez de droits d’accès, rectification, suppression et limitation.
+      </p>
+
+      <p class="text-muted-foreground">
+        Contact :
+        <a href="mailto:secretariat.cn2e@gmail.com" class="text-primary hover:underline">
+          secretariat.cn2e@gmail.com
+        </a>
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">8. Cookies</h2>
+
+      <p class="text-muted-foreground">
+        Uniquement des cookies nécessaires au fonctionnement.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">9. Droit applicable</h2>
+
+      <p class="text-muted-foreground">
+        Droit français. Juridictions françaises compétentes.
+      </p>
+    </section>
+
+    <section class="bg-secondary p-6 rounded-lg mt-8">
+      <p class="text-sm text-muted-foreground">
+        <strong>Dernière mise à jour :</strong> Avril 2026
+      </p>
+    </section>
+
+  </div>
+
 </div>
+
 {% endblock %}

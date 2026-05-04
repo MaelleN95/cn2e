@@ -1,20 +1,161 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello PrivacyPolicyController!{% endblock %}
-
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+{% include 'components/breadcrumb.html.twig' with {
+  items: [
+    { label: 'Politique de confidentialité' }
+  ]
+} %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/var/www/html/src/Controller/LegalController.php</code></li>
-        <li>Your template at <code>/var/www/html/templates/legal/privacy_policy.html.twig</code></li>
-    </ul>
+<div class="max-w-4xl mx-auto px-4 py-12">
+
+  <div class="flex items-center gap-3 mb-6">
+    <svg class="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        d="M12 3l7 4v5c0 5-3.5 9.5-7 11-3.5-1.5-7-6-7-11V7l7-4z"/>
+    </svg>
+
+    <h1>Politique de confidentialité</h1>
+  </div>
+
+  <p class="text-lg text-muted-foreground mb-8">
+    Le CN2E s'engage à assurer la protection des données personnelles collectées via son site
+    et à garantir leur traitement conforme au Règlement Général sur la Protection des Données (RGPD).
+  </p>
+
+  <div class="space-y-10 text-base leading-relaxed">
+
+    <section>
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-primary">🗄️</span>
+        <h2 class="text-2xl font-semibold">1. Données collectées</h2>
+      </div>
+
+      <h3 class="text-xl font-semibold mt-6 mb-3">1.1 Formulaire de contact</h3>
+      <p class="text-muted-foreground mb-4">
+        Lors de l’utilisation du formulaire de contact, les données suivantes peuvent être collectées :
+      </p>
+
+      <ul class="list-disc ml-6 space-y-2 text-muted-foreground">
+        <li>Nom</li>
+        <li>Prénom</li>
+        <li>Adresse email</li>
+        <li>Message</li>
+      </ul>
+
+      <h3 class="text-xl font-semibold mt-6 mb-3">1.2 Création de compte professionnel</h3>
+      <p class="text-muted-foreground mb-4">
+        Lors d’une demande de création de compte, les informations suivantes sont collectées :
+      </p>
+
+      <ul class="list-disc ml-6 space-y-2 text-muted-foreground">
+        <li>Nom et prénom</li>
+        <li>Adresse email professionnelle</li>
+        <li>Mot de passe (stocké de manière chiffrée)</li>
+        <li>Établissement de rattachement</li>
+        <li>Profession / fonction</li>
+      </ul>
+
+      <h3 class="text-xl font-semibold mt-6 mb-3">1.3 Données techniques</h3>
+      <ul class="list-disc ml-6 space-y-2 text-muted-foreground">
+        <li>Adresse IP</li>
+        <li>Données de navigation</li>
+        <li>Logs de connexion</li>
+      </ul>
+    </section>
+
+    <section>
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-primary">👁️</span>
+        <h2 class="text-2xl font-semibold">2. Finalités du traitement</h2>
+      </div>
+
+      <ul class="list-disc ml-6 space-y-2 text-muted-foreground">
+        <li>Répondre aux demandes via le formulaire de contact</li>
+        <li>Gérer les comptes utilisateurs professionnels</li>
+        <li>Permettre l’accès à l’espace membre</li>
+        <li>Assurer la gestion des établissements partenaires</li>
+        <li>Améliorer le fonctionnement du site</li>
+      </ul>
+    </section>
+
+    <section>
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-primary">🔒</span>
+        <h2 class="text-2xl font-semibold">3. Base légale</h2>
+      </div>
+
+      <ul class="list-disc ml-6 space-y-2 text-muted-foreground">
+        <li>Consentement (formulaire de contact)</li>
+        <li>Exécution d’un contrat (comptes utilisateurs)</li>
+        <li>Intérêt légitime du CN2E</li>
+      </ul>
+    </section>
+
+    <section>
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-primary">👤</span>
+        <h2 class="text-2xl font-semibold">4. Destinataires des données</h2>
+      </div>
+
+      <p class="text-muted-foreground">
+        Les données sont exclusivement accessibles aux membres habilités du CN2E.
+      </p>
+    </section>
+
+    <section>
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-primary">📄</span>
+        <h2 class="text-2xl font-semibold">5. Durée de conservation</h2>
+      </div>
+
+      <ul class="list-disc ml-6 space-y-2 text-muted-foreground">
+        <li>Formulaire de contact : 2 ans</li>
+        <li>Comptes utilisateurs : activité + 1 an</li>
+        <li>Données techniques : 12 mois</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">6. Sécurité</h2>
+      <p class="text-muted-foreground">
+        Des mesures techniques et organisationnelles sont mises en œuvre pour protéger les données.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">7. Vos droits</h2>
+      <p class="text-muted-foreground mb-4">
+        Accès, rectification, suppression, opposition, limitation et portabilité.
+      </p>
+
+      <a href="mailto:secretariat.cn2e@gmail.com" class="text-primary hover:underline">
+        secretariat.cn2e@gmail.com
+      </a>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">8. Cookies</h2>
+      <p class="text-muted-foreground">
+        Seuls des cookies techniques nécessaires sont utilisés.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">9. Réclamation</h2>
+      <p class="text-muted-foreground">
+        Réclamation possible auprès de la CNIL.
+      </p>
+    </section>
+
+    <section class="bg-secondary p-6 rounded-lg mt-8">
+      <p class="text-sm text-muted-foreground">
+        <strong>Dernière mise à jour :</strong> Avril 2026
+      </p>
+    </section>
+
+  </div>
 </div>
+
 {% endblock %}
