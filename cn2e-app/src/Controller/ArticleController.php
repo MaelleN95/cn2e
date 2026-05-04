@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Article;
 use App\Repository\ArticleRepository;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -15,6 +17,14 @@ final class ArticleController extends AbstractController
         return $this->render('article/index.html.twig', [
             'articles' => $repo->findRecentes(),
             'archivesCount' => $repo->countArchivees(),
+        ]);
+    }
+
+    #[Route('/actualites/article/{slug}', name: 'app_article_show')]
+    public function show(#[MapEntity(mapping: ['slug' => 'slug'])] Article $article): Response
+    {
+        return $this->render('article/show.html.twig', [
+            'article' => $article,
         ]);
     }
 

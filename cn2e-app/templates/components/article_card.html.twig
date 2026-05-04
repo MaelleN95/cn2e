@@ -1,4 +1,4 @@
-<a href="{{ path('app_article', { id: article.id }) }}"
+<a href="{{ path('app_article_show', { slug: article.slug }) }}"
    class="bg-white border border-border rounded overflow-hidden hover:shadow-md transition-shadow group">
 
   {% if article.image %}
@@ -54,10 +54,10 @@
         </div>
       {% endif %}
 
-    <span class="text-primary group-hover:underline text-sm">
+      <span class="text-primary inline-flex items-center gap-1 text-sm">
         <span class="group-hover:underline">Lire</span>
-        <span class="transition-transform group-hover:translate-x-1">→</span>
-    </span>
+        <span class="w-4 h-4 transition-transform group-hover:translate-x-1">→</span>
+      </span>
 
     </div>
   </div>
