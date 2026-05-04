@@ -20,6 +20,7 @@ class EstablishmentFixtures extends Fixture
 
             $type = $faker->randomElement($establishmentTypes);
             $e->setName($type . ' ' . $faker->city());
+            $e->setSlug($faker->slug());
             $e->setCity($faker->city());
             $e->setDepartment($faker->departmentNumber());
             $e->setRegion($faker->region());

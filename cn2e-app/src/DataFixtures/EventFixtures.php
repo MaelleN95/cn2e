@@ -37,6 +37,7 @@ class EventFixtures extends Fixture
             $end = (clone $start)->modify('+'.rand(1, 3).' days');
 
             $e->setTitle($faker->randomElement($eventTitles));
+            $e->setSlug($faker->slug());
             $e->setStartDate(\DateTimeImmutable::createFromMutable($start));
             $e->setEndDate(\DateTimeImmutable::createFromMutable($end));
             $e->setLocation($faker->city());
