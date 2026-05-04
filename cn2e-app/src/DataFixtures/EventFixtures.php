@@ -44,7 +44,7 @@ class EventFixtures extends Fixture
             $e->setTime($faker->time());
             $e->setShortDescription($faker->paragraph());
             $e->setContent($faker->text(800));
-            $e->setImage($faker->imageUrl(800, 600, 'conference'));
+            $e->setImage('https://picsum.photos/400?random=' . $i);
             $e->setCategory($faker->randomElement($categories));
             $e->setIsMembersOnly($faker->boolean());
             $e->setHasRegistration($faker->boolean());
