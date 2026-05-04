@@ -45,7 +45,7 @@
 
       {% for event in events %}
         <a href="{{ path('app_event_show', { slug: event.slug }) }}"
-           class="bg-white border border-border rounded overflow-hidden hover:shadow-md transition-shadow h-auto">
+           class="bg-white border border-border rounded overflow-hidden hover:shadow-md transition-shadow h-auto group">
 
           <div class="flex flex-col md:flex-row h-auto">
 
@@ -101,7 +101,7 @@
                 <img
                   src="{{ event.image }}"
                   alt="{{ event.title }}"
-                  class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 >
               </div>
             {% endif %}
