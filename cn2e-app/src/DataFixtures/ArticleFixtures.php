@@ -49,10 +49,14 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
             $a = new Article();
 
             $a->setTitle($faker->randomElement($titlePrefixes) . $faker->randomElement($titleSubjects));
-            $a->setPublishedAt(\DateTimeImmutable::createFromMutable($faker->dateTime()));
+            if ($i <= 20) {
+                $a->setPublishedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 year', 'now')));
+            } else {
+                $a->setPublishedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-5 years', 'now')));
+            }
             $a->setShortDescription($faker->paragraph());
             $a->setContent($faker->text(1000));
-            $a->setImage($faker->imageUrl(800, 600, 'education'));
+            $a->setImage('https://picsum.photos/300?random=' . $i);
             $a->setCategory($faker->randomElement($categories));
             $a->setIsMembersOnly($faker->boolean());
 
