@@ -19,10 +19,17 @@ final class ArticleController extends AbstractController
     }
 
     #[Route('/actualites/archives', name: 'app_article_archive')]
-    public function archive(): Response
+    public function archive(ArticleRepository $repo): Response
     {
-        return $this->render('article_archive/index.html.twig', [
-            'controller_name' => 'ArticleArchiveController',
+
+        $grouped = $repo->findArchiveesGroupedByYear();
+
+        $years = array_keys($grouped);
+        rsort($years);
+
+        return $this->render('article/index_archive.html.twig', [
+            'groupedArticlesByYear' => $grouped,
+            'years' => $years,
         ]);
     }
 }
