@@ -15,4 +15,29 @@ class EventRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Event::class);
     }
+
+    public function findUpcoming(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.startDate >= :now')
+            ->setParameter('now', new \DateTimeImmutable())
+            ->orderBy('e.startDate', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findPast(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.startDate < :now')
+            ->setParameter('now', new \DateTimeImmutable())
+            ->orderBy('e.startDate', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function isPast(Event $event): bool
+    {
+        return $event->getStartDate() < new \DateTimeImmutable();
+    }
 }

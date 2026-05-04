@@ -1,20 +1,123 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello EventController!{% endblock %}
+{% block title %}Agenda{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/var/www/html/src/Controller/EventController.php</code></li>
-        <li>Your template at <code>/var/www/html/templates/event/index.html.twig</code></li>
-    </ul>
+  {% include 'components/breadcrumb.html.twig' with {
+    items: [{ label: 'Agenda' }]
+  } %}
+
+  <div class="max-w-7xl mx-auto px-4 py-12">
+
+    <div class="text-center mb-12">
+      <h1 class="mb-4">Agenda</h1>
+      <p class="text-muted-foreground max-w-3xl mx-auto">
+        Retrouvez tous les événements, séminaires, formations et rencontres organisés par le CN2E et le réseau des EREA/LEA et ERPD.
+      </p>
+    </div>
+
+    <div class="flex justify-center mb-12">
+      <div class="inline-flex bg-secondary rounded p-1">
+
+        <a href="{{ path('app_event', { tab: 'a-venir' }) }}"
+           class="px-6 py-2 rounded transition-colors text-base font-medium leading-[1.5]
+           {{ activeTab == 'a-venir'
+              ? 'bg-white shadow-sm text-primary'
+              : 'text-muted-foreground hover:text-foreground' }}">
+          À venir
+        </a>
+
+        <a href="{{ path('app_event', { tab: 'passes' }) }}"
+           class="px-6 py-2 rounded transition-colors text-base font-medium leading-[1.5]
+           {{ activeTab == 'passes'
+              ? 'bg-white shadow-sm text-primary'
+              : 'text-muted-foreground hover:text-foreground' }}">
+          Passés
+        </a>
+
+      </div>
+    </div>
+
+    <div class="grid gap-6">
+
+      {% for event in events %}
+        <a href="{{ path('app_event_show', { slug: event.slug }) }}"
+           class="bg-white border border-border rounded overflow-hidden hover:shadow-md transition-shadow h-auto">
+
+          <div class="flex flex-col md:flex-row h-auto">
+
+            <div class="flex flex-col md:flex-row gap-6 p-6 flex-1">
+
+              <div class="md:w-32 flex-shrink-0">
+                <div class="bg-primary text-primary-foreground rounded p-4 text-center">
+                  <div class="text-3xl font-semibold">
+                    {{ event.startDate|date('d') }}
+                  </div>
+                  <div class="text-sm uppercase">
+                    {{ event.startDate|format_datetime(locale='fr', pattern='MMM') }}
+                  </div>
+                  <div class="text-sm">
+                    {{ event.startDate|date('Y') }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex-1">
+
+                {% if event.category %}
+                  <span class="inline-block bg-primary/10 text-primary px-3 py-1 rounded text-sm mb-3">
+                    {{ event.category }}
+                  </span>
+                {% endif %}
+
+                <h3 class="mb-3">{{ event.title }}</h3>
+
+                <div class="flex flex-wrap gap-4 text-sm text-muted-foreground mb-3">
+                  <span class="flex items-center gap-2">
+                    📍 {{ event.location }}
+                  </span>
+                  <span class="flex items-center gap-2">
+                    🕒 {{ event.time }}
+                  </span>
+                </div>
+
+                <p class="text-muted-foreground mb-4">
+                  {{ event.shortDescription }}
+                </p>
+
+                <span class="text-primary hover:underline">
+                  En savoir plus →
+                </span>
+
+              </div>
+
+            </div>
+
+            {% if event.image %}
+              <div class="md:w-80 aspect-[4/3] overflow-hidden bg-secondary">
+                <img
+                  src="{{ event.image }}"
+                  alt="{{ event.title }}"
+                  class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                >
+              </div>
+            {% endif %}
+
+          </div>
+
+        </a>
+      {% else %}
+        <div class="text-center py-12">
+          <p class="text-muted-foreground">Aucun événement pour le moment</p>
+        </div>
+      {% endfor %}
+
+    </div>
+
+  </div>
 </div>
+
 {% endblock %}
