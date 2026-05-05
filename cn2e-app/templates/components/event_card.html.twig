@@ -1,0 +1,75 @@
+<a href="{{ path('app_event_show', { slug: event.slug }) }}"
+    class="bg-white border border-border rounded overflow-hidden hover:shadow-md transition-shadow h-auto group">
+
+    <div class="flex flex-col md:flex-row h-auto">
+
+    <div class="flex flex-col md:flex-row gap-6 p-6 flex-1">
+
+        <div class="md:w-32 flex-shrink-0">
+        <div class="bg-primary text-primary-foreground rounded p-4 text-center">
+            <div class="text-3xl font-semibold">
+            {{ event.startDate|date('d') }}
+            </div>
+            <div class="text-sm uppercase">
+            {{ event.startDate|format_datetime(locale='fr', pattern='MMM') }}
+            </div>
+            <div class="text-sm">
+            {{ event.startDate|date('Y') }}
+            </div>
+        </div>
+        </div>
+
+        <div class="flex-1">
+
+        {% if event.category %}
+            <span class="inline-block bg-primary/10 text-primary px-3 py-1 rounded text-sm mb-3">
+            {{ event.category }}
+            </span>
+        {% endif %}
+
+        <h3 class="mb-3">{{ event.title }}</h3>
+
+        <div class="flex flex-wrap gap-4 text-sm text-muted-foreground mb-3">
+            <span class="flex items-center gap-2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="w-4 h-4">
+                <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/>
+                <circle cx="12" cy="10" r="3"/>
+            </svg>
+            {{ event.location }}
+            </span>
+            <span class="flex items-center gap-2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="w-4 h-4">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+            </svg>
+            {{ event.time }}
+            </span>
+        </div>
+
+        <p class="text-muted-foreground mb-4">
+            {{ event.shortDescription }}
+        </p>
+
+        <span class="text-primary hover:underline">
+            En savoir plus →
+        </span>
+
+        </div>
+
+    </div>
+
+    {% if event.image %}
+        <div class="md:w-80 aspect-[4/3] overflow-hidden bg-secondary">
+        <img
+            src="{{ event.image }}"
+            alt="{{ event.title }}"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        >
+        </div>
+    {% endif %}
+
+    </div>
+
+</a>

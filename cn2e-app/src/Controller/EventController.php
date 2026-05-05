@@ -9,12 +9,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 final class EventController extends AbstractController
 {
     #[Route('/agenda', name: 'app_event')]
     public function index(Request $request, EventRepository $repo): Response
     {
+
+        $isMember = false;
+        $user = $this->getUser();
+
+        if ($user instanceof UserInterface && method_exists($user, 'isCn2eMember')) {
+            $isMember = $user->isCn2eMember();
+        }
+
         $allowedTabs = ['a-venir', 'passes'];
 
         $tab = $request->query->get('tab', 'a-venir');
@@ -30,6 +39,7 @@ final class EventController extends AbstractController
         return $this->render('event/index.html.twig', [
             'events' => $events,
             'activeTab' => $tab,
+            'isMember' => $isMember
         ]);
     }
 
