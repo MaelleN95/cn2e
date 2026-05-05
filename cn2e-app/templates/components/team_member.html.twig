@@ -31,12 +31,23 @@
     <div class="flex-1 space-y-3 text-sm text-muted-foreground">
 
       <div class="flex items-start gap-2">
-        <span class="text-primary">💼</span>
+        <svg viewBox="0 0 24 24" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="mt-0.5 w-4 h-4 stroke-primary fill-none">
+          <path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          <rect x="2" y="6" width="20" height="14" rx="2"/>
+        </svg>
         <span>{{ profession }}</span>
       </div>
 
       <div class="flex items-start gap-2">
-        <span class="text-primary">🏫</span>
+        <svg viewBox="0 0 24 24" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="mt-0.5 w-4 h-4 stroke-primary fill-none">
+          <path d="M10 12h4"/>
+          <path d="M10 8h4"/>
+          <path d="M14 21v-3a2 2 0 0 0-4 0v3"/>
+          <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/>
+          <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/>
+        </svg>
         <span>{{ etablissement }}</span>
       </div>
 
@@ -46,7 +57,12 @@
             href="mailto:{{ email }}"
             class="flex items-center gap-1 text-primary hover:underline"
           >
-            ✉ {{ email }}
+            <svg viewBox="0 0 24 24" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="w-3 h-3 stroke-primary fill-none">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <path d="M22 6l-10 7L2 6"/>
+            </svg>
+            {{ email }}
           </a>
         </div>
       {% endif %}
