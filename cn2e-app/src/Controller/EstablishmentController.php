@@ -32,6 +32,10 @@ final class EstablishmentController extends AbstractController
     {
         $establishment = $repository->findOneBy(['slug' => $slug]);
 
+        if (!$establishment) {
+            throw $this->createNotFoundException('Établissement non trouvé');
+        }
+
         return $this->render('establishment/show.html.twig', [
             'establishment' => $establishment,
         ]);

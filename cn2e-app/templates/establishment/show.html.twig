@@ -1,0 +1,200 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ establishment.name }}{% endblock %}
+
+{% block body %}
+
+{% include 'components/breadcrumb.html.twig' with {
+  items: [
+    { label: 'Établissements', path: path('app_establishment') },
+    { label: establishment.name }
+  ]
+} %}
+
+<div class="max-w-5xl mx-auto px-4 py-12">
+
+    <div class="mb-8">
+        <h1 class="mb-4">
+            {{ establishment.name }}
+        </h1>
+
+        <div class="flex flex-wrap gap-4 text-muted-foreground">
+
+            <span class="flex items-center gap-2">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"  stroke-width="2" -linecap="round" stroke-linejoin="round" aria-hidden="true" class="w-5 h-5">
+                    <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/>
+                    <circle cx="12" cy="10" r="3"/>
+                </svg>
+                {{ establishment.city }} ({{ establishment.department }})
+            </span>
+
+            <span>•</span>
+
+            <span>
+                {{ establishment.region }}
+            </span>
+
+        </div>
+    </div>
+
+    <section class="mb-12">
+        <h2 class="text-xl font-semibold mb-4">
+            Présentation
+        </h2>
+
+        <p class="text-muted-foreground leading-relaxed">
+            {{ establishment.description }}
+        </p>
+    </section>
+
+    <section class="mb-12">
+
+        <h2 class="text-xl font-semibold mb-6">
+            Formations proposées
+        </h2>
+
+        <div class="bg-white border border-border rounded-lg overflow-hidden">
+
+            <table class="w-full">
+
+                <thead class="bg-secondary">
+                    <tr>
+                        <th class="px-6 py-3 text-left">
+                            Niveau
+                        </th>
+                        <th class="px-6 py-3 text-left">
+                            Intitulé de la formation
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-border">
+
+                    {% for program in establishment.academicPrograms %}
+
+                        <tr class="hover:bg-secondary/50">
+
+                            <td class="px-6 py-4">
+                                <span class="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1 rounded">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="w-4 h-4">
+                                    <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/>
+                                    <path d="M22 10v6"/>
+                                    <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>
+                                    </svg>
+                                    {{ program.level }}
+                                </span>
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {{ program.title }}
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </section>
+
+    <section class="bg-accent p-8 rounded-lg">
+
+        <h2 class="text-xl font-semibold mb-6">
+            Coordonnées
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-6">
+
+            <div>
+
+                <div class="flex items-start gap-3 mb-4">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="w-5 h-5 text-primary mt-1">
+                    <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/>
+                    <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    <div>
+                        <p class="font-medium mb-1">Adresse</p>
+                        <p class="text-muted-foreground">
+                            {{ establishment.address }}
+                        </p>
+                    </div>
+                </div>
+
+                {% if establishment.phone %}
+                    <div class="flex items-start gap-3 mb-4">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="w-5 h-5 text-primary mt-1">
+                        <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/>
+                        </svg>
+                        <div>
+                            <p class="font-medium mb-1">Téléphone</p>
+                            <a href="tel:{{ establishment.phone|replace({' ': ''}) }}"
+                                class="text-primary hover:underline">
+                                {{ establishment.phone }}
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+
+            <div>
+
+                {% if establishment.email %}
+                    <div class="flex items-start gap-3 mb-4">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="w-5 h-5 text-primary mt-1">
+                        <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/>
+                        <rect x="2" y="4" width="20" height="16" rx="2"/>
+                        </svg>
+                        <div>
+                            <p class="font-medium mb-1">Email</p>
+                            <a href="mailto:{{ establishment.email }}"
+                                class="text-primary hover:underline">
+                                {{ establishment.email }}
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if establishment.website %}
+                    <div class="flex items-start gap-3">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="w-5 h-5 text-primary mt-1">
+                        <path d="M15 3h6v6"/>
+                        <path d="M10 14 21 3"/>
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                        </svg>
+                        <div>
+                            <p class="font-medium mb-1">Site web</p>
+                            <a href="{{ establishment.website }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="text-primary hover:underline">
+                                {{ establishment.website }}
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <div class="mt-8">
+        <a href="{{ path('app_establishment') }}"
+            class="text-primary hover:underline">
+            ← Retour à la liste des établissements
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -53,7 +53,8 @@
     <turbo-frame id="results" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
         {% for establishment in establishments %}
             <a href="{{ path('app_establishment_show', {slug: establishment.slug}) }}"
-                class="bg-white border border-border rounded p-6 hover:shadow-md transition">
+                class="bg-white border border-border rounded p-6 hover:shadow-md transition"
+                data-turbo="false">
 
                 <div class="flex items-start gap-4">
 
