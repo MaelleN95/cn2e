@@ -68,4 +68,17 @@ class ArticleRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    /**
+     * Trouver les actualités publiques les plus récentes pour la page d’accueil
+     */
+    public function findLatestPublic(int $limit)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.isMembersOnly = false')
+            ->orderBy('a.publishedAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }
