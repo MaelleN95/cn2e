@@ -15,4 +15,24 @@ class EstablishmentRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Establishment::class);
     }
+
+    public function search(?string $search): array
+    {
+        $qb = $this->createQueryBuilder('e');
+
+        if ($search) {
+            $search = mb_strtolower($search);
+
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    'e.name LIKE :search',
+                    'e.city LIKE :search',
+                    'e.region LIKE :search'
+                )
+            )
+            ->setParameter('search', '%' . $search . '%');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

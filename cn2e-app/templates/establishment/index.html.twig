@@ -1,20 +1,103 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello EstablishmentController!{% endblock %}
+{% block title %}Les établissements{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+{% include 'components/breadcrumb.html.twig' with {
+    items: [{ label: 'Établissements' }]
+} %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/var/www/html/src/Controller/EstablishmentController.php</code></li>
-        <li>Your template at <code>/var/www/html/templates/establishment/index.html.twig</code></li>
-    </ul>
+<div class="max-w-7xl mx-auto px-4 py-12">
+
+    <div class="text-center mb-12">
+        <h1 class="mb-4">
+            Les établissements EREA/LEA et ERPD
+        </h1>
+        <p class="text-muted-foreground max-w-3xl mx-auto">
+            Découvrez le réseau national des établissements régionaux d'enseignement adapté (EREA), des lycée d’enseignement adapté (LEA)
+            et des établissements régionaux du premier degré (ERPD).
+        </p>
+    </div>
+
+    {# @todo Carte #}
+    <div class="mb-12">
+        <div id="map" class="w-full h-[600px] bg-gray-100 rounded"></div>
+    </div>
+
+    <div class="mb-8">            
+            <form method="get"
+                data-turbo-frame="results"
+                data-controller="search"
+                data-search-delay-value="300"
+                data-search-min-length-value="2"
+                data-action="input->search#submit keydown.enter->search#submit"
+                class="relative max-w-xl mx-auto"
+            >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground">
+                <path d="m21 21-4.34-4.34"/>
+                <circle cx="11" cy="11" r="8"/>
+                </svg>
+                <input
+                    data-search-target="query"
+                    type="text"
+                    name="q"
+                    value="{{ search }}"
+                    placeholder="Rechercher par nom ou ville..."
+                    class="w-full pl-12 pr-4 py-3 border rounded bg-white border-border focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition"
+                >
+            </form>
+    </div>
+
+    <turbo-frame id="results" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        {% for establishment in establishments %}
+            <a href="{{ path('app_establishment_show', {slug: establishment.slug}) }}"
+                class="bg-white border border-border rounded p-6 hover:shadow-md transition">
+
+                <div class="flex items-start gap-4">
+
+                    <div class="w-12 h-12 bg-primary/10 rounded flex items-center justify-center">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                            class="w-6 h-6 text-primary">
+                            <path d="M10 12h4"/>
+                            <path d="M10 8h4"/>
+                            <path d="M14 21v-3a2 2 0 0 0-4 0v3"/>
+                            <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/>
+                            <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/>
+                        </svg>
+                    </div>
+
+                    <div class="flex-1">
+                        <h3 class="font-semibold mb-2">
+                            {{ establishment.name }}
+                        </h3>
+
+                        <p class="text-muted-foreground text-sm mb-1 flex items-center justify-start">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"  stroke-width="2" -linecap="round" stroke-linejoin="round" aria-hidden="true" class="w-4 h-4 inline mr-1">
+                            <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/>
+                            <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                            {{ establishment.city }} ({{ establishment.department }})
+                        </p>
+
+                        <p class="text-muted-foreground text-sm">
+                            {{ establishment.region }}
+                        </p>
+                    </div>
+
+                </div>
+            </a>
+        {% endfor %}
+
+        {% if establishments is empty %}
+                <p class="text-muted-foreground text-center col-span-full py-12">
+                    Aucun établissement trouvé
+                </p>
+        {% endif %}
+    </turbo-frame>
+
+
 </div>
 {% endblock %}
