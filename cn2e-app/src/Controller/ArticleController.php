@@ -8,15 +8,24 @@ use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 final class ArticleController extends AbstractController
 {
     #[Route('/actualites', name: 'app_article')]
     public function index(ArticleRepository $repo): Response
     {
+        $isMember = false;
+        $user = $this->getUser();
+
+        if ($user instanceof UserInterface && method_exists($user, 'isCn2eMember')) {
+            $isMember = $user->isCn2eMember();
+        }
+
         return $this->render('article/index.html.twig', [
             'articles' => $repo->findRecentes(),
             'archivesCount' => $repo->countArchivees(),
+            'isMember' => $isMember,
         ]);
     }
 
