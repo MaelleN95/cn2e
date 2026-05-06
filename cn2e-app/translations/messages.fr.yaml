@@ -1,0 +1,6 @@
+form:
+  contact:
+    name: "Nom"
+    email: "Email"
+    objectMessage: "Objet"
+    message: "Message"

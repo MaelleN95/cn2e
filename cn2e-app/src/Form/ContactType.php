@@ -23,22 +23,26 @@ class ContactType extends AbstractType
 
         $builder
             ->add('name', TextType::class, [
+                'label' => 'form.contact.name',
                 'constraints' => [
                     new Assert\NotBlank(),
                 ],
             ])
             ->add('email', EmailType::class, [
+                'label' => 'form.contact.email',
                 'constraints' => [
                     new Assert\NotBlank(),
                     new Assert\Email(),
                 ],
             ])
             ->add('objectMessage', TextType::class, [
+                'label' => 'form.contact.objectMessage',
                 'constraints' => [
                     new Assert\NotBlank(),
                 ],
             ])
             ->add('message', TextareaType::class, [
+                'label' => 'form.contact.message',
                 'constraints' => [
                     new Assert\NotBlank(),
                     new Assert\Length(['min' => 10]),
