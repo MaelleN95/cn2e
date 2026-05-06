@@ -24,7 +24,7 @@ final class ContactController extends AbstractController
             $data = $form->getData();
 
             $email = (new TemplatedEmail())
-                ->from(new Address($_ENV['CONTACT_FROM'], 'Site CN2E'))
+                ->from(new Address($_ENV['CONTACT_FROM'], 'Formulaire de contact CN2E'))
                 ->replyTo(new Address($data['email'], $data['name']))
                 ->to(new Address($_ENV['CONTACT_TO']))
                 ->subject($data['objectMessage'])
