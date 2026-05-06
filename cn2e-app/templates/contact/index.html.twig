@@ -45,7 +45,26 @@
         {{ form_row(form.name) }}
         {{ form_row(form.email) }}
         {{ form_row(form.objectMessage) }}
-        {{ form_row(form.message) }}
+        <div data-controller="char-counter" data-char-counter-max-value="3000" class="space-y-2">
+          {{ form_label(form.message) }}
+          {{ form_widget(form.message, {
+            attr: {
+              'data-char-counter-target': 'input',
+              'data-action': 'input->char-counter#input',
+              'rows': 6,
+              'class': (form.message.vars.attr.class|default('') ~ ' w-full px-4 py-3 border rounded-lg bg-white focus:outline-none focus:ring-2 ' ~ (form.message.vars.errors|length ? ' !border-red-500 focus:ring-red-500 ' : '!border-border focus:ring-primary'))|trim,
+            }
+          }) }}
+
+          <div class="flex justify-between text-sm text-muted-foreground">
+            <span>Maximum 3000 caractères</span>
+            <span>
+              <span data-char-counter-target="count">0</span> / 3000
+            </span>
+          </div>
+
+          {{ form_errors(form.message) }}
+        </div>
         {# Honeypot caché #}
         <div class="hidden">
           {{ form_widget(form.website) }}

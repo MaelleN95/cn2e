@@ -94,7 +94,7 @@ class ContactType extends AbstractType
                     new Assert\NotBlank(),
                     new Assert\Length([
                         'min' => 10,
-                        'max' => 2000,
+                        'max' => 3000,
                         'minMessage' => 'form.contact.message_min_length',
                         'maxMessage' => 'form.contact.message_max_length',
                     ]),
