@@ -1,0 +1,11 @@
+form:
+  contact:
+    name_min_length: "Le nom doit comporter au moins {{ limit }} caractères."
+    name_max_length: "Le nom ne peut pas dépasser {{ limit }} caractères."
+    email_min_length: "L'email doit comporter au moins {{ limit }} caractères."
+    email_max_length: "L'email ne peut pas dépasser {{ limit }} caractères."
+    objectMessage_min_length: "L'objet du message doit comporter au moins {{ limit }} caractères."
+    objectMessage_max_length: "L'objet du message ne peut pas dépasser {{ limit }} caractères."
+    message_min_length: "Le message doit comporter au moins {{ limit }} caractères."
+    message_max_length: "Le message ne peut pas dépasser {{ limit }} caractères."
+    no_links: "Les liens ne sont pas autorisés dans ce champ."
