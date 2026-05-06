@@ -38,7 +38,13 @@ final class FormSecuritySubscriber implements EventSubscriberInterface
         try {
             $this->securityGuard->check($request, $form);
         } catch (AccessDeniedHttpException $e) {
-            $form->addError(new FormError('Soumission refusée'));
+            $form->addError(new FormError(
+                'Une erreur est survenue lors de la soumission du formulaire. Veuillez réessayer plus tard.',
+                null,
+                [],
+                null,
+                $e
+            ));
         }
     }
 }
