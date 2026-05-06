@@ -51,12 +51,8 @@ final class FormSecurityGuard
 
         $elapsed = time() - (int) $start;
 
-        if ($elapsed < 3) {
+        if ($elapsed < 2) {
             throw new AccessDeniedHttpException('Form submitted too fast');
-        }
-
-        if ($elapsed > 3600) {
-            throw new AccessDeniedHttpException('Form expired');
         }
     }
 
