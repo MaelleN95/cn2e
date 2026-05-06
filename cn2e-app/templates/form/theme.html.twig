@@ -1,0 +1,56 @@
+{# INPUT TEXT / EMAIL #}
+{% block form_row %}
+  {% set hasError = form.vars.errors|length > 0 %}
+  <div>
+    {{ form_label(form, null, { label_attr: { class: 'block mb-2' } }) }}
+
+    {{ form_widget(form, {
+      attr: form.vars.attr|merge({
+        class: (
+          form.vars.attr.class|default('') ~
+          ' w-full px-4 py-3 border rounded-lg bg-white focus:outline-none focus:ring-2 ' ~
+          (hasError
+            ? 'border-red-500 focus:ring-red-500'
+            : 'border-border focus:ring-primary'
+          )
+        )|trim
+      })
+    }) }}
+
+    {{ form_errors(form) }}
+  </div>
+{% endblock %}
+
+
+{# TEXTAREA #}
+{% block textarea_widget %}
+  <textarea
+    {{ block('widget_attributes') }}
+    class="w-full px-4 py-3 border border-border rounded bg-white focus:outline-none focus:ring-2 focus:ring-primary"
+  >{{ value }}</textarea>
+{% endblock %}
+
+
+{# LABEL #}
+{% block form_label %}
+  {% if label is not same as(false) %}
+    <label {{ block('attributes') }} class="block mb-2">
+      {{ label|trans }}
+      {% if required %}
+        <span class="text-destructive">*</span>
+      {% endif %}
+    </label>
+  {% endif %}
+{% endblock %}
+
+
+{# ERRORS #}
+{% block form_errors %}
+  {% if errors|length > 0 %}
+    <div class="text-sm text-red-600 mt-1">
+      {% for error in errors %}
+        <div>{{ error.message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}
