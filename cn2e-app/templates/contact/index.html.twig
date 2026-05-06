@@ -8,26 +8,30 @@
 
 <div class="max-w-7xl mx-auto px-4 py-12">
 
+  {# HEADER #}
   <div class="text-center mb-12">
     <h1 class="mb-4">Nous contacter</h1>
     <p class="text-muted-foreground max-w-3xl mx-auto">
-      Vous êtes professionnel de l'enseignement adapté ou partenaire ? Contactez-nous.
+      Vous êtes professionnel de l'enseignement adapté, partenaire institutionnel ou souhaitez obtenir
+      des informations sur le CN2E ? N'hésitez pas à nous contacter.
     </p>
   </div>
 
+  {# FLASH SUCCESS #}
   {% for message in app.flashes('success') %}
     <div class="mb-6 p-4 bg-green-100 text-green-800 rounded">
       {{ message }}
     </div>
   {% endfor %}
 
+  {# ERREURS FORM #}
   {% if form.vars.errors|length > 0 %}
     <div class="mb-6 p-4 bg-red-100 text-red-800 rounded">
-        <ul>
-            {% for error in form.vars.errors %}
-                <li>{{ error.message }}</li>
-            {% endfor %}
-        </ul>
+      <ul>
+        {% for error in form.vars.errors %}
+          <li>{{ error.message }}</li>
+        {% endfor %}
+      </ul>
     </div>
   {% endif %}
 
@@ -42,22 +46,109 @@
         {{ form_row(form.email) }}
         {{ form_row(form.objectMessage) }}
         {{ form_row(form.message) }}
-        {{ form_row(form.website) }}
-
+        {# Honeypot caché #}
+        <div class="hidden">
+          {{ form_widget(form.website) }}
+        </div>
+        {# Timing #}
         <input type="hidden" name="_form_start_time" value="{{ 'now'|date('U') }}">
 
-        <button class="w-full bg-primary text-primary-foreground px-6 py-3 rounded hover:bg-primary/90">
+        <button
+          type="submit"
+          class="w-full bg-primary text-primary-foreground px-6 py-3 rounde hover:bg-primary/90 transition-colors"
+        >
           Envoyer le message
         </button>
 
         <p class="text-sm text-muted-foreground">
-          Conformément au RGPD, vous disposez d’un droit d’accès, rectification et suppression.
+          Les informations recueillies font l'objet d'un traitement informatique destiné à répondre à
+          votre demande. Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et de
+          suppression de vos données.
         </p>
 
       {{ form_end(form) }}
-
     </div>
 
+    <div>
+      <h2 class="mb-6">Coordonnées</h2>
+
+      <div class="space-y-6">
+
+        {# Adresse #}
+        <div class="bg-accent p-6 rounde">
+          <div class="flex items-start gap-4 mb-4">
+            <svg class="w-6 h-6 text-primary flex-shrink-0 mt-1" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            <div>
+              <h3 class="mb-2">Adresse</h3>
+              <p class="text-muted-foreground">
+                Comité National des EREA/LEA et ERPD - CN2E<br>
+                29 Rue de Cronstadt<br>
+                75015 Paris<br>
+                France
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {# Email #}
+        <div class="bg-accent p-6 rounded">
+          <div class="flex items-start gap-4 mb-4">
+          <svg class="w-6 h-6 text-primary flex-shrink-0 mt-1" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/>
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+          </svg>
+            <div>
+              <h3 class="mb-2">Email</h3>
+              <a href="mailto:secretariat.cn2e@gmail.com" class="text-primary hover:underline">
+                secretariat.cn2e@gmail.com
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {# Téléphone #}
+        <div class="bg-accent p-6 rounded">
+          <div class="flex items-start gap-4">
+            <svg class="w-6 h-6 text-primary flex-shrink-0 mt-1" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/>
+            </svg>
+            <div>
+              <h3 class="mb-2">Téléphone</h3>
+              <a href="tel:+33123456789" class="text-primary hover:underline">
+                01 23 45 67 89
+              </a>
+              <p class="text-sm text-muted-foreground mt-2">
+                Du lundi au vendredi, de 9h à 17h
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {# Bloc membre #}
+        <div class="bg-primary/5 border border-primary/20 p-6 rounded">
+          <h3 class="mb-3">Professionnels de l'enseignement adapté</h3>
+          <p class="text-muted-foreground mb-4">
+            Vous êtes directeur, enseignant ou personnel d'un EREA/LEA ou ERPD ? Connectez-vous à votre espace
+            pour accéder aux ressources et services réservés aux membres du réseau.
+          </p>
+          <a href="/connexion" class="inline-flex text-primary items-center gap-1 group">
+            <span class="group-hover:underline">Accéder à l'espace membre</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true" class="w-4 h-4 transition-transform group-hover:translate-x-1">
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+
+      </div>
+    </div>
 
   </div>
 </div>
