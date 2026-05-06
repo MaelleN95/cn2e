@@ -8,8 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class ContactController extends AbstractController
 {
@@ -20,10 +20,6 @@ final class ContactController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            if ($form->get('honeypot')->getData()) {
-                return $this->redirectToRoute('app_contact');
-            }
 
             $data = $form->getData();
 
@@ -41,7 +37,7 @@ final class ContactController extends AbstractController
 
             $mailer->send($email);
 
-            $this->addFlash('success', 'Message envoyé');
+            $this->addFlash('success', 'Votre message a été envoyé avec succès. Nous vous répondrons dans les plus brefs délais.');
 
             return $this->redirectToRoute('app_contact');
         }

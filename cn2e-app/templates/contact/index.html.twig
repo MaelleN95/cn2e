@@ -21,6 +21,16 @@
     </div>
   {% endfor %}
 
+  {% if form.vars.errors|length > 0 %}
+    <div class="mb-6 p-4 bg-red-100 text-red-800 rounded">
+        <ul>
+            {% for error in form.vars.errors %}
+                <li>{{ error.message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+  {% endif %}
+
   <div class="grid lg:grid-cols-2 gap-12">
 
     <div>
@@ -32,10 +42,9 @@
         {{ form_row(form.email) }}
         {{ form_row(form.objectMessage) }}
         {{ form_row(form.message) }}
+        {{ form_row(form.website) }}
 
-        <div class="hidden">
-          {{ form_widget(form.honeypot) }}
-        </div>
+        <input type="hidden" name="_form_start_time" value="{{ 'now'|date('U') }}">
 
         <button class="w-full bg-primary text-primary-foreground px-6 py-3 rounded hover:bg-primary/90">
           Envoyer le message

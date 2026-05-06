@@ -2,18 +2,25 @@
 
 namespace App\Form;
 
+use App\EventSubscriber\FormSecuritySubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class ContactType extends AbstractType
 {
+    public function __construct(
+        private FormSecuritySubscriber $subscriber
+    ) {}
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $builder->addEventSubscriber($this->subscriber);
+
         $builder
             ->add('name', TextType::class, [
                 'constraints' => [
@@ -37,9 +44,14 @@ class ContactType extends AbstractType
                     new Assert\Length(['min' => 10]),
                 ],
             ])
-            ->add('honeypot', HiddenType::class, [
-                'mapped' => false,
+            // Champ caché anti-spam
+            ->add('website', HiddenType::class, [
                 'required' => false,
+                'mapped' => false,
+                'attr' => [
+                    'autocomplete' => 'off',
+                    'tabindex' => '-1',
+                ],
             ]);
     }
 }
