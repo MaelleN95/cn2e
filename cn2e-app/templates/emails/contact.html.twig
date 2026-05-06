@@ -1,7 +1,72 @@
-<h2>Nouveau message de contact</h2>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Nouveau message de contact</title>
+</head>
+<body style="margin:0; padding:0; background-color:#f5f5f5; font-family:Arial, sans-serif;">
 
-<p><strong>Nom :</strong> {{ name }}</p>
-<p><strong>Email :</strong> {{ userEmail }}</p>
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5; padding:40px 0;">
+    <tr>
+      <td align="center">
 
-<p><strong>Message :</strong></p>
-<p>{{ message|nl2br }}</p>
+        <!-- CONTAINER -->
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff; border-radius:8px; overflow:hidden;">
+
+          <!-- HEADER -->
+          <tr>
+            <td style="background:#0f172a; color:#ffffff; padding:20px 30px;">
+              <h1 style="margin:0; font-size:20px;">CN2E</h1>
+            </td>
+          </tr>
+
+          <!-- CONTENT -->
+          <tr>
+            <td style="padding:30px;">
+
+              <h2 style="margin-top:0; font-size:18px; color:#111827;">
+                Nouveau message de contact
+              </h2>
+
+              <!-- INFOS -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
+                <tr>
+                  <td style="padding:8px 0; color:#6b7280; width:120px;">Nom</td>
+                  <td style="padding:8px 0; color:#111827; font-weight:500;">{{ name }}</td>
+                </tr>
+                <tr>
+                  <td style="padding:8px 0; color:#6b7280;">Email</td>
+                  <td style="padding:8px 0;">
+                    <a href="mailto:{{ userEmail }}" style="color:#2563eb; text-decoration:none;">
+                      {{ userEmail }}
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- MESSAGE -->
+              <div style="margin-top:20px;">
+                <p style="margin-bottom:8px; color:#6b7280;">Message</p>
+                <div style="background:#f9fafb; border:1px solid #e5e7eb; padding:15px; border-radius:6px; color:#111827; line-height:1.5;">
+                  {{ message|nl2br }}
+                </div>
+              </div>
+
+            </td>
+          </tr>
+
+          <!-- FOOTER -->
+          <tr>
+            <td style="padding:20px 30px; background:#f9fafb; font-size:12px; color:#6b7280;">
+              Cet email a été envoyé depuis le formulaire de contact du site CN2E.
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
