@@ -1,0 +1,98 @@
+<div class="bg-white border border-border rounded-lg p-8">
+
+    <div class="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mx-auto mb-6">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             class="w-8 h-8 text-primary"
+             fill="none"
+             viewBox="0 0 24 24"
+             stroke="currentColor">
+            <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 11c1.657 0 3-1.343 3-3V7a3 3 0 10-6 0v1c0 1.657 1.343 3 3 3zm-7 9v-2a7 7 0 0114 0v2"/>
+        </svg>
+    </div>
+
+    <h2 class="text-center text-2xl font-semibold mb-6">
+        Connexion
+    </h2>
+
+    <form method="post" class="space-y-6">
+
+        {% if error %}
+            <div class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+        <div>
+            <label for="username" class="block mb-2">
+                Email
+            </label>
+
+            <input
+                type="email"
+                value="{{ last_username }}"
+                name="_username"
+                id="username"
+                autocomplete="email"
+                required
+                autofocus
+                class="w-full px-4 py-3 border border-border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+        </div>
+
+        <div>
+            <label for="password" class="block mb-2">
+                Mot de passe
+            </label>
+
+            <input
+                type="password"
+                name="_password"
+                id="password"
+                autocomplete="current-password"
+                required
+                class="w-full px-4 py-3 border border-border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+        </div>
+
+        <input
+            type="hidden"
+            name="_csrf_token"
+            value="{{ csrf_token('authenticate') }}"
+        >
+
+        <button
+            type="submit"
+            class="w-full bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
+        >
+            Se connecter
+        </button>
+
+        <div class="text-center">
+            <a href="#"
+               class="text-sm text-primary hover:underline">
+                Mot de passe oublié ?
+            </a>
+        </div>
+
+    </form>
+
+    <div class="mt-8 pt-6 border-t border-border text-center">
+
+        <p class="text-sm text-muted-foreground mb-2">
+            Vous n'avez pas encore de compte ?
+        </p>
+
+        <a
+            href="{{ path('app_register') }}"
+            data-turbo-frame="auth_frame"
+            class="text-primary hover:underline"
+        >
+            Demander la création d'un compte →
+        </a>
+
+    </div>
+
+</div>

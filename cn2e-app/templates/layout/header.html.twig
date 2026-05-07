@@ -14,17 +14,28 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
     <div class="flex justify-between items-center h-16">
+      
+      <div class="flex items-center gap-4">
 
-      <a href="/" 
-        class="flex items-center gap-3 
-        {% if app.request.get('_route') == "app_home" %} 
-          pointer-events-none
-        {% endif %}"
-      >
-        <div class="w-12 h-12 bg-primary rounded flex items-center justify-center">
-          <span class="text-primary-foreground font-semibold">CN2E</span>
-        </div>
-      </a>
+        <a href="/" 
+          class="flex items-center gap-3 
+          {% if app.request.get('_route') == 'app_home' %} 
+            pointer-events-none
+          {% endif %}"
+        >
+          <div class="w-12 h-12 bg-primary rounded flex items-center justify-center">
+            <span class="text-primary-foreground font-semibold">CN2E</span>
+          </div>
+        </a>
+
+        {% if app.user %}
+          <span class="text-primary hidden sm:block">
+            Bonjour, {{ app.user.firstName }} {{ app.user.lastName }}
+          </span>
+        {% endif %}
+
+      </div>
+      
 
       {# Desktop #}
       <nav class="hidden md:flex items-center gap-6">
@@ -40,10 +51,17 @@
           </a>
         {% endfor %}
 
-        <a href="#"
-           class="px-4 py-2 border border-primary text-primary rounded hover:bg-primary hover:text-white transition-colors">
-          Connexion
-        </a>
+        {% if app.user %}
+          <a href="{{ path('app_logout') }}"
+            class="px-4 py-2 border border-primary text-primary rounded hover:bg-primary hover:text-white transition-colors">
+            Déconnexion
+          </a>
+        {% else %}
+          <a href="{{ path('app_login') }}"
+            class="px-4 py-2 border border-primary text-primary rounded hover:bg-primary hover:text-white transition-colors">
+            Connexion
+          </a>
+        {% endif %}
       </nav>
 
       {# Burger #}
@@ -97,11 +115,19 @@
         </a>
       {% endfor %}
 
-      <a href="/connexion"
-         data-action="click->mobile-menu#close"
-         class="text-primary hover:underline">
-        Connexion
-      </a>
+      {% if app.user %}
+        <a href="{{ path('app_logout') }}"
+           data-action="click->mobile-menu#close"
+           class="text-primary hover:underline">
+          Déconnexion
+        </a>
+      {% else %}
+        <a href="{{ path('app_login') }}"
+           data-action="click->mobile-menu#close"
+           class="text-primary hover:underline">
+          Connexion
+        </a>
+      {% endif %}
     </nav>
   </div>
 </header>
