@@ -9,3 +9,7 @@ form:
     message_min_length: "Le message doit comporter au moins {{ limit }} caractères."
     message_max_length: "Le message ne peut pas dépasser {{ limit }} caractères."
     no_links: "Les liens ne sont pas autorisés dans ce champ."
+
+connexion:
+  email:
+    unique: "Cette adresse email est déjà utilisée."
