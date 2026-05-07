@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Espace membre{% endblock %}
+
+{% block body %}
+
+<div class="max-w-5xl mx-auto px-4 py-12">
+
+    {# Header #}
+    <div class="text-center mb-12">
+        <h1 class="mb-4 text-4xl font-bold">Espace membre</h1>
+
+        <p class="text-muted-foreground max-w-3xl mx-auto">
+            Réservé aux professionnels des EREA/ERPD et aux membres du CN2E
+        </p>
+    </div>
+
+    {# Toggle #}
+    <div class="flex justify-center mb-8">
+        <div class="inline-flex bg-secondary rounded-lg p-1">
+
+            <a
+                href="{{ path('app_login') }}"
+                data-turbo-frame="auth_frame"
+                class="
+                    px-6 py-2 rounded transition-colors
+                    {{ activeForm == 'login'
+                        ? 'bg-white shadow-sm text-primary hover:bg-white/90'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }}
+                "
+            >
+                Connexion
+            </a>
+
+            <a
+                href="{{ path('app_register') }}"
+                data-turbo-frame="auth_frame"
+                class="
+                    px-6 py-2 rounded transition-colors
+                    {{ activeForm == 'register'
+                        ? 'bg-white shadow-sm text-primary hover:bg-white/90'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }}
+                "
+            >
+                Demande de compte
+            </a>
+
+        </div>
+    </div>
+
+    <div class="max-w-xl mx-auto">
+
+            {% if activeForm == 'login' %}
+                {% include 'security/_login_form.html.twig' %}
+            {% else %}
+                {% include 'registration/_register_form.html.twig' %}
+            {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

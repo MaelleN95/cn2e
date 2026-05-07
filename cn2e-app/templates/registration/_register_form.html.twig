@@ -1,0 +1,46 @@
+<div class="bg-white border border-border rounded-lg p-8">
+
+    <h2 class="text-center text-2xl font-semibold mb-6">
+        Demande de création de compte
+    </h2>
+
+    {{ form_start(registrationForm, {
+        attr: {
+            class: 'space-y-6'
+        }
+    }) }}
+
+    <div class="grid md:grid-cols-2 gap-4">
+
+        {{ form_row(registrationForm.lastName) }}
+
+        {{ form_row(registrationForm.firstName) }}
+
+    </div>
+
+    {{ form_row(registrationForm.email) }}
+
+    {{ form_row(registrationForm.establishment) }}
+
+    {{ form_row(registrationForm.profession) }}
+
+    {{ form_row(registrationForm.requestMessage) }}
+
+    {{ form_row(registrationForm.plainPassword) }}
+
+    {{ form_row(registrationForm.agreeTerms) }}
+
+    <button
+        type="submit"
+        class="w-full bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
+    >
+        Envoyer la demande
+    </button>
+
+    <p class="text-sm text-muted-foreground text-center">
+        Votre demande sera examinée par l'équipe du CN2E.
+    </p>
+
+    {{ form_end(registrationForm) }}
+
+</div>
