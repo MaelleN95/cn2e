@@ -4,3 +4,15 @@ form:
     email: "Email"
     objectMessage: "Objet"
     message: "Message"
+
+  registration:
+    last_name: "Nom"
+    first_name: "Prénom"
+    email: "Email professionnel"
+    establishment: "Établissement"
+    profession: "Rôle / Fonction"
+    request_message: "Message (optionnel)"
+    password: "Mot de passe"
+    confirm_password: "Confirmer le mot de passe"
+    submit: "S'inscrire"
+    agree_terms: "J'accepte les conditions d'utilisation"

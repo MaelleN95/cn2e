@@ -9,7 +9,23 @@ form:
     message_min_length: "Le message doit comporter au moins {{ limit }} caractères."
     message_max_length: "Le message ne peut pas dépasser {{ limit }} caractères."
     no_links: "Les liens ne sont pas autorisés dans ce champ."
+  registration:
+    last_name_not_blank: "Le nom est obligatoire."
+    last_name_too_long: "Le nom ne peut pas dépasser {{ limit }} caractères."
+    first_name_not_blank: "Le prénom est obligatoire."
+    first_name_too_long: "Le prénom ne peut pas dépasser {{ limit }} caractères."
+    email_not_blank: "L'email est obligatoire."
+    invalid_email: "L'email n'est pas valide."
+    email_too_long: "L'email ne peut pas dépasser {{ limit }} caractères."
+    establishment_not_blank: "L'établissement est obligatoire."
+    profession_not_blank: "Le rôle / fonction est obligatoire."
+    request_message_too_long: "Le message de demande ne peut pas dépasser {{ limit }} caractères."
+    password_not_blank: "Le mot de passe est obligatoire."
+    password_too_long: "Le mot de passe ne peut pas dépasser {{ limit }} caractères."
+    password_compromised: "Ce mot de passe a été compromis dans une fuite de données. Veuillez en choisir un autre."
+    agree_terms: "Vous devez accepter les conditions d'utilisation."
 
 connexion:
   email:
     unique: "Cette adresse email est déjà utilisée."
+

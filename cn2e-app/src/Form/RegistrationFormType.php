@@ -23,7 +23,7 @@ final class RegistrationFormType extends AbstractType
         $builder
 
             ->add('lastName', TextType::class, [
-                'label' => 'Nom',
+                'label' => 'form.registration.last_name',
                 'constraints' => [
                     new Assert\NotBlank(),
                     new Assert\Length(max: 255),
@@ -31,7 +31,7 @@ final class RegistrationFormType extends AbstractType
             ])
 
             ->add('firstName', TextType::class, [
-                'label' => 'Prénom',
+                'label' => 'form.registration.first_name',
                 'constraints' => [
                     new Assert\NotBlank(),
                     new Assert\Length(max: 255),
@@ -39,7 +39,7 @@ final class RegistrationFormType extends AbstractType
             ])
 
             ->add('email', EmailType::class, [
-                'label' => 'Email professionnel',
+                'label' => 'form.registration.email',
                 'constraints' => [
                     new Assert\NotBlank(),
                     new Assert\Email(),
@@ -48,7 +48,7 @@ final class RegistrationFormType extends AbstractType
             ])
 
             ->add('establishment', EntityType::class, [
-                'label' => 'Établissement',
+                'label' => 'form.registration.establishment',
                 'class' => Establishment::class,
                 'choice_label' => 'name',
                 'placeholder' => 'Sélectionnez votre établissement',
@@ -58,7 +58,7 @@ final class RegistrationFormType extends AbstractType
             ])
 
             ->add('profession', ChoiceType::class, [
-                'label' => 'Rôle / Fonction',
+                'label' => 'form.registration.profession',
                 'placeholder' => 'Sélectionnez votre rôle',
                 'choices' => [
                     'Directeur / Directrice' => 'directeur',
@@ -76,7 +76,7 @@ final class RegistrationFormType extends AbstractType
             ->add('requestMessage', TextareaType::class, [
                 'mapped' => false,
                 'required' => false,
-                'label' => 'Message (optionnel)',
+                'label' => 'form.registration.request_message',
                 'attr' => [
                     'rows' => 4,
                     'placeholder' => 'Précisez votre demande ou votre besoin d\'accès',
@@ -104,7 +104,7 @@ final class RegistrationFormType extends AbstractType
 
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
-                'label' => 'J’accepte les conditions d’utilisation',
+                'label' => 'form.registration.agree_terms',
                 'constraints' => [
                     new Assert\IsTrue(
                         message: 'Vous devez accepter les conditions.'
