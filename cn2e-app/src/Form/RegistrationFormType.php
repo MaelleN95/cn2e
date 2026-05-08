@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,25 +26,42 @@ final class RegistrationFormType extends AbstractType
             ->add('lastName', TextType::class, [
                 'label' => 'form.registration.last_name',
                 'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Length(max: 255),
+                    new Assert\NotBlank([
+                        'message' => 'form.registration.last_name_not_blank',
+                    ]),
+                    new Assert\Length([
+                        'max' => 255,
+                        'maxMessage' => 'form.registration.last_name_too_long',
+                    ]),
                 ],
             ])
 
             ->add('firstName', TextType::class, [
                 'label' => 'form.registration.first_name',
                 'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Length(max: 255),
+                    new Assert\NotBlank([
+                        'message' => 'form.registration.first_name_not_blank',
+                    ]),
+                    new Assert\Length([
+                        'max' => 255,
+                        'maxMessage' => 'form.registration.first_name_too_long',
+                    ]),
                 ],
             ])
 
             ->add('email', EmailType::class, [
                 'label' => 'form.registration.email',
                 'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Email(),
-                    new Assert\Length(max: 180),
+                    new Assert\NotBlank([
+                        'message' => 'form.registration.email_not_blank',
+                    ]),
+                    new Assert\Email([
+                        'message' => 'form.registration.invalid_email',
+                    ]),
+                    new Assert\Length([
+                        'max' => 255,
+                        'maxMessage' => 'form.registration.email_too_long',
+                    ]),
                 ],
             ])
 
@@ -53,7 +71,9 @@ final class RegistrationFormType extends AbstractType
                 'choice_label' => 'name',
                 'placeholder' => 'Sélectionnez votre établissement',
                 'constraints' => [
-                    new Assert\NotBlank(),
+                    new Assert\NotBlank([
+                        'message' => 'form.registration.establishment_not_blank',
+                    ]),
                 ],
             ])
 
@@ -69,7 +89,9 @@ final class RegistrationFormType extends AbstractType
                     'Autre' => 'autre',
                 ],
                 'constraints' => [
-                    new Assert\NotBlank(),
+                    new Assert\NotBlank([
+                        'message' => 'form.registration.profession_not_blank',
+                    ]),
                 ],
             ])
 
@@ -82,24 +104,43 @@ final class RegistrationFormType extends AbstractType
                     'placeholder' => 'Précisez votre demande ou votre besoin d\'accès',
                 ],
                 'constraints' => [
-                    new Assert\Length(max: 3000),
+                    new Assert\Length([
+                        'max' => 3000,
+                        'maxMessage' => 'form.registration.request_message_too_long',
+                    ]),
                 ],
             ])
 
-            ->add('plainPassword', PasswordType::class, [
+            ->add('plainPassword', RepeatedType::class, [
+                'type' => PasswordType::class,
                 'mapped' => false,
-                'label' => 'Mot de passe',
-                'attr' => [
-                    'autocomplete' => 'new-password',
+                'invalid_message' => 'Les mots de passe ne correspondent pas.',
+                'first_options'  => [
+                    'label' => 'form.registration.password',
+                    'attr' => [
+                        'autocomplete' => 'new-password',
+                    ],
                 ],
-                // 'constraints' => [
-                //     new Assert\NotBlank(),
-                //     new Assert\Length(
-                //         min: 12,
-                //         max: 4096,
-                //         minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères.',
-                //     ),
-                // ],
+                'second_options' => [
+                    'label' => 'form.registration.confirm_password',
+                    'attr' => [
+                        'autocomplete' => 'new-password',
+                    ],
+                ],
+                'constraints' => [
+                    new Assert\NotBlank([
+                        'message' => 'form.registration.password_not_blank',
+                    ]),
+                    new Assert\Length([
+                        'min' => 6,
+                        'minMessage' => 'form.registration.password_too_short',
+                        'max' => 4096,
+                        'maxMessage' => 'form.registration.password_too_long',
+                    ]),
+                    new Assert\NotCompromisedPassword(
+                        message: 'form.registration.password_compromised'
+                    ),
+                ],
             ])
 
             ->add('agreeTerms', CheckboxType::class, [
@@ -107,7 +148,7 @@ final class RegistrationFormType extends AbstractType
                 'label' => 'form.registration.agree_terms',
                 'constraints' => [
                     new Assert\IsTrue(
-                        message: 'Vous devez accepter les conditions.'
+                        message: 'form.registration.agree_terms'
                     ),
                 ],
             ])
