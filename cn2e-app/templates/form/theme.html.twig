@@ -8,7 +8,7 @@
       attr: form.vars.attr|merge({
         class: (
           form.vars.attr.class|default('') ~
-          ' w-full px-4 py-3 border rounded-lg bg-white focus:outline-none focus:ring-2 ' ~
+          ' w-full px-4 py-3 border rounded bg-white focus:outline-none focus:ring-2 ' ~
           (hasError
             ? 'border-red-500 focus:ring-red-500'
             : 'border-border focus:ring-primary'

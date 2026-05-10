@@ -52,7 +52,7 @@
               'data-char-counter-target': 'input',
               'data-action': 'input->char-counter#input',
               'rows': 6,
-              'class': (form.message.vars.attr.class|default('') ~ ' w-full px-4 py-3 border rounded-lg bg-white focus:outline-none focus:ring-2 ' ~ (form.message.vars.errors|length ? ' !border-red-500 focus:ring-red-500 ' : '!border-border focus:ring-primary'))|trim,
+              'class': (form.message.vars.attr.class|default('') ~ ' w-full px-4 py-3 border rounded bg-white focus:outline-none focus:ring-2 ' ~ (form.message.vars.errors|length ? ' !border-red-500 focus:ring-red-500 ' : '!border-border focus:ring-primary'))|trim,
             }
           }) }}
 
@@ -74,7 +74,7 @@
 
         <button
           type="submit"
-          class="w-full bg-primary text-primary-foreground px-6 py-3 rounde hover:bg-primary/90 transition-colors"
+          class="w-full bg-primary text-primary-foreground px-6 py-3 rounde hover:bg-primary/80 transition-colors cursor-pointer"
         >
           Envoyer le message
         </button>
