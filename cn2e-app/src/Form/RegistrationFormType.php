@@ -69,7 +69,7 @@ final class RegistrationFormType extends AbstractType
                 'label' => 'form.registration.establishment',
                 'class' => Establishment::class,
                 'choice_label' => 'name',
-                'placeholder' => 'Sélectionnez votre établissement',
+                'placeholder' => 'form.registration.select_establishement',
                 'constraints' => [
                     new Assert\NotBlank([
                         'message' => 'form.registration.establishment_not_blank',
@@ -79,14 +79,14 @@ final class RegistrationFormType extends AbstractType
 
             ->add('profession', ChoiceType::class, [
                 'label' => 'form.registration.profession',
-                'placeholder' => 'Sélectionnez votre rôle',
+                'placeholder' => 'form.registration.select_profession',
                 'choices' => [
-                    'Directeur / Directrice' => 'directeur',
-                    'Enseignant(e)' => 'enseignant',
-                    'Personnel éducatif' => 'personnel-education',
-                    'Personnel administratif' => 'personnel-administratif',
-                    'Partenaire institutionnel' => 'partenaire',
-                    'Autre' => 'autre',
+                    'form.registration.profession_director' => 'director',
+                    'form.registration.profession_teacher' => 'teacher',
+                    'form.registration.profession_educational_staff' => 'educational_staff',
+                    'form.registration.profession_administrative_staff' => 'administrative_staff',
+                    'form.registration.profession_institutional_partner' => 'institutional_partner',
+                    'form.registration.profession_other' => 'other',
                 ],
                 'constraints' => [
                     new Assert\NotBlank([
@@ -101,7 +101,7 @@ final class RegistrationFormType extends AbstractType
                 'label' => 'form.registration.request_message',
                 'attr' => [
                     'rows' => 4,
-                    'placeholder' => 'Précisez votre demande ou votre besoin d\'accès',
+                    'placeholder' => 'form.registration.request_message_placeholder',
                 ],
                 'constraints' => [
                     new Assert\Length([
@@ -114,7 +114,7 @@ final class RegistrationFormType extends AbstractType
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'mapped' => false,
-                'invalid_message' => 'Les mots de passe ne correspondent pas.',
+                'invalid_message' => 'form.registration.password_mismatch',
                 'first_options'  => [
                     'label' => 'form.registration.password',
                     'attr' => [
