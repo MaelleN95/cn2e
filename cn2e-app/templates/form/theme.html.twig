@@ -54,3 +54,41 @@
     </div>
   {% endif %}
 {% endblock %}
+
+{# CHECKBOX #}
+{% block checkbox_row %}
+    {% set hasError = form.vars.errors|length > 0 %}
+
+    <div class="space-y-2">
+
+        <div class="flex items-center gap-3">
+
+            {{ form_widget(form, {
+                attr: {
+                    class: (
+                        'mt-1 h-4 w-4 rounded border ' ~
+                        (hasError
+                            ? 'border-red-500 text-red-500 focus:ring-red-500'
+                            : 'border-border text-primary focus:ring-primary'
+                        )
+                    )|trim
+                }
+            }) }}
+
+            <label
+                for="{{ form.vars.id }}"
+                class="leading-6 text-foreground cursor-pointer"
+            >
+                {{ form.vars.label|trans }}
+
+                {% if form.vars.required %}
+                    <span class="text-destructive">*</span>
+                {% endif %}
+            </label>
+
+        </div>
+
+        {{ form_errors(form) }}
+
+    </div>
+{% endblock %}
