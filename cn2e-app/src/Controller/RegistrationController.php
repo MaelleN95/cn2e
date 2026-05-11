@@ -3,13 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Enum\UserStatus;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -30,26 +33,62 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $plainPassword = $form->get('plainPassword')->getData();
 
-            // encode the plain password
-            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+            try {
+                $plainPassword = $form->get('plainPassword')->getData();
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+                // encoder le mot de passe et le stocker dans l'entité User
+                $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address($_ENV['CONTACT_FROM'], 'CN2E bot'))
-                    ->to((string) $user->getEmail())
-                    ->subject('Confirmez votre adresse email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
+                $user->setRoles(['ROLE_USER']);
+                $user->setIsVerified(false);
+                $user->setStatus(UserStatus::PENDING);
 
-            // do anything else you need here, like send an email
+                $entityManager->persist($user);
+                $entityManager->flush();
 
-            return $this->redirectToRoute('app_home');
+                // générer un token de confirmation d'email et envoyer l'email de confirmation
+                $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+                    (new TemplatedEmail())
+                        ->from(new Address($_ENV['CONTACT_FROM'], 'CN2E bot'))
+                        ->to((string) $user->getEmail())
+                        ->subject('Confirmez votre adresse email')
+                        ->htmlTemplate('registration/confirmation_email.html.twig')
+                );
+
+                $this->addFlash(
+                    'success',
+                    sprintf(
+                        '
+                        Votre compte a été créé avec succès.
+                        Un email de confirmation vous a été envoyé.<br>
+                        <a
+                            href="%s"
+                            class="mt-3 inline-flex text-sm font-medium underline hover:no-underline"
+                        >
+                            Vous n’avez pas reçu d’email ? Renvoyer un email
+                        </a>
+                        ',
+                        $this->generateUrl(
+                            'app_resend_verification_email',
+                            ['id' => $user->getId()]
+                        )
+                    )
+                );
+
+                return $this->redirectToRoute('app_login');
+
+            } catch (UniqueConstraintViolationException) {
+                $this->addFlash(
+                    'error',
+                    'Cette adresse email est déjà utilisée.'
+                );
+            } catch (TransportExceptionInterface) {
+                $this->addFlash(
+                    'warning',
+                    'Compte créé, mais impossible d’envoyer l’email de confirmation.'
+                );
+            }
         }
 
         return $this->render('security/auth.html.twig', [
@@ -66,20 +105,31 @@ class RegistrationController extends AbstractController
     ): Response {
         $id = $request->attributes->get('id');
 
-        if (!$id) {
-            dd('no id');
-            return $this->redirectToRoute('app_register');
-        }
-
         $user = $entityManager->getRepository(User::class)->find($id);
 
         if (!$user) {
-            dd('no user');
+            $this->addFlash(
+                'error',
+                'Utilisateur non trouvé.'
+            );
+
             return $this->redirectToRoute('app_register');
+        }
+
+        if ($user->isVerified()) {
+            $this->addFlash(
+                'info',
+                'Votre adresse email est déjà vérifiée.'
+            );
+
+            return $this->redirectToRoute('app_login');
         }
 
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $user);
+
+            // notifier le CN2E
+
         } catch (VerifyEmailExceptionInterface $exception) {
 
             $this->addFlash(
@@ -90,8 +140,54 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_register');
         }
 
-        $this->addFlash('success', 'Votre adresse email a bien été vérifiée.');
+        $this->addFlash('success', 'Votre adresse email a bien été vérifiée. Votre demande est maintenant en attente de validation par l’équipe du CN2E.');
 
         return $this->redirectToRoute('app_home');
+    }
+
+    #[Route('/verification/email/renvoyer/{id}', name: 'app_resend_verification_email')]
+    public function resendVerificationEmail(
+        Request $request,
+        User $user,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $id = $request->attributes->get('id');
+
+        $user = $entityManager->getRepository(User::class)->find($id);
+
+        if (!$user) {
+            $this->addFlash(
+                'error',
+                'Utilisateur non trouvé.'
+            );
+
+            return $this->redirectToRoute('app_register');
+        }
+
+        if ($user->isVerified()) {
+            $this->addFlash(
+                'info',
+                'Votre adresse email est déjà vérifiée.'
+            );
+
+            return $this->redirectToRoute('app_login');
+        }
+
+        $this->emailVerifier->sendEmailConfirmation(
+            'app_verify_email',
+            $user,
+            (new TemplatedEmail())
+                ->from(new Address($_ENV['CONTACT_FROM'], 'CN2E'))
+                ->to((string) $user->getEmail())
+                ->subject('Confirmez votre adresse email')
+                ->htmlTemplate('registration/confirmation_email.html.twig')
+        );
+
+        $this->addFlash(
+            'success',
+            'Un nouvel email de confirmation vous a été envoyé.'
+        );
+
+        return $this->redirectToRoute('app_login');
     }
 }

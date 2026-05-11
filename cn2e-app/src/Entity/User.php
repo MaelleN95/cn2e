@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\UserStatus;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -54,8 +55,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $lastLoginAt = null;
 
-    #[ORM\Column(options: ['default' => false])]
-    private ?bool $isAccepted = false;
+    #[ORM\Column(enumType: UserStatus::class)]
+    private UserStatus $status = UserStatus::PENDING;
 
     #[ORM\Column(options: ['default' => false])]
     private ?bool $isVerified = false;
@@ -252,14 +253,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isAccepted(): ?bool
+    public function getStatus(): UserStatus
     {
-        return $this->isAccepted;
+        return $this->status;
     }
 
-    public function setIsAccepted(bool $isAccepted): static
+    public function setStatus(UserStatus $status): static
     {
-        $this->isAccepted = $isAccepted;
+        $this->status = $status;
 
         return $this;
     }

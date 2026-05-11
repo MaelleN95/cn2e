@@ -21,6 +21,7 @@ form:
     profession_not_blank: "Le rôle / fonction est obligatoire."
     request_message_too_long: "Le message de demande ne peut pas dépasser {{ limit }} caractères."
     password_not_blank: "Le mot de passe est obligatoire."
+    password_too_short: "Le mot de passe doit comporter au moins {{ limit }} caractères."
     password_too_long: "Le mot de passe ne peut pas dépasser {{ limit }} caractères."
     password_compromised: "Ce mot de passe a été compromis dans une fuite de données. Veuillez en choisir un autre."
     password_mismatch: "Les mots de passe ne correspondent pas."

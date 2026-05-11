@@ -66,6 +66,8 @@
             </div>
         </div>
 
+        {{ dump(csrf_token('authenticate')) }}
+
         <input
             type="hidden"
             name="_csrf_token"

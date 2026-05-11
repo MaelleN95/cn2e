@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Establishment;
 use App\Entity\User;
+use App\Enum\UserStatus;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -53,7 +54,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setPhone($faker->phoneNumber());
 
             $user->setLastLoginAt(\DateTimeImmutable::createFromMutable($faker->dateTime()));
-            $user->setIsAccepted(true);
+            $user->setStatus(UserStatus::PENDING);
             $user->setIsVerified(true);
 
             $user->setPassword(
