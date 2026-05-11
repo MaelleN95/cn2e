@@ -6,7 +6,6 @@ use App\Entity\User;
 use App\Enum\UserStatus;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -50,10 +49,10 @@ class RegistrationController extends AbstractController
                 // générer un token de confirmation d'email et envoyer l'email de confirmation
                 $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                     (new TemplatedEmail())
-                        ->from(new Address($_ENV['CONTACT_FROM'], 'CN2E bot'))
+                        ->from(new Address($_ENV['CONTACT_FROM'], 'CN2E'))
                         ->to((string) $user->getEmail())
                         ->subject('Confirmez votre adresse email')
-                        ->htmlTemplate('registration/confirmation_email.html.twig')
+                        ->htmlTemplate('emails/confirmation_email.html.twig')
                 );
 
                 $this->addFlash(
@@ -78,16 +77,27 @@ class RegistrationController extends AbstractController
 
                 return $this->redirectToRoute('app_login');
 
-            } catch (UniqueConstraintViolationException) {
-                $this->addFlash(
-                    'error',
-                    'Cette adresse email est déjà utilisée.'
-                );
             } catch (TransportExceptionInterface) {
                 $this->addFlash(
                     'warning',
-                    'Compte créé, mais impossible d’envoyer l’email de confirmation.'
+                    sprintf(
+                        '
+                        Votre compte est créé. Cependant, l’email de validation n’a pas pu être envoyé.<br>
+                        <a
+                            href="%s"
+                            class="mt-3 inline-flex text-sm font-medium underline hover:no-underline"
+                        >
+                            Renvoyer un email
+                        </a>
+                        ',
+                        $this->generateUrl(
+                            'app_resend_verification_email',
+                            ['id' => $user->getId()]
+                        )
+                    )
                 );
+
+                return $this->redirectToRoute('app_register');
             }
         }
 
@@ -173,20 +183,29 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        $this->emailVerifier->sendEmailConfirmation(
-            'app_verify_email',
-            $user,
-            (new TemplatedEmail())
-                ->from(new Address($_ENV['CONTACT_FROM'], 'CN2E'))
-                ->to((string) $user->getEmail())
-                ->subject('Confirmez votre adresse email')
-                ->htmlTemplate('registration/confirmation_email.html.twig')
-        );
+        try {
 
-        $this->addFlash(
-            'success',
-            'Un nouvel email de confirmation vous a été envoyé.'
-        );
+            $this->emailVerifier->sendEmailConfirmation(
+                'app_verify_email',
+                $user,
+                (new TemplatedEmail())
+                    ->from(new Address($_ENV['CONTACT_FROM'], 'CN2E'))
+                    ->to((string) $user->getEmail())
+                    ->subject('Confirmez votre adresse email')
+                    ->htmlTemplate('emails/confirmation_email.html.twig')
+            );
+
+            $this->addFlash(
+                'success',
+                'Un nouvel email de confirmation vous a été envoyé.'
+            );
+
+        } catch (TransportExceptionInterface) {
+            $this->addFlash(
+                'error',
+                'Impossible d’envoyer l’email de confirmation. Nous sommes désolés. Veuillez réessayer plus tard.'
+            );
+        }
 
         return $this->redirectToRoute('app_login');
     }
