@@ -66,13 +66,7 @@
             </div>
         </div>
 
-        {{ dump(csrf_token('authenticate')) }}
-
-        <input
-            type="hidden"
-            name="_csrf_token"
-            value="{{ csrf_token('authenticate') }}"
-        >
+        <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
 
         <button
             type="submit"
@@ -98,7 +92,6 @@
 
         <a
             href="{{ path('app_register') }}"
-            data-turbo-frame="auth_frame"
             class="text-primary hover:underline"
         >
             Demander la création d'un compte →
