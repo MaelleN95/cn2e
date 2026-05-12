@@ -123,17 +123,16 @@ final class RegistrationFormType extends AbstractType
                 'type' => PasswordType::class,
                 'mapped' => false,
                 'invalid_message' => 'form.registration.password_mismatch',
-                'first_options'  => [
-                    'label' => 'form.registration.password',
+                'options' => [
                     'attr' => [
                         'autocomplete' => 'new-password',
                     ],
                 ],
+                'first_options'  => [
+                    'label' => 'form.registration.password',
+                ],
                 'second_options' => [
                     'label' => 'form.registration.confirm_password',
-                    'attr' => [
-                        'autocomplete' => 'new-password',
-                    ],
                 ],
                 'constraints' => [
                     new Assert\NotBlank([
