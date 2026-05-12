@@ -4,6 +4,18 @@
 
 {% block body %}
 
+{% if activeForm == 'login' %}
+    {% set labelText = 'Connexion' %}
+{% else %}
+    {% set labelText = 'Demande de création de compte' %}
+{% endif %}
+
+{% include 'components/breadcrumb.html.twig' with {
+  items: [
+    { label: labelText }
+  ]
+} %}
+
 <div class="max-w-5xl mx-auto px-4 py-12">
 
     {# Header #}

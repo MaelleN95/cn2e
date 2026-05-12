@@ -4,6 +4,13 @@
 
 {% block body %}
 
+{% include 'components/breadcrumb.html.twig' with {
+  items: [
+    { label: 'Connexion', path: path('app_login') },
+    { label: 'Mot de passe oublié', path: path('app_forgot_password_request') }
+  ]
+} %}
+
 <div class="max-w-5xl mx-auto px-4 py-12">
 
     <div class="text-center mb-12">
