@@ -43,6 +43,9 @@
 
     {{ form_widget(registrationForm.website) }}
 
+    {# Timing #}
+    <input type="hidden" name="_form_start_time" value="{{ 'now'|date('U') }}">
+
     <button
         type="submit"
         class="w-full bg-primary text-primary-foreground px-6 py-3 rounded hover:bg-primary/80 transition-colors cursor-pointer"
