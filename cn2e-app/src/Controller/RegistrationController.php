@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Enum\UserStatus;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
+use App\Service\Cn2eApprovalMailer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,8 +21,10 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
-    public function __construct(private EmailVerifier $emailVerifier)
-    {
+    public function __construct(
+        private EmailVerifier $emailVerifier,
+        private Cn2eApprovalMailer $cn2eApprovalMailer,
+    ) {
     }
 
     #[Route('/devenir-membre', name: 'app_register')]
@@ -42,6 +45,11 @@ class RegistrationController extends AbstractController
                 $user->setRoles(['ROLE_USER']);
                 $user->setIsVerified(false);
                 $user->setStatus(UserStatus::PENDING);
+
+                // Enregistrement du message optionnel
+                $user->setRequestMessage(
+                    $form->get('requestMessage')->getData()
+                );
 
                 $entityManager->persist($user);
                 $entityManager->flush();
@@ -138,7 +146,20 @@ class RegistrationController extends AbstractController
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $user);
 
-            // notifier le CN2E
+            $user->setValidationToken(
+                bin2hex(random_bytes(32))
+            );
+
+            $user->setValidationTokenExpiresAt(
+                new \DateTimeImmutable('+7 days')
+            );
+
+            $entityManager->flush();
+
+            $this->cn2eApprovalMailer->send(
+                $user,
+                $user->getRequestMessage()
+            );
 
         } catch (VerifyEmailExceptionInterface $exception) {
 

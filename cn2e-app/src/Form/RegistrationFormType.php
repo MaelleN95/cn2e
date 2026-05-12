@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Establishment;
 use App\Entity\User;
+use App\Enum\Profession;
 use App\EventSubscriber\FormSecuritySubscriber;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -88,14 +89,12 @@ final class RegistrationFormType extends AbstractType
             ->add('profession', ChoiceType::class, [
                 'label' => 'form.registration.profession',
                 'placeholder' => 'form.registration.select_profession',
-                'choices' => [
-                    'form.registration.profession_director' => 'director',
-                    'form.registration.profession_teacher' => 'teacher',
-                    'form.registration.profession_educational_staff' => 'educational_staff',
-                    'form.registration.profession_administrative_staff' => 'administrative_staff',
-                    'form.registration.profession_institutional_partner' => 'institutional_partner',
-                    'form.registration.profession_other' => 'other',
-                ],
+
+                'choices' => array_combine(
+                    array_map(fn(Profession $p) => $p->value, Profession::cases()),
+                    array_map(fn(Profession $p) => $p->value, Profession::cases())
+                ),
+
                 'constraints' => [
                     new Assert\NotBlank([
                         'message' => 'form.registration.profession_not_blank',

@@ -71,6 +71,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?Establishment $establishment = null;
 
+    // Temporaire : pour création token d'acceptation ou refus d'adhésion
+    #[ORM\Column(length: 64, nullable: true)]
+    private ?string $validationToken = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $validationTokenExpiresAt = null;
+
+    // Pour le message optionnel lors du registerForm
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $requestMessage = null;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -315,6 +326,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEstablishment(?Establishment $establishment): static
     {
         $this->establishment = $establishment;
+
+        return $this;
+    }
+
+    public function getValidationToken(): ?string
+    {
+        return $this->validationToken;
+    }
+
+    public function setValidationToken(?string $validationToken): static
+    {
+        $this->validationToken = $validationToken;
+
+        return $this;
+    }
+
+    public function getValidationTokenExpiresAt(): ?\DateTimeImmutable
+    {
+        return $this->validationTokenExpiresAt;
+    }
+
+    public function setValidationTokenExpiresAt(?\DateTimeImmutable $validationTokenExpiresAt): static
+    {
+        $this->validationTokenExpiresAt = $validationTokenExpiresAt;
+
+        return $this;
+    }
+
+    public function getRequestMessage(): ?string
+    {
+        return $this->requestMessage;
+    }
+
+    public function setRequestMessage(?string $requestMessage): static
+    {
+        $this->requestMessage = $requestMessage;
 
         return $this;
     }

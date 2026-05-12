@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Nouvelle demande d’adhésion</title>
+</head>
+
+<body style="margin:0; padding:0; background-color:#f5f5f5; font-family:Arial, sans-serif;">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5; padding:40px 0;">
+    <tr>
+        <td align="center">
+
+            <!-- CONTAINER -->
+            <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff; border-radius:8px; overflow:hidden;">
+
+                <!-- HEADER -->
+                <tr>
+                    <td style="background:#003399; color:#ffffff; padding:20px 30px;">
+                        <h1 style="margin:0; font-size:18px; letter-spacing:0.5px;">CN2E</h1>
+                    </td>
+                </tr>
+
+                <!-- CONTENT -->
+                <tr>
+                    <td style="padding:30px;">
+
+                        <h2 style="margin:0 0 20px 0; font-size:18px; color:#111827;">
+                            Nouvelle demande d’adhésion
+                        </h2>
+
+                        <!-- INFOS -->
+                        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:25px;">
+
+                            <tr>
+                                <td style="padding:8px 0; width:140px; color:#6b7280;">Nom</td>
+                                <td style="padding:8px 0; color:#111827; font-weight:500;">
+                                    {{ user.lastName }}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px 0; color:#6b7280;">Prénom</td>
+                                <td style="padding:8px 0; color:#111827; font-weight:500;">
+                                    {{ user.firstName }}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px 0; color:#6b7280;">Email</td>
+                                <td style="padding:8px 0;">
+                                    <a href="mailto:{{ user.email }}" style="color:#003399; text-decoration:none;">
+                                        {{ user.email }}
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px 0; color:#6b7280;">Établissement</td>
+                                <td style="padding:8px 0; color:#111827;">
+                                    {{ user.establishment.name }}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px 0; color:#6b7280;">Profession</td>
+                                <td style="padding:8px 0; color:#111827;">
+                                    {{ user.profession }}
+                                </td>
+                            </tr>
+
+                        </table>
+
+                        <!-- MESSAGE -->
+                        {% if requestMessage %}
+                            <div style="margin-top:10px;">
+                                <p style="margin:0 0 8px 0; color:#6b7280;">Message</p>
+
+                                <div style="background:#f9fafb; border:1px solid #e5e7eb; padding:15px; border-radius:6px; color:#111827; line-height:1.5; white-space:pre-line;">
+                                    {{ requestMessage }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <!-- CTA -->
+                        <table cellpadding="0" cellspacing="0" style="margin-top:30px;">
+                            <tr>
+
+                                <td style="padding-right:10px;">
+                                    <a href="{{ acceptUrl }}"
+                                       style="background:#16a34a; color:#ffffff; padding:12px 18px; text-decoration:none; border-radius:6px; display:inline-block;">
+                                        Accepter
+                                    </a>
+                                </td>
+
+                                <td>
+                                    <a href="{{ refuseUrl }}"
+                                       style="background:#dc2626; color:#ffffff; padding:12px 18px; text-decoration:none; border-radius:6px; display:inline-block;">
+                                        Refuser
+                                    </a>
+                                </td>
+
+                            </tr>
+                        </table>
+
+                    </td>
+                </tr>
+
+                <!-- FOOTER -->
+                <tr>
+                    <td style="padding:20px 30px; background:#f9fafb; font-size:12px; color:#6b7280;">
+                        CN2E – Système automatique de gestion des demandes d’adhésion
+                    </td>
+                </tr>
+
+            </table>
+
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

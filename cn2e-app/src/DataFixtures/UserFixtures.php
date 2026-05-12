@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Establishment;
 use App\Entity\User;
+use App\Enum\Profession;
 use App\Enum\UserStatus;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -21,24 +22,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
         $rolesCN2E = ['Président', 'Vice-président', 'Trésorier', 'Secrétaire', 'Membre actif', 'Membre associé'];
 
-        $professions = [
-            'Professeur des écoles',
-            'Professeur de lycée',
-            'Directeur d\'établissement',
-            'Éducateur spécialisé',
-            'Psychologue scolaire',
-            'Conseiller d\'orientation',
-            'Infirmier scolaire',
-            'Assistant d\'éducation',
-            'Chef d\'établissement',
-            'Enseignant spécialisé',
-            'Médecin scolaire',
-            'Orthophoniste',
-            'Ergothérapeute',
-            'Kinésithérapeute',
-            'Responsable pédagogique'
-        ];
-
         for ($i = 1; $i <= 30; $i++) {
             $user = new User();
 
@@ -46,7 +29,9 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setRoles(['ROLE_USER']);
             $user->setFirstName($faker->firstName());
             $user->setLastName($faker->lastName());
-            $user->setProfession($faker->randomElement($professions));
+            $user->setProfession(
+                $faker->randomElement(Profession::cases())->value
+            );
             $user->setProfilePicture('https://picsum.photos/200?random=' . $i);
 
             $user->setIsCn2eMember(true);
