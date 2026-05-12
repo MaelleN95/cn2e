@@ -4,11 +4,13 @@ namespace App\Form;
 
 use App\Entity\Establishment;
 use App\Entity\User;
+use App\EventSubscriber\FormSecuritySubscriber;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -19,8 +21,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class RegistrationFormType extends AbstractType
 {
+    public function __construct(
+        private FormSecuritySubscriber $subscriber
+    ) {}
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $builder->addEventSubscriber($this->subscriber);
+
         $builder
 
             ->add('lastName', TextType::class, [
@@ -152,6 +160,15 @@ final class RegistrationFormType extends AbstractType
                     ),
                 ],
             ])
+            // Champ caché anti-spam
+            ->add('website', HiddenType::class, [
+                'required' => false,
+                'mapped' => false,
+                'attr' => [
+                    'autocomplete' => 'off',
+                    'tabindex' => '-1',
+                ],
+            ]);
         ;
     }
 
