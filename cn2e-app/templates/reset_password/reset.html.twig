@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau mot de passe{% endblock %}
+
+{% block body %}
+
+<div class="max-w-5xl mx-auto px-4 py-12">
+
+    <div class="text-center mb-12">
+        <h1 class="mb-4 text-4xl font-bold">
+            Nouveau mot de passe
+        </h1>
+
+        <p class="text-muted-foreground max-w-3xl mx-auto">
+            Choisissez un nouveau mot de passe sécurisé pour votre compte.
+        </p>
+    </div>
+
+    <div class="max-w-xl mx-auto">
+
+        <div class="bg-white border border-border rounded p-8">
+
+            <div class="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mx-auto mb-6">
+                <svg class="w-8 h-8 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+            </div>
+
+            <h2 class="text-center text-2xl font-semibold mb-6">
+                Définir un nouveau mot de passe
+            </h2>
+
+            {{ form_start(resetForm, {
+                attr: {
+                    class: 'space-y-6'
+                }
+            }) }}
+
+                {{ form_row(resetForm.plainPassword) }}
+
+                <button
+                    type="submit"
+                    class="w-full bg-primary text-primary-foreground px-6 py-3 rounded hover:bg-primary/80 transition-colors cursor-pointer"
+                >
+                    Réinitialiser le mot de passe
+                </button>
+
+            {{ form_end(resetForm) }}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

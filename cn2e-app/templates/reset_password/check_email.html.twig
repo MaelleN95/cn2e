@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Email envoyé{% endblock %}
+
+{% block body %}
+
+<div class="max-w-5xl mx-auto px-4 py-12">
+
+    <div class="text-center mb-12">
+        <h1 class="mb-4 text-4xl font-bold">
+            Réinitialisation du mot de passe
+        </h1>
+
+        <p class="text-muted-foreground max-w-3xl mx-auto">
+            Vérifiez votre boîte mail pour continuer la procédure.
+        </p>
+    </div>
+
+    <div class="max-w-xl mx-auto">
+
+        <div class="bg-white border border-border rounded p-8">
+
+            <div class="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mx-auto mb-6">
+                <svg class="w-8 h-8 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/>
+                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                </svg>
+            </div>
+
+            <h2 class="text-center text-2xl font-semibold mb-6">
+                Email envoyé
+            </h2>
+
+            <div class="space-y-4 text-muted-foreground leading-relaxed">
+
+                <p>
+                    Si un compte correspondant à cette adresse email existe,
+                    un email contenant un lien de réinitialisation vient d'être envoyé.
+                </p>
+
+                <p>
+                    Ce lien expirera dans
+                    <strong class="text-foreground">
+                        {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}
+                    </strong>.
+                </p>
+
+                <p>
+                    Si vous ne recevez aucun email, pensez à vérifier votre dossier spam
+                    ou recommencez la procédure.
+                </p>
+
+            </div>
+
+            <div class="flex justify-center text-primary">
+                <a href="{{ path('app_forgot_password_request') }}" class="inline-flex items-center gap-1 group">
+                    <span class="group-hover:underline">Réessayer</span>
+
+                    <svg viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                        class="w-4 h-4 transition-transform group-hover:translate-x-1">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -25,3 +25,6 @@ form:
     confirm_password: "Confirmer le mot de passe"
     submit: "S'inscrire"
     agree_terms: "J'accepte les conditions d'utilisation"
+
+  reset_password_request:
+    email: "Adresse mail"

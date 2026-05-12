@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mot de passe oublié{% endblock %}
+
+{% block body %}
+
+<div class="max-w-5xl mx-auto px-4 py-12">
+
+    <div class="text-center mb-12">
+        <h1 class="mb-4 text-4xl font-bold">
+            Mot de passe oublié
+        </h1>
+
+        <p class="text-muted-foreground max-w-3xl mx-auto">
+            Entrez votre adresse email afin de recevoir un lien de réinitialisation.
+        </p>
+    </div>
+
+    <div class="max-w-xl mx-auto">
+
+        <div class="bg-white border border-border rounded p-8">
+
+            <div class="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mx-auto mb-6">
+                <svg class="w-8 h-8 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/>
+                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                </svg>
+            </div>
+
+            <h2 class="text-center text-2xl font-semibold mb-6">
+                Réinitialiser mon mot de passe
+            </h2>
+
+            {% for flash_error in app.flashes('reset_password_error') %}
+                <div class="mb-6 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded">
+                    {{ flash_error }}
+                </div>
+            {% endfor %}
+
+            {{ form_start(requestForm, {
+                attr: {
+                    class: 'space-y-6'
+                }
+            }) }}
+
+                {{ form_row(requestForm.email) }}
+
+                <p class="text-sm text-muted-foreground">
+                    Nous vous enverrons un lien sécurisé permettant de choisir un nouveau mot de passe.
+                </p>
+
+                <button
+                    type="submit"
+                    class="w-full bg-primary text-primary-foreground px-6 py-3 rounded hover:bg-primary/80 transition-colors cursor-pointer"
+                >
+                    Envoyer le lien de réinitialisation
+                </button>
+
+            {{ form_end(requestForm) }}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

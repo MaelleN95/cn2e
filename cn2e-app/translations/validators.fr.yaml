@@ -26,6 +26,9 @@ form:
     password_compromised: "Ce mot de passe a été compromis dans une fuite de données. Veuillez en choisir un autre."
     password_mismatch: "Les mots de passe ne correspondent pas."
     agree_terms: "Vous devez accepter les conditions d'utilisation."
+  
+  reset_password_request:
+    email_not_blank: "L'email ne peut pas être vide."
 
 connexion:
   email:
