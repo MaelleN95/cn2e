@@ -17,12 +17,7 @@
     </p>
   </div>
 
-  {# FLASH SUCCESS #}
-  {% for message in app.flashes('success') %}
-    <div class="mb-6 p-4 bg-green-100 text-green-800 rounded">
-      {{ message }}
-    </div>
-  {% endfor %}
+  {% include 'components/flash_messages.html.twig' %}
 
   {# ERREURS FORM #}
   {% if form.vars.errors|length > 0 %}
