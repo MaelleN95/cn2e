@@ -39,10 +39,21 @@
             </h2>
 
             {% for flash_error in app.flashes('reset_password_error') %}
-                <div class="mb-6 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded">
+                <div class="mb-6 rounded border border-red-200 bg-red-50 p-4 text-red-800">
                     {{ flash_error }}
                 </div>
             {% endfor %}
+
+            {# ERREURS FORM #}
+            {% if requestForm.vars.errors|length > 0 %}
+                <div class="mb-6 p-4 bg-red-100 text-red-800 rounded">
+                <ul>
+                    {% for error in requestForm.vars.errors %}
+                    <li>{{ error.message }}</li>
+                    {% endfor %}
+                </ul>
+                </div>
+            {% endif %}
 
             {{ form_start(requestForm, {
                 attr: {
@@ -51,6 +62,11 @@
             }) }}
 
                 {{ form_row(requestForm.email) }}
+
+                {{ form_row(requestForm.website) }}
+
+                {# Timing #}
+                <input type="hidden" name="_form_start_time" value="{{ 'now'|date('U') }}">
 
                 <p class="text-sm text-muted-foreground">
                     Nous vous enverrons un lien sécurisé permettant de choisir un nouveau mot de passe.
