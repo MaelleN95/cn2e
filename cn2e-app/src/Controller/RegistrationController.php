@@ -152,7 +152,7 @@ class RegistrationController extends AbstractController
 
         $this->addFlash('success', 'Votre adresse email a bien été vérifiée. Votre demande est maintenant en attente de validation par l’équipe du CN2E.');
 
-        return $this->redirectToRoute('app_home');
+        return $this->redirectToRoute('app_login');
     }
 
     #[Route('/verification/email/renvoyer/{id}', name: 'app_resend_verification_email')]
