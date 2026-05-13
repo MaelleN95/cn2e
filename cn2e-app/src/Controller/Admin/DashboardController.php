@@ -37,27 +37,24 @@ class DashboardController extends AbstractDashboardController
             'articlesCount' => $this->entityManager->getRepository(Article::class)->count([]),
             'eventsCount' => $this->entityManager->getRepository(Event::class)->count([]),
             'establishmentsCount' => $this->entityManager->getRepository(Establishment::class)->count([]),
+            'academicProgramCount' => $this->entityManager->getRepository(AcademicProgram::class)->count([]),
         ]);
     }
 
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Administration CN2E');
+            ->setTitle('Administration du CN2E');
     }
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::linkToDashboard('Tableau de bord', 'fa fa-home');
 
-        yield MenuItem::section('Contenu');
-
-        yield MenuItem::linkToRoute('Articles', 'fa fa-newspaper', 'admin_article_index');
+        yield MenuItem::linkToRoute('Actualités', 'fa fa-newspaper', 'admin_article_index');
         yield MenuItem::linkToRoute('Événements', 'fa fa-calendar', 'admin_event_index');
         yield MenuItem::linkToRoute('Établissements', 'fa fa-school', 'admin_establishment_index');
         yield MenuItem::linkToRoute('Diplômes', 'fa fa-graduation-cap', 'admin_academic_program_index');
-
-        yield MenuItem::section('Utilisateurs');
 
         yield MenuItem::linkToRoute('Membres', 'fa fa-users', 'admin_user_index');
     }

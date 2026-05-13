@@ -1,0 +1,115 @@
+{% extends '@!EasyAdmin/layout.html.twig' %}
+
+{% block wrapper %}
+    <div class="sidebar-wrapper mt-16">
+        <aside class="sidebar">
+            {% block sidebar %}
+                {% block main_menu_wrapper %}
+                    {{ include(ea.templatePath('main_menu')) }}
+                {% endblock main_menu_wrapper %}
+            {% endblock sidebar %}
+
+            <div id="sidebar-resizer-handler" class="resizer-handler resizer-handler-left"></div>
+        </aside>
+    </div>
+    {% block main_content_wrapper %}
+        <header class="fixed w-full top-0 z-40 h-16 bg-[#0f1115] border-b border-gray-800">
+            <div class="h-full px-4 sm:px-6 lg:px-8">
+
+                <div class="flex items-center justify-between h-full">
+
+                    {# LEFT #}
+                    <div class="flex items-center gap-2">
+
+                        {# MOBILE BURGER #}
+                        <twig:ea:Button type="button" isInvisible id="navigation-toggler" aria-label="Toggle navigation">
+                            <svg class="w-6 h-6 text-gray-300"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M4 6h16M4 12h16M4 18h16"/>
+                            </svg>
+                        </twig:ea:Button>
+
+                        {# LOGO #}
+                        <a href="{{ ea_url() }}"
+                        class="flex items-center gap-3">
+
+                            <div class="w-10 h-10 bg-primary rounded flex items-center justify-center">
+                                <span class="text-white font-semibold text-sm">
+                                    CN2E
+                                </span>
+                            </div>
+
+                            <span class="hidden sm:block text-lg font-semibold text-white">
+                                Administration
+                            </span>
+
+                        </a>
+
+                    </div>
+
+                    {# RIGHT #}
+                    <div class="flex items-center gap-4">
+
+                        <a href="{{ path('app_home') }}"
+                        class="hidden sm:block text-sm text-gray-400 hover:text-gray-200 transition-colors">
+                            Retour à la page d'accueil
+                        </a>
+
+                        {% if app.user %}
+                            <div class="flex items-center gap-3">
+
+                                <div class="hidden md:block text-right">
+
+                                    <div class="text-sm font-medium text-white">
+                                        {{ app.user.firstName }}
+                                        {{ app.user.lastName }}
+                                    </div>
+
+                                    <div class="text-xs text-gray-400">
+                                        {{ app.user.roles|first|replace({
+                                            'ROLE_': '',
+                                            '_': ' '
+                                        })|lower }}
+                                    </div>
+
+                                </div>
+
+                                <a href="{{ path('app_logout') }}"
+                                class="p-2 hover:bg-gray-800 rounded text-gray-400 hover:text-gray-200 transition-colors"
+                                title="Déconnexion">
+
+                                    <svg class="w-5 h-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                                        <polyline points="16 17 21 12 16 7"/>
+                                        <line x1="21" y1="12" x2="9" y2="12"/>
+                                    </svg>
+
+                                </a>
+
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+        </header>
+
+        {% block content_top_header %}
+        {% endblock content_top_header %}
+        
+
+        {{ parent() }}
+    {% endblock %}
+{% endblock wrapper %}
+

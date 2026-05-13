@@ -1,0 +1,30 @@
+{% extends '@!EasyAdmin/menu.html.twig' %}
+
+{% block menu_item %}
+    {% set isActive = menuItem.isSelected %}
+
+    <li class="list-none">
+
+        <a
+            href="{{ menuItem.linkUrl }}"
+            class="
+                flex items-center mt-2 px-4 py-3 rounded transition-colors gap-2
+                {{
+                    isActive
+                        ? 'bg-primary text-white'
+                        : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200'
+                }}
+            "
+        >
+            {% if menuItem.icon is not empty %}
+                <twig:ea:Icon name="{{ menuItem.icon }}" class="w-5" />
+            {% endif %}
+
+            <span>
+                {{ menuItem.label|trans }}
+            </span>
+
+        </a>
+
+    </li>
+{% endblock %}
