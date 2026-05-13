@@ -1,0 +1,60 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}
+    Tableau de bord
+{% endblock %}
+
+{% block main %}
+
+<div class="mb-8">
+    <p class="text-gray-400">
+        Bienvenue, {{ app.user.firstName }} {{ app.user.lastName }}
+    </p>
+</div>
+
+{# STATS #}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+
+    <div class="bg-[#0f1115] border border-gray-800 rounded-lg p-6">
+        <div class="flex items-center justify-between mb-4">
+            <div class="bg-blue-500 p-3 rounded-lg text-white">
+                👥
+            </div>
+        </div>
+        <div class="text-3xl font-bold mb-1">{{ usersCount }}</div>
+        <div class="text-sm text-gray-400">Utilisateurs</div>
+    </div>
+
+    <div class="bg-[#0f1115] border border-gray-800 rounded-lg p-6">
+        <div class="flex items-center justify-between mb-4">
+            <div class="bg-green-500 p-3 rounded-lg text-white">
+                🏢
+            </div>
+        </div>
+        <div class="text-3xl font-bold mb-1">{{ establishmentsCount }}</div>
+        <div class="text-sm text-gray-400">Établissements</div>
+    </div>
+
+    <div class="bg-[#0f1115] border border-gray-800 rounded-lg p-6">
+        <div class="flex items-center justify-between mb-4">
+            <div class="bg-purple-500 p-3 rounded-lg text-white">
+                📰
+            </div>
+        </div>
+        <div class="text-3xl font-bold mb-1">{{ articlesCount }}</div>
+        <div class="text-sm text-gray-400">Actualités</div>
+    </div>
+
+    <div class="bg-[#0f1115] border border-gray-800 rounded-lg p-6">
+        <div class="flex items-center justify-between mb-4">
+            <div class="bg-orange-500 p-3 rounded-lg text-white">
+                📅
+            </div>
+        </div>
+        <div class="text-3xl font-bold mb-1">{{ eventsCount }}</div>
+        <div class="text-sm text-gray-400">Événements</div>
+    </div>
+
+</div>
+
+{% endblock %}
