@@ -28,3 +28,23 @@ form:
 
   reset_password_request:
     email: "Adresse mail"
+
+
+admin:
+  dashboard:
+    label: Tableau de bord
+  article:
+    singular: Actualité
+    plural: Actualités
+  event:
+    singular: Événement
+    plural: Événements
+  establishment:
+    singular: Établissement
+    plural: Établissements
+  academicprogram:
+    singular: Diplôme
+    plural: Diplômes
+  user:
+    singular: Utilisateur
+    plural: Utilisateurs

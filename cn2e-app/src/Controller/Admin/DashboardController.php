@@ -49,13 +49,13 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Tableau de bord', 'fa fa-home');
+        yield MenuItem::linkToDashboard('admin.dashboard.label', 'fa fa-home');
 
-        yield MenuItem::linkToRoute('Actualités', 'fa fa-newspaper', 'admin_article_index');
-        yield MenuItem::linkToRoute('Événements', 'fa fa-calendar', 'admin_event_index');
-        yield MenuItem::linkToRoute('Établissements', 'fa fa-school', 'admin_establishment_index');
-        yield MenuItem::linkToRoute('Diplômes', 'fa fa-graduation-cap', 'admin_academic_program_index');
+        yield MenuItem::linkToRoute('admin.article.plural', 'fa fa-newspaper', 'admin_article_index');
+        yield MenuItem::linkToRoute('admin.event.plural', 'fa fa-calendar', 'admin_event_index');
+        yield MenuItem::linkToRoute('admin.establishment.plural', 'fa fa-school', 'admin_establishment_index');
+        yield MenuItem::linkToRoute('admin.academicprogram.plural', 'fa fa-graduation-cap', 'admin_academic_program_index');
 
-        yield MenuItem::linkToRoute('Membres', 'fa fa-users', 'admin_user_index');
+        yield MenuItem::linkToRoute('admin.user.plural', 'fa fa-users', 'admin_user_index');
     }
 }
