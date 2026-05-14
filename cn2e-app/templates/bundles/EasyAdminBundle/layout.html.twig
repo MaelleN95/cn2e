@@ -107,9 +107,77 @@
 
         {% block content_top_header %}
         {% endblock content_top_header %}
-        
 
-        {{ parent() }}
-    {% endblock %}
+        <div class="content-wrapper">
+            <article class="content">
+        
+                {% block content_header_wrapper %}
+
+                    <section class="mb-6 mt-16 p-4">
+
+                        <div class="flex items-center justify-between mb-4">
+
+                            <h1 class="text-2xl font-semibold text-white">
+                                {% block content_title %}{% endblock %}
+                            </h1>
+
+                            {% block page_actions_wrapper %}
+                                <div class="page-actions">{% block page_actions %}{% endblock %}</div>
+                            {% endblock %}
+
+                        </div>
+
+                        {% if ea.crud is not null
+                            and ea.crud.currentAction == 'index'
+                            and ea.crud.isSearchEnabled %}
+                            <form method="get" class="relative max-w-md mb-4">
+
+                                <svg viewBox="0 0 24 24" fill="none"  stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground stroke-primary">
+                                <path d="m21 21-4.34-4.34"/>
+                                <circle cx="11" cy="11" r="8"/>
+                                </svg>
+
+                                {% for key, value in app.request.query.all %}
+                                    {% if key != 'query' %}
+                                        {% if value is iterable %}
+                                            {% for subKey, subValue in value %}
+                                                <input type="hidden" name="{{ key }}[{{ subKey }}]" value="{{ subValue }}">
+                                            {% endfor %}
+                                        {% else %}
+                                            <input type="hidden" name="{{ key }}" value="{{ value }}">
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                <input
+                                    type="search"
+                                    name="query"
+                                    value="{{ app.request.get('query') }}"
+                                    placeholder="Rechercher..."
+                                    class="w-full max-w-md bg-zinc-950 border border-zinc-700 rounded-lg py-2 pl-12 text-white focus:!border-primary focus:outline-none transition"
+                                >
+
+                            </form>
+                        {% endif %}
+
+                        <section id="main" class="content-body">
+                            {% block main %}{% endblock %}
+                        </section>
+                    </section>
+
+                {% endblock content_header_wrapper %}
+
+                {# A laisser pour ne pas casser l'affichage #}
+                {% block content_footer_wrapper %}
+                    {% if block('content_footer') is not empty %}
+                        <section class="content-footer">
+                            {% block content_footer %}{% endblock %}
+                        </section>
+                    {% endif %}
+                {% endblock content_footer_wrapper %}
+            </article>
+        </div>
+    {% endblock main_content_wrapper %}
 {% endblock wrapper %}
 
