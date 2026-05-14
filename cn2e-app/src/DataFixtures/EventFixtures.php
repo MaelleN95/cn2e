@@ -41,7 +41,6 @@ class EventFixtures extends Fixture
             $e->setStartDate(\DateTimeImmutable::createFromMutable($start));
             $e->setEndDate(\DateTimeImmutable::createFromMutable($end));
             $e->setLocation($faker->city());
-            $e->setTime($faker->time());
             $e->setShortDescription($faker->paragraph());
             $e->setContent($faker->text(800));
             $e->setImage('https://picsum.photos/400?random=' . $i);

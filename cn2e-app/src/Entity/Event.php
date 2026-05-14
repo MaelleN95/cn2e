@@ -29,9 +29,6 @@ class Event
     #[ORM\Column(length: 255)]
     private ?string $location = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $time = null;
-
     #[ORM\Column(type: Types::TEXT)]
     private ?string $shortDescription = null;
 
@@ -111,18 +108,6 @@ class Event
     public function setLocation(string $location): static
     {
         $this->location = $location;
-
-        return $this;
-    }
-
-    public function getTime(): ?string
-    {
-        return $this->time;
-    }
-
-    public function setTime(string $time): static
-    {
-        $this->time = $time;
 
         return $this;
     }
