@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AcademicProgramRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AcademicProgramRepository::class)]
@@ -13,30 +15,31 @@ class AcademicProgram
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'academicPrograms')]
-    private ?Establishment $establishment = null;
-
     #[ORM\Column(length: 100)]
     private ?string $level = null;
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    /**
+     * @var Collection<int, Establishment>
+     */
+    #[ORM\ManyToMany(targetEntity: Establishment::class, inversedBy: 'academicPrograms')]
+    private Collection $establishments;
+
+    public function __construct()
+    {
+        $this->establishments = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->title ?? 'ID : ' . $this->id;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getEstablishment(): ?Establishment
-    {
-        return $this->establishment;
-    }
-
-    public function setEstablishment(?Establishment $establishment): static
-    {
-        $this->establishment = $establishment;
-
-        return $this;
     }
 
     public function getLevel(): ?string
@@ -59,6 +62,30 @@ class AcademicProgram
     public function setTitle(string $title): static
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Establishment>
+     */
+    public function getEstablishments(): Collection
+    {
+        return $this->establishments;
+    }
+
+    public function addEstablishment(Establishment $establishment): static
+    {
+        if (!$this->establishments->contains($establishment)) {
+            $this->establishments->add($establishment);
+        }
+
+        return $this;
+    }
+
+    public function removeEstablishment(Establishment $establishment): static
+    {
+        $this->establishments->removeElement($establishment);
 
         return $this;
     }

@@ -56,19 +56,20 @@ class Establishment
     private ?string $description = null;
 
     /**
-     * @var Collection<int, AcademicProgram>
-     */
-    #[ORM\OneToMany(targetEntity: AcademicProgram::class, mappedBy: 'establishment')]
-    private Collection $academicPrograms;
-
-    /**
      * @var Collection<int, User>
      */
     #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'establishment')]
     private Collection $users;
 
+    /**
+     * @var Collection<int, AcademicProgram>
+     */
+    #[ORM\ManyToMany(targetEntity: AcademicProgram::class, mappedBy: 'establishments')]
+    private Collection $academicPrograms;
+
     public function __construct()
     {
+        $this->users = new ArrayCollection();
         $this->academicPrograms = new ArrayCollection();
     }
 
@@ -238,6 +239,7 @@ class Establishment
         return $this;
     }
 
+
     /**
      * @return Collection<int, AcademicProgram>
      */
@@ -250,7 +252,7 @@ class Establishment
     {
         if (!$this->academicPrograms->contains($academicProgram)) {
             $this->academicPrograms->add($academicProgram);
-            $academicProgram->setEstablishment($this);
+            $academicProgram->addEstablishment($this);
         }
 
         return $this;
@@ -259,10 +261,7 @@ class Establishment
     public function removeAcademicProgram(AcademicProgram $academicProgram): static
     {
         if ($this->academicPrograms->removeElement($academicProgram)) {
-            // set the owning side to null (unless already changed)
-            if ($academicProgram->getEstablishment() === $this) {
-                $academicProgram->setEstablishment(null);
-            }
+            $academicProgram->removeEstablishment($this);
         }
 
         return $this;
