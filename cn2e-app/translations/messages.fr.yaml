@@ -36,15 +36,68 @@ admin:
   article:
     singular: Actualité
     plural: Actualités
+    slug: Slug
+    title: Titre
+    publishedAt: Date de publication
+    shortDescription: Résumé
+    content: Contenu
+    image: Image
+    category: Catégorie
+    isMembersOnly: Réservé aux membres
+    author: Auteur
   event:
     singular: Événement
     plural: Événements
+    slug: Slug
+    title: Titre
+    startDate: Date de début
+    endDate: Date de fin
+    location: Lieu
+    shortDescription: Résumé
+    content: Contenu
+    image: Image
+    category: Catégorie
+    isMembersOnly: Réservé aux membres
+    hasRegistration: Inscription requise
   establishment:
     singular: Établissement
     plural: Établissements
+    slug: Slug
+    name: Nom
+    city: Ville
+    department: Département
+    region: Région
+    address: Adresse
+    addressHash: Hash adresse
+    latitude: Latitude
+    longitude: Longitude
+    phone: Téléphone
+    email: Email
+    website: Site web
+    description: Description
   academicprogram:
     singular: Diplôme
     plural: Diplômes
+    establishments: Établissements
+    level: Niveau
+    title: Intitulé
   user:
     singular: Utilisateur
     plural: Utilisateurs
+    email: Email
+    roles: Rôles
+    password: Mot de passe
+    lastName: Nom
+    firstName: Prénom
+    profession: Profession
+    profilePicture: Photo de profil
+    isCn2eMember: Membre CN2E
+    cn2eRole: Rôle CN2E
+    phone: Téléphone
+    lastLoginAt: Dernière connexion
+    status: Statut
+    isVerified: Vérifié
+    establishment: Établissement
+    validationToken: Token de validation
+    validationTokenExpiresAt: Expiration token
+    requestMessage: Message de demande
