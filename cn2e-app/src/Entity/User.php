@@ -87,6 +87,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->articles = new ArrayCollection();
     }
 
+    public function getFullName(): string
+    {
+        return trim($this->firstName . ' ' . $this->lastName);
+    }
+
+    public function __toString(): string
+    {
+        return $this->getFullName() !== ''
+            ? $this->getFullName()
+            : $this->email;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

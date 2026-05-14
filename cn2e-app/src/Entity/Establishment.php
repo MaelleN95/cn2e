@@ -70,7 +70,11 @@ class Establishment
     public function __construct()
     {
         $this->academicPrograms = new ArrayCollection();
-        $this->users = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->name ?? 'ID : ' . $this->id;
     }
 
     public function getId(): ?int

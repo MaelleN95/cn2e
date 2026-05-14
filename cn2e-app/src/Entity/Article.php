@@ -21,7 +21,7 @@ class Article
     private ?string $title = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    private ?\DateTimeImmutable $publishedAt = null;
+    private \DateTimeImmutable $publishedAt;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $shortDescription = null;
@@ -36,11 +36,16 @@ class Article
     private ?string $category = null;
 
     #[ORM\Column]
-    private ?bool $isMembersOnly = null;
+    private ?bool $isMembersOnly = false;
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
+
+    public function __construct()
+    {
+        $this->publishedAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -71,7 +76,7 @@ class Article
         return $this;
     }
 
-    public function getPublishedAt(): ?\DateTimeImmutable
+    public function getPublishedAt(): \DateTimeImmutable
     {
         return $this->publishedAt;
     }
