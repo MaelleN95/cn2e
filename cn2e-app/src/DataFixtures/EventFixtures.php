@@ -30,7 +30,7 @@ class EventFixtures extends Fixture
             'Journée d\'Échange Pédagogique'
         ];
 
-        for ($i = 1; $i <= 15; $i++) {
+        for ($i = 1; $i <= 200; $i++) {
             $e = new Event();
 
             $start = $faker->dateTimeBetween('-6 months', '+6 months');

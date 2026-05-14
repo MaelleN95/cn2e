@@ -45,7 +45,7 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
             'vie associative'
         ];
 
-        for ($i = 1; $i <= 40; $i++) {
+        for ($i = 1; $i <= 200; $i++) {
             $a = new Article();
 
             $a->setTitle($faker->randomElement($titlePrefixes) . $faker->randomElement($titleSubjects));

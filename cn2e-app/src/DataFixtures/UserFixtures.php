@@ -22,7 +22,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
         $rolesCN2E = ['Président', 'Vice-président', 'Trésorier', 'Secrétaire', 'Membre actif', 'Membre associé'];
 
-        for ($i = 1; $i <= 30; $i++) {
+        for ($i = 1; $i <= 150; $i++) {
             $user = new User();
 
             $user->setEmail($faker->unique()->safeEmail());

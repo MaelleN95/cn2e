@@ -15,7 +15,7 @@ class EstablishmentFixtures extends Fixture
 
         $establishmentTypes = ['EREA', 'LEA', 'ERPD'];
 
-        for ($i = 1; $i <= 30; $i++) {
+        for ($i = 1; $i <= 100; $i++) {
             $e = new Establishment();
 
             $type = $faker->randomElement($establishmentTypes);
