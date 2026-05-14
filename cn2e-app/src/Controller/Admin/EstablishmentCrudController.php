@@ -3,14 +3,10 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Establishment;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class EstablishmentCrudController extends AbstractCrudController
@@ -49,7 +45,9 @@ class EstablishmentCrudController extends AbstractCrudController
         yield TextareaField::new('description', 'admin.establishment.description')
             ->hideOnIndex();
 
-        yield CollectionField::new('academicPrograms')
-            ->hideOnIndex();
+        yield AssociationField::new('academicPrograms')
+            ->hideOnIndex()
+            ->autocomplete()
+            ->setFormTypeOption('by_reference', false);
     }
 }

@@ -74,9 +74,24 @@ class AcademicProgramFixtures extends Fixture implements DependentFixtureInterfa
                     break;
             }
 
-            $p->setEstablishment(
-                $this->getReference('establishment_' . rand(1, 10), Establishment::class)
-            );
+            $establishmentCount = rand(0, 12);
+
+            $usedIds = [];
+
+            for ($j = 0; $j < $establishmentCount; $j++) {
+                do {
+                    $id = rand(1, 100);
+                } while (in_array($id, $usedIds, true));
+
+                $usedIds[] = $id;
+
+                $establishment = $this->getReference(
+                    'establishment_' . $id,
+                    Establishment::class
+                );
+
+                $p->addEstablishment($establishment);
+            }
 
             $manager->persist($p);
         }
