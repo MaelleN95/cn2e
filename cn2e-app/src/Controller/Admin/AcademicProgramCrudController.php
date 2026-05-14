@@ -3,9 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\AcademicProgram;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class AcademicProgramCrudController extends AbstractCrudController
@@ -15,14 +15,22 @@ class AcademicProgramCrudController extends AbstractCrudController
         return AcademicProgram::class;
     }
 
-    /*
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->showEntityActionsInlined()
+            ->setEntityLabelInSingular('admin.academicprogram.singular')
+            ->setEntityLabelInPlural('admin.academicprogram.plural');
+    }
+
     public function configureFields(string $pageName): iterable
     {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
+        yield AssociationField::new('establishments', 'admin.academicprogram.establishments')
+            ->autocomplete()
+            ->setFormTypeOption('by_reference', false);
+
+        yield TextField::new('level', 'admin.academicprogram.level');
+
+        yield TextField::new('title', 'admin.academicprogram.title');
     }
-    */
 }
