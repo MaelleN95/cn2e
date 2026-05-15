@@ -74,4 +74,10 @@
     font-weight: var(--font-weight-normal);
     line-height: 1.5;
   }
+
+  /* EAB encadre le formulaire complet en rouge en cas d'erreur sans cette contrainte */
+  .form-fieldset.has-fieldset-error {
+      border: none !important;
+      box-shadow: none !important;
+  }
 }
