@@ -27,16 +27,16 @@ class Establishment
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Assert\NotBlank(message: 'establishment.city.required')]
-    #[ORM\Column(length: 255)]
+    // #[Assert\NotBlank(message: 'establishment.city.required')]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $city = null;
 
-    #[Assert\NotBlank(message: 'establishment.department.required')]
-    #[ORM\Column(length: 255)]
+    // #[Assert\NotBlank(message: 'establishment.department.required')]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $department = null;
 
-    #[Assert\NotBlank(message: 'establishment.region.required')]
-    #[ORM\Column(length: 255)]
+    // #[Assert\NotBlank(message: 'establishment.region.required')]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $region = null;
 
     #[Assert\NotBlank(message: 'establishment.address.required')]
@@ -44,13 +44,13 @@ class Establishment
     private ?string $address = null;
 
     #[ORM\Column(length: 64)]
-    private ?string $addressHash = null;
+    private ?string $addressHash = 'null';
 
     #[ORM\Column]
-    private ?float $latitude = null;
+    private ?float $latitude = 1;
 
     #[ORM\Column]
-    private ?float $longitude = null;
+    private ?float $longitude = 1;
 
     #[Assert\Regex(
         pattern: '/^\+?[0-9\s\-]{6,20}$/',
