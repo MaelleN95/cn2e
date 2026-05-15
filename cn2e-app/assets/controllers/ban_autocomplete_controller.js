@@ -3,11 +3,6 @@ import { Controller } from '@hotwired/stimulus';
 export default class extends Controller {
     static targets = [
         "input",
-        "city",
-        "department",
-        "region",
-        "lat",
-        "lng",
         "dropdown"
     ];
 
@@ -15,7 +10,6 @@ export default class extends Controller {
         this.timeout = null;
         this.results = [];
         this.createDropdown();
-        console.log('BAN controller loaded');
     }
 
     createDropdown() {
@@ -93,43 +87,10 @@ export default class extends Controller {
 
     selectAddress(item) {
         const props = item.properties;
-        const coords = item.geometry.coordinates;
 
         this.inputTarget.value = props.label;
 
-        // city
-        if (this.hasCityTarget) {
-            this.cityTarget.value = props.city || '';
-        }
-
-        // department (code + name dans context)
-        if (this.hasDepartmentTarget) {
-            this.departmentTarget.value = props.context || '';
-        }
-
-        // region (non fourni directement → simplification FR)
-        if (this.hasRegionTarget) {
-            this.regionTarget.value = this.extractRegion(props.context);
-        }
-
-        // coordonnées (long/lat)
-        if (this.hasLatTarget) {
-            this.latTarget.value = coords[1];
-        }
-
-        if (this.hasLngTarget) {
-            this.lngTarget.value = coords[0];
-        }
-
         this.hideDropdown();
-    }
-
-    extractRegion(context) {
-        if (!context) return '';
-
-        // format BAN: "92, Hauts-de-Seine, Île-de-France"
-        const parts = context.split(',');
-        return parts.length >= 3 ? parts[2].trim() : '';
     }
 
     hideDropdown() {

@@ -27,15 +27,12 @@ class Establishment
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    // #[Assert\NotBlank(message: 'establishment.city.required')]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $city = null;
 
-    // #[Assert\NotBlank(message: 'establishment.department.required')]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $department = null;
 
-    // #[Assert\NotBlank(message: 'establishment.region.required')]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $region = null;
 
