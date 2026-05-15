@@ -25,12 +25,14 @@ class AcademicProgramCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        
+        yield TextField::new('level', 'admin.academicprogram.level');
+        
+        yield TextField::new('title', 'admin.academicprogram.title');
+
         yield AssociationField::new('establishments', 'admin.academicprogram.establishments')
             ->autocomplete()
+            ->setHelp('admin.academicprogram.establishmentsHelp')
             ->setFormTypeOption('by_reference', false);
-
-        yield TextField::new('level', 'admin.academicprogram.level');
-
-        yield TextField::new('title', 'admin.academicprogram.title');
     }
 }
