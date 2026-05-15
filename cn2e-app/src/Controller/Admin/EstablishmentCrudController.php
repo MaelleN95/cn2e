@@ -3,14 +3,20 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Establishment;
+use App\Service\AddressGeocoder;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\HiddenField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class EstablishmentCrudController extends AbstractCrudController
 {
+    public function __construct(
+        private AddressGeocoder $geocoder
+    ) {}
+    
     public static function getEntityFqcn(): string
     {
         return Establishment::class;
@@ -28,19 +34,48 @@ class EstablishmentCrudController extends AbstractCrudController
     {
         yield TextField::new('name', 'admin.establishment.name');
 
-        yield TextField::new('city', 'admin.establishment.city');
+        yield TextField::new('address', 'admin.establishment.address')
+            ->hideOnIndex()
+            ->setFormTypeOption('attr', [
+                'data-controller' => 'ban-autocomplete',
+                'data-ban-autocomplete-target' => 'input',
+                'data-action' => 'input->ban-autocomplete#search'
+            ]);
 
-        yield TextField::new('department', 'admin.establishment.department');
+        yield HiddenField::new('city')
+            ->setFormTypeOption('attr', [
+                'data-ban-autocomplete-target' => 'city'
+            ]);
 
-        yield TextField::new('region', 'admin.establishment.region');
+        yield HiddenField::new('department')
+            ->setFormTypeOption('attr', [
+                'data-ban-autocomplete-target' => 'department'
+            ]);
 
-        yield TextareaField::new('address', 'admin.establishment.address');
+        yield HiddenField::new('region')
+            ->setFormTypeOption('attr', [
+                'data-ban-autocomplete-target' => 'region'
+            ]);
+
+        yield HiddenField::new('latitude')
+            ->setFormTypeOption('attr', [
+                'data-ban-autocomplete-target' => 'lat'
+            ]);
+
+        yield HiddenField::new('longitude')
+            ->setFormTypeOption('attr', [
+                'data-ban-autocomplete-target' => 'lng'
+            ]);
 
         yield TextField::new('phone', 'admin.establishment.phone');
 
         yield TextField::new('email', 'admin.establishment.email');
 
-        yield TextField::new('website', 'admin.establishment.website');
+        yield TextField::new('city', 'admin.establishment.city')
+            ->onlyOnIndex();
+
+        yield TextField::new('website', 'admin.establishment.website')
+            ->hideOnIndex();
 
         yield TextareaField::new('description', 'admin.establishment.description')
             ->hideOnIndex();
