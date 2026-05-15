@@ -6,6 +6,7 @@ use App\Repository\AcademicProgramRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AcademicProgramRepository::class)]
 class AcademicProgram
@@ -15,15 +16,16 @@ class AcademicProgram
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: 'academic_program.level.required')]
+    #[Assert\Length(max: 100, maxMessage: 'academic_program.level.max')]
     #[ORM\Column(length: 100)]
     private ?string $level = null;
 
+    #[Assert\NotBlank(message: 'academic_program.title.required')]
+    #[Assert\Length(max: 100, maxMessage: 'academic_program.title.max')]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    /**
-     * @var Collection<int, Establishment>
-     */
     #[ORM\ManyToMany(targetEntity: Establishment::class, inversedBy: 'academicPrograms')]
     private Collection $establishments;
 

@@ -29,8 +29,108 @@ form:
   
   reset_password_request:
     email_not_blank: "L'email ne peut pas être vide."
+    invalid_email: "L'email n'est pas valide."
 
-connexion:
+# Validations des formulaires CRUD
+article:
+  title:
+    required: "Le titre est obligatoire."
+    max: "Le titre ne peut pas dépasser {{ limit }} caractères."
+
+  short_description:
+    required: "Le résumé est obligatoire."
+    max: "Le résumé est trop long."
+
+  content:
+    required: "Le contenu est obligatoire."
+
+  published_at:
+    required: "La date de publication est obligatoire."
+
+  members_only:
+    required: "Le champ 'réservé aux membres' est obligatoire."
+
+  author:
+    required: "L’auteur est obligatoire."
+
+event:
+  title:
+    required: "Le titre est obligatoire."
+    max: "Le titre ne peut pas dépasser {{ limit }} caractères."
+
+  start_date:
+    required: "La date de début est obligatoire."
+
+  end_date:
+    after_start: "La date de fin doit être après la date de début."
+
+  location:
+    required: "Le lieu est obligatoire."
+
+  short_description:
+    required: "Le résumé est obligatoire."
+
+  content:
+    required: "Le contenu est obligatoire."
+
+  members_only:
+    required: "Le champ 'réservé aux membres' est obligatoire."
+
+  registration:
+    required: "Le champ 'inscription' est obligatoire."
+
+establishment:
+  name:
+    required: "Le nom est obligatoire."
+    max: "Le nom ne peut pas dépasser {{ limit }} caractères."
+
+  city:
+    required: "La ville est obligatoire."
+
+  department:
+    required: "Le département est obligatoire."
+
+  region:
+    required: "La région est obligatoire."
+
+  address:
+    required: "L'adresse est obligatoire."
+
   email:
+    invalid: "L'email est invalide."
+
+  website:
+    invalid: "Le site web est invalide."
+
+  phone:
+    invalid: "Le numéro de téléphone est invalide."
+
+academic_program:
+  level:
+    required: "Le niveau est obligatoire."
+    max: "Le niveau ne peut pas dépasser {{ limit }} caractères."
+
+  title:
+    required: "Le titre est obligatoire."
+    max: "Le titre ne peut pas dépasser {{ limit }} caractères."
+
+user:
+  email:
+    required: "L'email est obligatoire."
+    invalid: "L'email est invalide."
     unique: "Cette adresse email est déjà utilisée."
 
+  lastname:
+    required: "Le nom est obligatoire."
+
+  firstname:
+    required: "Le prénom est obligatoire."
+
+  phone:
+    invalid: "Le numéro de téléphone est invalide."
+
+  status:
+    required: "Le statut est obligatoire."
+
+  establishment:
+    required: "L’établissement est obligatoire."

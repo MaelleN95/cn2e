@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -22,6 +23,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: 'user.email.required')]
+    #[Assert\Email(message: 'user.email.invalid')]
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
@@ -31,9 +34,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[Assert\NotBlank(message: 'user.lastname.required')]
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
+    #[Assert\NotBlank(message: 'user.firstname.required')]
     #[ORM\Column(length: 255)]
     private ?string $firstName = null;
 
@@ -49,24 +54,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $cn2eRole = null;
 
+    #[Assert\Regex(
+        pattern: '/^\+?[0-9\s\-]{6,20}$/',
+        message: 'user.phone.invalid'
+    )]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $phone = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $lastLoginAt = null;
 
+    #[Assert\NotNull(message: 'user.status.required')]
     #[ORM\Column(enumType: UserStatus::class)]
     private UserStatus $status = UserStatus::PENDING;
 
     #[ORM\Column(options: ['default' => false])]
     private ?bool $isVerified = false;
 
-    /**
-     * @var Collection<int, Article>
-     */
     #[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'author')]
     private Collection $articles;
 
+    #[Assert\NotNull(message: 'user.establishment.required')]
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Establishment $establishment = null;

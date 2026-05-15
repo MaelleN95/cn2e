@@ -45,7 +45,7 @@ class EstablishmentCrudController extends AbstractCrudController
         yield TextareaField::new('description', 'admin.establishment.description')
             ->hideOnIndex();
 
-        yield AssociationField::new('academicPrograms')
+        yield AssociationField::new('academicPrograms', 'admin.establishment.academicprogram')
             ->hideOnIndex()
             ->autocomplete()
             ->setFormTypeOption('by_reference', false);

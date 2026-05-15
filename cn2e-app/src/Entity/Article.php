@@ -5,7 +5,10 @@ namespace App\Entity;
 use App\Repository\ArticleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\Validator\Constraints as Assert;
 
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
 {
@@ -17,15 +20,22 @@ class Article
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
+    #[Assert\NotBlank(message: 'article.title.required')]
+    #[Assert\Length(max: 255, maxMessage: 'article.title.max')]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    #[Assert\NotNull(message: 'article.published_at.required')]
+    #[Assert\Type(\DateTimeImmutable::class)]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $publishedAt;
 
+    #[Assert\NotBlank(message: 'article.short_description.required')]
+    #[Assert\Length(max: 1000, maxMessage: 'article.short_description.max')]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $shortDescription = null;
 
+    #[Assert\NotBlank(message: 'article.content.required')]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
@@ -35,9 +45,11 @@ class Article
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $category = null;
 
+    #[Assert\NotNull(message: 'article.members_only.required')]
     #[ORM\Column]
     private ?bool $isMembersOnly = false;
 
+    #[Assert\NotNull(message: 'article.author.required')]
     #[ORM\ManyToOne(inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
@@ -62,6 +74,15 @@ class Article
         $this->slug = $slug;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function updateSlug(): void
+    {
+        $this->slug = (new AsciiSlugger())
+            ->slug($this->title)
+            ->lower();
     }
 
     public function getTitle(): ?string

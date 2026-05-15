@@ -7,7 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\Validator\Constraints as Assert;
 
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: EstablishmentRepository::class)]
 class Establishment
 {
@@ -19,18 +22,24 @@ class Establishment
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
+    #[Assert\NotBlank(message: 'establishment.name.required')]
+    #[Assert\Length(max: 255, maxMessage: 'establishment.name.max')]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Assert\NotBlank(message: 'establishment.city.required')]
     #[ORM\Column(length: 255)]
     private ?string $city = null;
 
+    #[Assert\NotBlank(message: 'establishment.department.required')]
     #[ORM\Column(length: 255)]
     private ?string $department = null;
 
+    #[Assert\NotBlank(message: 'establishment.region.required')]
     #[ORM\Column(length: 255)]
     private ?string $region = null;
 
+    #[Assert\NotBlank(message: 'establishment.address.required')]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $address = null;
 
@@ -43,12 +52,18 @@ class Establishment
     #[ORM\Column]
     private ?float $longitude = null;
 
+    #[Assert\Regex(
+        pattern: '/^\+?[0-9\s\-]{6,20}$/',
+        message: 'establishment.phone.invalid'
+    )]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $phone = null;
 
+    #[Assert\Email(message: 'establishment.email.invalid')]
     #[ORM\Column(length: 180, nullable: true)]
     private ?string $email = null;
 
+    #[Assert\Url(message: 'establishment.website.invalid')]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $website = null;
 
@@ -93,6 +108,15 @@ class Establishment
         $this->slug = $slug;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function updateSlug(): void
+    {
+        $this->slug = (new AsciiSlugger())
+            ->slug($this->name)
+            ->lower();
     }
 
     public function getName(): ?string

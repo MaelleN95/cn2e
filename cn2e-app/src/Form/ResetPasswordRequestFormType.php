@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ResetPasswordRequestFormType extends AbstractType
@@ -28,6 +29,9 @@ class ResetPasswordRequestFormType extends AbstractType
                     new NotBlank(
                         message: 'form.reset_password_request.email_not_blank',
                     ),
+                    new Email([
+                        'message' => 'form.reset_password_request.invalid_email',
+                    ]),
                 ],
             ])
             // Champ caché anti-spam

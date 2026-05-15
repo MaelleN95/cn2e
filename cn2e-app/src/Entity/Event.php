@@ -5,7 +5,10 @@ namespace App\Entity;
 use App\Repository\EventRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\Validator\Constraints as Assert;
 
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event
 {
@@ -17,21 +20,32 @@ class Event
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
+    #[Assert\NotBlank(message: 'event.title.required')]
+    #[Assert\Length(max: 255, maxMessage: 'event.title.max')]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    #[Assert\NotNull(message: 'event.start_date.required')]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private ?\DateTimeImmutable $startDate = null;
 
+    #[Assert\GreaterThanOrEqual(
+        propertyPath: 'startDate',
+        message: 'event.end_date.after_start'
+    )]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $endDate = null;
 
+    #[Assert\NotBlank(message: 'event.location.required')]
+    #[Assert\Length(max: 255, maxMessage: 'event.location.max')]
     #[ORM\Column(length: 255)]
     private ?string $location = null;
 
+    #[Assert\NotBlank(message: 'event.short_description.required')]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $shortDescription = null;
 
+    #[Assert\NotBlank(message: 'event.content.required')]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
@@ -41,11 +55,13 @@ class Event
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $category = null;
 
+    #[Assert\NotNull(message: 'event.members_only.required')]
     #[ORM\Column]
-    private ?bool $isMembersOnly = null;
+    private ?bool $isMembersOnly = false;
 
+    #[Assert\NotNull(message: 'event.registration.required')]
     #[ORM\Column]
-    private ?bool $hasRegistration = null;
+    private ?bool $hasRegistration = false;
 
     public function getId(): ?int
     {
@@ -62,6 +78,15 @@ class Event
         $this->slug = $slug;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function updateSlug(): void
+    {
+        $this->slug = (new AsciiSlugger())
+            ->slug($this->title)
+            ->lower();
     }
 
     public function getTitle(): ?string
