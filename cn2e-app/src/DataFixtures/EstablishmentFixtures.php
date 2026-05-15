@@ -26,8 +26,8 @@ class EstablishmentFixtures extends Fixture
             $e->setRegion($faker->region());
             $e->setAddress($faker->address());
             $e->setAddressHash(md5($e->getAddress()));
-            $e->setLatitude($faker->latitude());
-            $e->setLongitude($faker->longitude());
+            $e->setLatitude($faker->latitude(42.0, 50.8));
+            $e->setLongitude($faker->longitude(-4.8, 8.5));
             $e->setPhone($faker->phoneNumber());
             $e->setEmail($faker->companyEmail());
             $e->setWebsite($faker->url());
