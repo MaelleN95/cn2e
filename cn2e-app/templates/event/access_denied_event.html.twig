@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ event.title }}{% endblock %}
+
+{% block body %}
+
+<div class="max-w-3xl mx-auto px-4 py-20 text-center">
+
+  <div class="bg-white border border-border rounded-lg p-10">
+
+    {# ICON #}
+    <div class="flex items-center justify-center w-16 h-16 mx-auto mb-6 rounded-full bg-primary/10">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" class="w-8 h-8 text-primary">
+        <path d="M12 2l8 4v6c0 5-3.4 9.4-8 10-4.6-.6-8-5-8-10V6l8-4z"/>
+        <path d="M9 12l2 2 4-4"/>
+      </svg>
+    </div>
+
+    {# TITLE #}
+    <h1 class="text-2xl font-semibold mb-4">
+      Accès restreint
+    </h1>
+
+    {# MESSAGE #}
+    <p class="text-muted-foreground mb-6 leading-relaxed">
+      Cet événement est réservé aux membres du CN2E.
+      <br>
+      Vous ne disposez pas des droits nécessaires pour consulter ce contenu.
+    </p>
+
+    {# ACTIONS #}
+    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+
+      {% if app.user %}
+        <a href="{{ path('app_logout') }}"
+           class="px-5 py-3 rounded bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
+          Changer de compte
+        </a>
+      {% else %}
+        <a href="{{ path('app_login') }}"
+           class="px-5 py-3 rounded bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
+          Se connecter
+        </a>
+      {% endif %}
+
+      <a href="{{ path('app_event') }}"
+         class="px-5 py-3 rounded border border-border hover:bg-secondary transition-colors">
+        Retour à l'agenda
+      </a>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+{% endblock %}

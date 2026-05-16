@@ -32,6 +32,13 @@ final class ArticleController extends AbstractController
     #[Route('/actualites/article/{slug}', name: 'app_article_show')]
     public function show(#[MapEntity(mapping: ['slug' => 'slug'])] Article $article): Response
     {
+
+        if ($article->isMembersOnly() && !$this->isGranted('ROLE_CN2E_MEMBER')) {
+            return $this->render('article/access_denied_article.html.twig', [
+                'article' => $article,
+            ]);
+        }
+
         return $this->render('article/show.html.twig', [
             'article' => $article,
         ]);

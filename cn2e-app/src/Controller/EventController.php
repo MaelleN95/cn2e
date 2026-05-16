@@ -46,6 +46,13 @@ final class EventController extends AbstractController
     #[Route('/agenda/{slug}', name: 'app_event_show')]
     public function show(#[MapEntity(mapping: ['slug' => 'slug'])] Event $event, EventRepository $repo): Response
     {
+
+        if ($event->isMembersOnly() && !$this->isGranted('ROLE_CN2E_MEMBER')) {
+            return $this->render('event/access_denied_event.html.twig', [
+                'event' => $event,
+            ]);
+        }
+
         return $this->render('event/show.html.twig', [
             'event' => $event,
             'isPast' => $repo->isPast($event)
