@@ -58,33 +58,16 @@ export default class extends Controller {
                 return;
             }
 
-            const popupContent = `
-                <div class="space-y-2">
-                    <div>
-                        <strong>${establishment.name}</strong>
-                    </div>
-
-                    <div>
-                        ${establishment.city}
-                        ${establishment.region
-                            ? `(${establishment.region})`
-                            : ''}
-                    </div>
-
-                    <a
-                        href="${establishment.url}"
-                        class="text-blue-600 underline"
-                    >
-                        Voir la fiche
-                    </a>
-                </div>
-            `;
+            
 
             L.marker([establishment.latitude, establishment.longitude], {
                 icon: this.getIcon(establishment)
             })
             .addTo(this.map)
-            .bindPopup(popupContent);
+            .on('click', () => {
+                this.selected = establishment;
+                this.renderPopup();
+            })
         });
     }
 
@@ -100,5 +83,85 @@ export default class extends Controller {
             iconSize: [32, 32],
             iconAnchor: [16, 16],
         });
+    }
+
+    renderPopup() {
+        if (!this.selected) return;
+
+        this.popupTarget.innerHTML = `
+            <div
+                class="
+                    absolute
+                    bottom-5
+                    left-5
+                    right-5
+                    z-[1001]
+                    rounded-lg
+                    bg-white
+                    p-4
+                    shadow-2xl
+                    border
+                    border-gray-200
+                "
+            >
+                <div class="relative flex justify-between">
+                    <div>
+                        <h3 class="font-semibold text-gray-900">
+                            ${this.selected.name}
+                        </h3>
+
+                        <p class="text-sm text-gray-500">
+                            ${this.selected.city}
+                            ${this.selected.region
+                                ? `(${this.selected.region})`
+                                : ''}
+                        </p>
+                    </div>
+
+                    <button
+                        data-action="click->map#closePopup"
+                        class="
+                            absolute
+                            right-1
+                            top-0
+                            text-lg
+                            font-semibold
+                            text-gray-500
+                            transition
+                            hover:text-gray-900
+                        "
+                        type="button"
+                    >
+                        ✕
+                    </button>
+                </div>
+
+                <div class="mt-3">
+                    <a
+                        href="${this.selected.url}"
+                        class="
+                            inline-flex
+                            items-center
+                            rounded-md
+                            bg-blue-600
+                            px-3
+                            py-1.5
+                            text-sm
+                            font-medium
+                            text-white
+                            transition
+                            hover:bg-blue-700
+                        "
+                    >
+                        Voir la fiche
+                    </a>
+                </div>
+            </div>
+        `;
+    }
+
+    closePopup() {
+        this.selected = null;
+        this.popupTarget.innerHTML = '';
     }
 }
