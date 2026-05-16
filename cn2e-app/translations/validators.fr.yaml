@@ -50,9 +50,6 @@ article:
   members_only:
     required: "Le champ 'réservé aux membres' est obligatoire."
 
-  author:
-    required: "L’auteur est obligatoire."
-
 event:
   title:
     required: "Le titre est obligatoire."

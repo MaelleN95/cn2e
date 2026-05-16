@@ -49,7 +49,6 @@ class Article
     #[ORM\Column]
     private ?bool $isMembersOnly = false;
 
-    #[Assert\NotNull(message: 'article.author.required')]
     #[ORM\ManyToOne(inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
