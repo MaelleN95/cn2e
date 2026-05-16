@@ -17,6 +17,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Response;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 
 class AcademicProgramCrudController extends AbstractCrudController
 {
@@ -49,8 +50,7 @@ class AcademicProgramCrudController extends AbstractCrudController
 
         yield TextField::new('title', 'admin.academicprogram.title');
 
-        yield AssociationField::new('establishments', 'admin.academicprogram.establishments')
-            ->autocomplete()
+        yield ArrayField::new('establishments', 'admin.academicprogram.establishments')
             ->setFormTypeOption('disabled', true);
     }
 
