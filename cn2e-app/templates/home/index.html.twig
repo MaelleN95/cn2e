@@ -122,11 +122,31 @@
 
         <h2 class="text-center mb-8">Nos établissements</h2>
 
-        <div
+        <div 
+            class="relative"
             data-controller="map"
-            data-map-target="map"
-            class="w-full h-[500px] rounded border border-border"
-        ></div>
+            data-map-endpoint-value="{{ path('api_map_establishments') }}"
+        >
+            <div
+                data-map-target="map"
+                class="w-full h-[500px] rounded border border-border"
+            >
+            </div>
+
+            <div
+                data-map-target="overlay"
+                class="absolute inset-0 flex items-center justify-center bg-black/0 transition pointer-events-none z-[1000]"
+            >
+                <div
+                    data-map-target="message"
+                    class="hidden pointer-events-auto rounded-lg bg-white px-4 py-3 shadow text-sm text-gray-800"
+                >
+                    Clique sur la carte pour activer le zoom
+                </div>
+            </div>
+
+            <div data-map-target="popup"></div>
+        </div>
 
         <div class="text-center mt-8">
             <a href="{{ path('app_establishment') }}"

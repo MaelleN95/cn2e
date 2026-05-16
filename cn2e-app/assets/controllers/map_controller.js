@@ -3,16 +3,19 @@ import '../vendor/leaflet/leaflet.css';
 import '../vendor/leaflet/leaflet.js';
 
 export default class extends Controller {
-    static targets = ["map"];
+    static targets = ['map', 'popup', 'overlay', 'message'];
 
     static values = {
         endpoint: String,
     };
+    
+    mapLocked = true;
+    messageVisible = false;
 
     async connect() {
         this.initMap();
-
         await this.loadEstablishments();
+        this.initInteractions();
     }
 
     initMap() {
@@ -28,11 +31,85 @@ export default class extends Controller {
             maxBounds: europeBounds,
             maxBoundsViscosity: 1.0,
             minZoom: 4,
+            scrollWheelZoom: false,
         }).setView([47, 2.5], 6);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
         }).addTo(this.map);
+    }
+
+    initInteractions() {
+        const container = this.map.getContainer();
+
+        // tentative de scroll -> affiche message
+        container.addEventListener('wheel', (e) => {
+            if (this.mapLocked) {
+                this.showHint();
+            }
+        }, { passive: false });
+
+        // clic -> unlock
+        container.addEventListener('click', () => {
+            this.unlockMap();
+        });
+
+        // sortie de souris -> lock silencieux
+        container.addEventListener('mouseleave', (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+
+            const el = document.elementFromPoint(x, y);
+
+            // si on est encore dans un élément lié à la carte (popup incluse)
+            if (el && this.elementBelongsToMap(el)) {
+                return;
+            }
+
+            this.lockMap();
+        });
+    }
+
+    elementBelongsToMap(el) {
+        if (!el) return false;
+
+        // carte elle-même
+        if (this.map.getContainer().contains(el)) return true;
+
+        // popups custom Stimulus
+        if (this.hasPopupTarget && this.popupTarget.contains(el)) return true;
+
+        return false;
+    }
+
+    lockMap() {
+        this.mapLocked = true;
+        this.map.scrollWheelZoom.disable();
+
+        this.hideHint();
+    }
+
+    unlockMap() {
+        this.mapLocked = false;
+        this.map.scrollWheelZoom.enable();
+
+        this.hideHint();
+    }
+
+    showHint() {
+        if (this.messageVisible) return;
+
+        this.messageTarget.classList.remove('hidden');
+        this.overlayTarget.classList.add('bg-black/20');
+
+        this.messageVisible = true;
+    }
+
+    hideHint() {
+        this.messageTarget.classList.add('hidden');
+        this.overlayTarget.classList.remove('bg-black/20');
+
+        this.messageVisible = false;
     }
 
     async loadEstablishments() {
@@ -72,6 +149,8 @@ export default class extends Controller {
     }
 
     getIcon(establishment) {
+        const L = window.L;
+
         return L.divIcon({
             className: '',
             html: `
