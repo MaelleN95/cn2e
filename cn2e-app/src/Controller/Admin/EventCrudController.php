@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Event;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -26,15 +28,31 @@ class EventCrudController extends AbstractCrudController
             ->setEntityLabelInPlural('admin.event.plural');
     }
 
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->setPermission(Action::INDEX, 'ROLE_CN2E_ADMIN')
+            ->setPermission(Action::NEW, 'ROLE_CN2E_ADMIN')
+            ->setPermission(Action::EDIT, 'ROLE_CN2E_ADMIN')
+            ->setPermission(Action::DELETE, 'ROLE_CN2E_ADMIN');
+    }
+
     public function configureFields(string $pageName): iterable
     {
         yield TextField::new('title', 'admin.event.title');
 
         yield DateTimeField::new('startDate', 'admin.event.startDate')
-            ->setFormat('dd/MM/yyyy HH:mm');
+            ->setFormat('dd/MM/yyyy HH:mm')
+            ->onlyOnForms();
+
+        yield DateTimeField::new('startDate', 'admin.event.startDate')
+            ->setFormat('dd/MM/yyyy')
+            ->onlyOnIndex();
 
         yield DateTimeField::new('endDate', 'admin.event.endDate')
-            ->setFormat('dd/MM/yyyy HH:mm');
+            ->setFormat('dd/MM/yyyy HH:mm')
+            ->onlyOnForms();
 
         yield TextField::new('location', 'admin.event.location');
 
