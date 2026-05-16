@@ -9,6 +9,8 @@ export default class extends Controller {
         endpoint: String,
     };
     
+    selected = null;
+
     mapLocked = true;
     messageVisible = false;
 
@@ -16,6 +18,32 @@ export default class extends Controller {
         this.initMap();
         await this.loadEstablishments();
         this.initInteractions();
+        this.handleResize();
+
+        window.addEventListener('resize', this.resizeHandler);
+    }
+
+    disconnect() {
+        if (this.resizeHandler) {
+            window.removeEventListener('resize', this.resizeHandler);
+        }
+    }
+
+    handleResize() {
+        if (!this.map) return;
+
+        this.map.invalidateSize();
+
+        // recentrage propre après resize
+        this.map.setView([47, 2.5], this.getInitialZoom());
+    }
+
+    getInitialZoom() {
+        return this.isMobile() ? 5 : 6;
+    }
+
+    isMobile() {
+        return window.matchMedia('(max-width: 768px)').matches;
     }
 
     initMap() {
@@ -31,7 +59,11 @@ export default class extends Controller {
             maxBounds: europeBounds,
             maxBoundsViscosity: 1.0,
             minZoom: 4,
+
             scrollWheelZoom: false,
+            dragging: true,
+            touchZoom: true,
+            tap: true,
         }).setView([47, 2.5], 6);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -42,6 +74,23 @@ export default class extends Controller {
     initInteractions() {
         const container = this.map.getContainer();
 
+        if (this.isMobile()) {
+            this.initMobileInteractions(container);
+        } else {
+            this.initDesktopInteractions(container);
+        }
+    }
+
+    initMobileInteractions(container) {
+        // Mobile = interaction simple
+        this.mapLocked = false;
+
+        container.addEventListener('click', () => {
+            this.unlockMap();
+        });
+    }
+
+    initDesktopInteractions(container) {
         // tentative de scroll -> affiche message
         container.addEventListener('wheel', (e) => {
             if (this.mapLocked) {
@@ -67,7 +116,7 @@ export default class extends Controller {
             }
 
             this.lockMap();
-        });
+        });  
     }
 
     elementBelongsToMap(el) {
