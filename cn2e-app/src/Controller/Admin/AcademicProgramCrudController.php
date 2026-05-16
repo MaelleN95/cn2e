@@ -11,7 +11,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -92,7 +91,11 @@ class AcademicProgramCrudController extends AbstractCrudController
 
         return $actions
             ->add(Crud::PAGE_EDIT, $addEstablishment)
-            ->add(Crud::PAGE_EDIT, $removeEstablishment);
+            ->add(Crud::PAGE_EDIT, $removeEstablishment)
+            ->setPermission(Action::INDEX, 'ROLE_LOCAL_ADMIN')
+            ->setPermission(Action::NEW, 'ROLE_LOCAL_ADMIN')
+            ->setPermission(Action::EDIT, 'ROLE_LOCAL_ADMIN')
+            ->setPermission(Action::DELETE, 'ACADEMIC_PROGRAM_DELETE');
     }
 
     private function redirectToCurrentAcademicProgram(AcademicProgram $entity): Response

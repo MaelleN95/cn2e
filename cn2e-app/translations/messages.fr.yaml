@@ -79,8 +79,7 @@ admin:
   academicprogram:
     singular: Diplôme
     plural: Diplômes
-    establishments: Établissements
-    establishmentsHelp: Établissements proposant cette formation.
+    establishments: Établissements proposant cette formation
     level: Niveau
     title: Intitulé
   user:
