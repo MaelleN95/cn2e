@@ -74,6 +74,7 @@ class EstablishmentCrudController extends AbstractCrudController
 
         yield AssociationField::new('academicPrograms', 'admin.establishment.academicprogram')
             ->hideOnIndex()
+            ->setFormTypeOption('by_reference', false)
             ->autocomplete();
     }
 
