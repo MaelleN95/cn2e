@@ -63,49 +63,57 @@ class DashboardController extends AbstractDashboardController
             'fa fa-home'
         );
 
+        // USERS
         if ($this->isGranted('ROLE_CN2E_ADMIN')) {
-            
+
+            yield MenuItem::section('Utilisateurs');
+
             yield MenuItem::linkToRoute(
-                'admin.user.plural',
+                'Liste des comptes',
                 'fa fa-users',
                 'admin_user_index'
             );
-        
-        }
-
-        if ($this->isGranted('ROLE_CN2E_ADMIN')) {
 
             yield MenuItem::linkToRoute(
-                sprintf('Gestion des comptes (%d)', $pendingCount),
+                sprintf('Validation (%d)', $pendingCount),
                 'fa fa-user-clock',
                 'admin_user_validation'
             );
+        }
+
+        // CONTENT
+        if ($this->isGranted('ROLE_CN2E_ADMIN')) {
+
+            yield MenuItem::section('Contenu');
 
             yield MenuItem::linkToRoute(
-                'admin.article.plural',
+                'Articles',
                 'fa fa-newspaper',
                 'admin_article_index'
             );
 
             yield MenuItem::linkToRoute(
-                'admin.event.plural',
+                'Événements',
                 'fa fa-calendar',
                 'admin_event_index'
             );
         }
 
+        // ORGANIZATION
         if (
             $this->isGranted('ROLE_LOCAL_ADMIN')
             || $this->isGranted('ROLE_CN2E_ADMIN')
         ) {
+            yield MenuItem::section('Organisation');
+
             yield MenuItem::linkToRoute(
-                'admin.establishment.plural',
+                'Établissements',
                 'fa fa-school',
                 'admin_establishment_index'
             );
 
             yield MenuItem::linkToRoute(
-                'admin.academicprogram.plural',
+                'Formations',
                 'fa fa-graduation-cap',
                 'admin_academic_program_index'
             );

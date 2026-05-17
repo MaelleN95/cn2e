@@ -1,30 +1,48 @@
 {% extends '@!EasyAdmin/menu.html.twig' %}
 
 {% block menu_item %}
-    {% set isActive = menuItem.isSelected %}
 
-    <li class="list-none">
+    {% if menuItem.type == 'section' %}
 
-        <a
-            href="{{ menuItem.linkUrl }}"
-            class="
-                flex items-center mt-2 px-4 py-3 rounded transition-colors gap-2
-                {{
-                    isActive
-                        ? 'bg-primary text-white'
-                        : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200'
-                }}
-            "
-        >
-            {% if menuItem.icon is not empty %}
-                <twig:ea:Icon name="{{ menuItem.icon }}" class="w-5" />
-            {% endif %}
+        <div class="mt-6 mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-gray-500">
+            {{ menuItem.label|trans }}
+        </div>
 
-            <span>
-                {{ menuItem.label|trans }}
-            </span>
+    {% else %}
 
-        </a>
+        {% set isActive = menuItem.isSelected %}
 
-    </li>
+        <li class="list-none">
+
+            <a href="{{ menuItem.linkUrl }}"
+               class="
+                   flex items-center mt-2 gap-2 px-4 py-3 rounded transition
+                   text-sm
+                   {{
+                       isActive
+                           ? 'bg-primary text-white'
+                           : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200'
+                   }}
+               ">
+
+                {% if menuItem.icon is not empty %}
+                    <twig:ea:Icon name="{{ menuItem.icon }}" class="w-4 h-4" />
+                {% endif %}
+
+                <span>
+                    {{ menuItem.label|trans }}
+                </span>
+
+                {% if menuItem.badge is not empty %}
+                    <span class="ml-auto text-xs px-2 py-0.5 rounded bg-red-600 text-white">
+                        {{ menuItem.badge }}
+                    </span>
+                {% endif %}
+
+            </a>
+
+        </li>
+
+    {% endif %}
+
 {% endblock %}
