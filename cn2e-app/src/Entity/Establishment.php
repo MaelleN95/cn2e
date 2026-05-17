@@ -36,18 +36,19 @@ class Establishment
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $region = null;
 
+    // TODO : une fois toutes les adresses mises, nullable : false
     #[Assert\NotBlank(message: 'establishment.address.required')]
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $address = null;
 
-    #[ORM\Column(length: 64)]
-    private ?string $addressHash = 'null';
+    #[ORM\Column(length: 64, nullable: true)]
+    private ?string $addressHash = null;
 
-    #[ORM\Column]
-    private ?float $latitude = 1;
+    #[ORM\Column(type: Types::FLOAT, nullable: true)]
+    private ?float $latitude = null;
 
-    #[ORM\Column]
-    private ?float $longitude = 1;
+    #[ORM\Column(type: Types::FLOAT, nullable: true)]
+    private ?float $longitude = null;
 
     #[Assert\Regex(
         pattern: '/^0[1-9](?:[ .-]?\d{2}){4}$/',
@@ -169,7 +170,7 @@ class Establishment
         return $this->address;
     }
 
-    public function setAddress(string $address): static
+    public function setAddress(?string $address): static
     {
         $this->address = $address;
 
@@ -181,7 +182,7 @@ class Establishment
         return $this->addressHash;
     }
 
-    public function setAddressHash(string $addressHash): static
+    public function setAddressHash(?string $addressHash): static
     {
         $this->addressHash = $addressHash;
 
@@ -193,7 +194,7 @@ class Establishment
         return $this->latitude;
     }
 
-    public function setLatitude(float $latitude): static
+    public function setLatitude(?float $latitude): static
     {
         $this->latitude = $latitude;
 
@@ -205,7 +206,7 @@ class Establishment
         return $this->longitude;
     }
 
-    public function setLongitude(float $longitude): static
+    public function setLongitude(?float $longitude): static
     {
         $this->longitude = $longitude;
 
