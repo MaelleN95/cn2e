@@ -1,15 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const memberCN2E = document.querySelector(
-        '.js-user-form-cn2e-member input[type="checkbox"]',
+    const roleCheckboxes = document.querySelectorAll(
+        '.js-user-form-roles input[type="checkbox"]'
     );
-    const roleCN2E = document.querySelector(".js-user-form-cn2e-role");
 
-    if (!memberCN2E || !roleCN2E) return;
+    const cn2eRoleField = document.querySelector(".js-user-form-cn2e-role");
 
-    const toggleImage = () => {
-        roleCN2E.style.display = memberCN2E.checked ? "" : "none";
+    if (!roleCheckboxes.length || !cn2eRoleField) return;
+
+    const toggle = () => {
+        const isMember = Array.from(roleCheckboxes).some(
+            (cb) => cb.checked && cb.value === "ROLE_CN2E_MEMBER"
+        );
+
+        cn2eRoleField.style.display = isMember ? "" : "none";
     };
 
-    toggleImage();
-    memberCN2E.addEventListener("change", toggleImage);
+    toggle();
+
+    roleCheckboxes.forEach((cb) =>
+        cb.addEventListener("change", toggle)
+    );
 });

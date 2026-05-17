@@ -92,7 +92,6 @@ admin:
     firstName: Prénom
     profession: Profession
     profilePicture: Photo de profil
-    isCn2eMember: Membre CN2E
     cn2eRole: Rôle CN2E
     phone: Téléphone
     lastLoginAt: Dernière connexion

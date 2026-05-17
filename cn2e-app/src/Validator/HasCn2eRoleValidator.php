@@ -19,7 +19,7 @@ class HasCn2eRoleValidator extends ConstraintValidator
             return;
         }
 
-        if (!$value->isCn2eMember()) {
+        if (!in_array('ROLE_CN2E_MEMBER', $value->getRoles(), true)) {
             return;
         }
 

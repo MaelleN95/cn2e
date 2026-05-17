@@ -36,11 +36,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function findCn2eMembers(): array
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.isCn2eMember = true')
-            ->orderBy('u.lastName', 'ASC')
-            ->getQuery()
-            ->getResult();
+        return array_filter(
+            $this->findAll(),
+            fn($u) => in_array('ROLE_CN2E_MEMBER', $u->getRoles(), true)
+        );
     }
 
     public function findByStatusAndName(UserStatus $status, ?string $query): array

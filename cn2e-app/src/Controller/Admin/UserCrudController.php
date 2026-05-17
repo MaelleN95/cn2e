@@ -9,7 +9,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
@@ -92,6 +91,7 @@ class UserCrudController extends AbstractCrudController
                     'Membre CN2E' => 'ROLE_CN2E_MEMBER',
                 ])
                 ->allowMultipleChoices()
+                ->addCssClass('js-user-form-roles')
                 ->renderExpanded();
 
         } else {
@@ -125,8 +125,13 @@ class UserCrudController extends AbstractCrudController
                     'Membre CN2E' => 'ROLE_CN2E_MEMBER',
                 ])
                 ->allowMultipleChoices()
+                ->addCssClass('js-user-form-roles')
                 ->renderExpanded();
         }
+
+        yield TextField::new('cn2eRole', 'admin.user.cn2eRole')
+            ->onlyOnForms()
+            ->addCssClass('js-user-form-cn2e-role');
 
         yield FormField::addFieldset('Informations sur l\'utilisateur');
 
@@ -140,14 +145,6 @@ class UserCrudController extends AbstractCrudController
 
             yield TelephoneField::new('phone', 'admin.user.phone');
         }
-
-        yield BooleanField::new('isCn2eMember', 'admin.user.isCn2eMember')
-            ->onlyOnForms()
-            ->addCssClass('js-user-form-cn2e-member');
-
-        yield TextField::new('cn2eRole', 'admin.user.cn2eRole')
-            ->onlyOnForms()
-            ->addCssClass('js-user-form-cn2e-role');
 
         yield TextField::new('primaryRole', 'Rôle principal')
             ->onlyOnIndex()
@@ -194,7 +191,7 @@ class UserCrudController extends AbstractCrudController
 
         /*
          * Un admin CN2E ne peut gérer
-         * que le rôle membre.
+         * que le rôle membre et local admin
          */
         if (
             $this->isGranted('ROLE_CN2E_ADMIN')
@@ -215,5 +212,9 @@ class UserCrudController extends AbstractCrudController
         $roles = array_values(array_unique($roles));
 
         $user->setRoles($roles);
+
+        if (!in_array('ROLE_CN2E_MEMBER', $roles, true)) {
+            $user->setCn2eRole(null);
+        }
     }
 }

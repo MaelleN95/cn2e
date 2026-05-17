@@ -34,7 +34,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             );
             $user->setProfilePicture('https://picsum.photos/200?random=' . $i);
 
-            $user->setIsCn2eMember(true);
             $user->setCn2eRole($faker->randomElement($rolesCN2E));
             $user->setPhone($faker->phoneNumber());
 

@@ -58,9 +58,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $profilePicture = null;
 
-    #[ORM\Column]
-    private ?bool $isCn2eMember = false;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $cn2eRole = null;
 
@@ -265,22 +262,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isCn2eMember(): ?bool
-    {
-        return $this->isCn2eMember;
-    }
-
-    public function setIsCn2eMember(bool $isCn2eMember): static
-    {
-        $this->isCn2eMember = $isCn2eMember;
-
-        if (!$isCn2eMember) {
-            $this->cn2eRole = null;
-        }
-
-        return $this;
-    }
-
     public function getCn2eRole(): ?string
     {
         return $this->cn2eRole;
@@ -288,11 +269,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setCn2eRole(?string $cn2eRole): static
     {
-        if (!$this->isCn2eMember) {
-            $this->cn2eRole = null;
-            return $this;
-        }
-
         $this->cn2eRole = $cn2eRole;
 
         return $this;

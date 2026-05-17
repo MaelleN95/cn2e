@@ -64,7 +64,7 @@
     <div class="grid gap-6">
 
       {% for event in events %}
-          {% if event.isMembersOnly and not isMember %}
+          {% if event.isMembersOnly and not is_granted('ROLE_CN2E_MEMBER') %}
             {% include 'components/event_locked_card.html.twig' %}
           {% else %}
             {% include 'components/event_card.html.twig' with { event: event } %}
