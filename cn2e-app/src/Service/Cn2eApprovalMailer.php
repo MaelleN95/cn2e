@@ -18,18 +18,10 @@ class Cn2eApprovalMailer
 
     public function send(User $user, ?string $requestMessage): void
     {
-        $acceptUrl = $this->urlGenerator->generate(
-            'app_cn2e_accept',
+        $validationUrl = $this->urlGenerator->generate(
+            'admin_user_validation_show',
             [
-                'token' => $user->getValidationToken(),
-            ],
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
-
-        $refuseUrl = $this->urlGenerator->generate(
-            'app_cn2e_refuse',
-            [
-                'token' => $user->getValidationToken(),
+                'id' => $user->getId(),
             ],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
@@ -42,8 +34,7 @@ class Cn2eApprovalMailer
             ->context([
                 'user' => $user,
                 'requestMessage' => $requestMessage,
-                'acceptUrl' => $acceptUrl,
-                'refuseUrl' => $refuseUrl,
+                'validationUrl' => $validationUrl,
             ]);
 
         $this->mailer->send($email);

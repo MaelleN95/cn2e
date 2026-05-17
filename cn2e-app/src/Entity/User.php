@@ -61,13 +61,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $cn2eRole = null;
 
-    #[Assert\Regex(
-        pattern: '/^\+?[0-9\s\-]{6,20}$/',
-        message: 'user.phone.invalid'
-    )]
-    #[ORM\Column(length: 20, nullable: true)]
-    private ?string $phone = null;
-
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $lastLoginAt = null;
 
@@ -85,13 +78,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Establishment $establishment = null;
-
-    // Temporaire : pour création token d'acceptation ou refus d'adhésion
-    #[ORM\Column(length: 64, nullable: true)]
-    private ?string $validationToken = null;
-
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeImmutable $validationTokenExpiresAt = null;
 
     // Pour le message optionnel lors du registerForm
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -274,17 +260,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPhone(): ?string
-    {
-        return $this->phone;
-    }
-
-    public function setPhone(?string $phone): static
-    {
-        $this->phone = $phone;
-
-        return $this;
-    }
 
     public function getLastLoginAt(): ?\DateTimeImmutable
     {
@@ -360,30 +335,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEstablishment(?Establishment $establishment): static
     {
         $this->establishment = $establishment;
-
-        return $this;
-    }
-
-    public function getValidationToken(): ?string
-    {
-        return $this->validationToken;
-    }
-
-    public function setValidationToken(?string $validationToken): static
-    {
-        $this->validationToken = $validationToken;
-
-        return $this;
-    }
-
-    public function getValidationTokenExpiresAt(): ?\DateTimeImmutable
-    {
-        return $this->validationTokenExpiresAt;
-    }
-
-    public function setValidationTokenExpiresAt(?\DateTimeImmutable $validationTokenExpiresAt): static
-    {
-        $this->validationTokenExpiresAt = $validationTokenExpiresAt;
 
         return $this;
     }
