@@ -55,6 +55,7 @@ class AcademicProgramFormSubscriber implements EventSubscriberInterface
 
         if ($form->has('level')) {
             $form->add('level', null, [
+                'label' => 'admin.academicprogram.level',
                 'disabled' => $inputIsDisabled,
                 'help' => $inputIsDisabled
                 ? 'Vous ne pouvez modifier ce champ que si cette formation est liée uniquement à votre établissement.'
@@ -64,6 +65,7 @@ class AcademicProgramFormSubscriber implements EventSubscriberInterface
 
         if ($form->has('title')) {
             $form->add('title', null, [
+                'label' => 'admin.academicprogram.title',
                 'disabled' => $inputIsDisabled,
                 'help' => $inputIsDisabled
                 ? 'Vous ne pouvez modifier ce champ que si cette formation est liée uniquement à votre établissement.'
