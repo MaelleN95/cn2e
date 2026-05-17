@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\UserRole;
 use App\Enum\UserStatus;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -152,6 +153,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function hasRole(UserRole $role): bool
+    {
+        return in_array($role->value, $this->roles, true);
+    }
+
+    public function addRole(UserRole $role): self
+    {
+        if (!$this->hasRole($role)) {
+            $this->roles[] = $role->value;
+        }
+
+        return $this;
+    }
+
+    public function removeRole(UserRole $role): self
+    {
+        $this->roles = array_filter(
+            $this->roles,
+            fn(string $existingRole) => $existingRole !== $role->value
+        );
 
         return $this;
     }

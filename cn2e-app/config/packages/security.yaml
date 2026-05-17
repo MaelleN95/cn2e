@@ -41,8 +41,8 @@ security:
     role_hierarchy:
         ROLE_SUPER_ADMIN: [ROLE_CN2E_ADMIN]
         ROLE_CN2E_ADMIN: [ROLE_LOCAL_ADMIN, ROLE_CN2E_MEMBER]
-        ROLE_LOCAL_ADMIN: []
         ROLE_CN2E_MEMBER: []
+        ROLE_LOCAL_ADMIN: []
 
 when@test:
     security:
