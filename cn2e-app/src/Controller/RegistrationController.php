@@ -155,16 +155,6 @@ class RegistrationController extends AbstractController
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $user);
 
-            $user->setValidationToken(
-                bin2hex(random_bytes(32))
-            );
-
-            $user->setValidationTokenExpiresAt(
-                new \DateTimeImmutable('+7 days')
-            );
-
-            $entityManager->flush();
-
             $this->cn2eApprovalMailer->send(
                 $user,
                 $user->getRequestMessage()
