@@ -224,7 +224,7 @@ export default class extends Controller {
                     left-5
                     right-5
                     z-[1001]
-                    rounded-lg
+                    rounded
                     bg-white
                     p-4
                     shadow-2xl
