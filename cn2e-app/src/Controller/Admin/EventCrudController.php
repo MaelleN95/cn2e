@@ -25,7 +25,10 @@ class EventCrudController extends AbstractCrudController
         return $crud
             ->showEntityActionsInlined()
             ->setEntityLabelInSingular('admin.event.singular')
-            ->setEntityLabelInPlural('admin.event.plural');
+            ->setEntityLabelInPlural('admin.event.plural')
+            ->setPageTitle('index', 'admin.event.plural')
+            ->setPageTitle('new', 'Ajouter un événement')
+            ->setPageTitle('edit', 'Modifier un événement');
     }
 
 

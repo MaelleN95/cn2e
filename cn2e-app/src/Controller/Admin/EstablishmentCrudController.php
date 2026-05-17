@@ -33,10 +33,37 @@ class EstablishmentCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
+        $user = $this->security->getUser();
+
+        $isCn2eAdmin = $this->isGranted('ROLE_CN2E_ADMIN');
+        $isLocalAdmin = $this->isGranted('ROLE_LOCAL_ADMIN') && !$isCn2eAdmin;
+
+        $indexTitle = 'Établissements';
+
+        /** @var \App\Entity\User $user */
+        if ($isLocalAdmin && $user->getEstablishment()) {
+            $indexTitle = 'Mon établissement';
+        }
+
         return $crud
             ->showEntityActionsInlined()
             ->setEntityLabelInSingular('admin.establishment.singular')
-            ->setEntityLabelInPlural('admin.establishment.plural');
+            ->setEntityLabelInPlural('admin.establishment.plural')
+            ->setPageTitle('index', $indexTitle)
+            ->setPageTitle('new', 'Ajouter un établissement')
+            ->setPageTitle('edit', function ($entity) use ($user) {
+
+                if ($this->isGranted('ROLE_LOCAL_ADMIN')
+                    && $user
+                    && $entity
+                    && $user->getEstablishment()
+                    && $entity->getId() === $user->getEstablishment()->getId()
+                ) {
+                    return 'Modifier mon établissement';
+                }
+
+                return 'Modifier un établissement';
+            });
     }
 
     public function configureActions(Actions $actions): Actions

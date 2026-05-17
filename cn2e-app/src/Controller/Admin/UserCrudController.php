@@ -27,7 +27,11 @@ class UserCrudController extends AbstractCrudController
         return $crud
             ->showEntityActionsInlined()
             ->setEntityLabelInSingular('admin.user.singular')
-            ->setEntityLabelInPlural('admin.user.plural');
+            ->setEntityLabelInPlural('admin.user.plural')
+            ->setPageTitle('index', 'Liste des comptes utilisateurs')
+            ->setPageTitle('edit', function (User $user) {
+                return 'Modifier ' . $user->getFullName();
+            });
     }
 
     public function configureActions(Actions $actions): Actions

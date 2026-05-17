@@ -40,7 +40,10 @@ class AcademicProgramCrudController extends AbstractCrudController
             ])
             ->showEntityActionsInlined()
             ->setEntityLabelInSingular('admin.academicprogram.singular')
-            ->setEntityLabelInPlural('admin.academicprogram.plural');
+            ->setEntityLabelInPlural('admin.academicprogram.plural')
+            ->setPageTitle('index', 'admin.academicprogram.plural')
+            ->setPageTitle('new', 'Ajouter une formation')
+            ->setPageTitle('edit', 'Modifier une formation');
     }
 
     public function configureFields(string $pageName): iterable
