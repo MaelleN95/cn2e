@@ -1,0 +1,77 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}
+    {{ user.fullName }}
+{% endblock %}
+
+{% block main %}
+
+<div class="max-w-3xl">
+
+    <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+
+        <div class="space-y-2 text-white">
+
+            <p>
+                <strong>Email :</strong> {{ user.email }}
+            </p>
+
+            <p>
+                <strong>Numéro de téléphone :</strong> {{ user.phone }}
+            </p>
+
+            <p>
+                <strong>Établissement :</strong>
+                {{ user.establishment }}
+            </p>
+
+            <p>
+                <strong>Profession :</strong>
+                {{ user.profession ?: 'Non renseignée' }}
+            </p>
+
+        </div>
+
+        {% if user.requestMessage %}
+            <div class="mt-6">
+
+                <h2 class="text-lg font-semibold text-white mb-2">
+                    Message
+                </h2>
+
+                <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-4 text-gray-300 ">
+                    {{ user.requestMessage }}
+                </div>
+
+            </div>
+        {% endif %}
+
+        <div class="flex gap-4 mt-6">
+
+            {% if user.status.canBeAccepted() %}
+                <a href="{{ path('admin_user_change_status', {
+                    id: user.id,
+                    status: 'accepted'
+                }) }}"
+                class="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700 transition">
+                    Accepter
+                </a>
+            {% endif %}
+
+            {% if user.status.canBeRefused() %}
+                <a href="{{ path('admin_user_change_status', {
+                    id: user.id,
+                    status: 'refused'
+                }) }}"
+                class="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700 transition">
+                    Refuser
+                </a>
+            {% endif %}
+
+</div>
+
+    </div>
+
+</div>
+
+{% endblock %}

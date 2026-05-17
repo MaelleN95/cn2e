@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Enum\UserStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -40,5 +41,19 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->orderBy('u.lastName', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function findByStatusAndName(UserStatus $status, ?string $query): array
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->andWhere('u.status = :status')
+            ->setParameter('status', $status);
+
+        if ($query) {
+            $qb->andWhere('LOWER(u.firstName) LIKE :q OR LOWER(u.lastName) LIKE :q')
+            ->setParameter('q', '%' . strtolower($query) . '%');
+        }
+
+        return $qb->getQuery()->getResult();
     }
 }

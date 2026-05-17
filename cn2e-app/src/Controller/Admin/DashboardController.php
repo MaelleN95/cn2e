@@ -7,6 +7,8 @@ use App\Entity\Article;
 use App\Entity\Establishment;
 use App\Entity\Event;
 use App\Entity\User;
+use App\Enum\UserStatus;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -21,6 +23,7 @@ class DashboardController extends AbstractDashboardController
 
     public function __construct(
         private EntityManagerInterface $entityManager,
+        private UserRepository $userRepository
     ) {
     }
 
@@ -51,6 +54,10 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
+        $pendingCount = $this->userRepository->count([
+            'status' => UserStatus::PENDING
+        ]);
+
         yield MenuItem::linkToDashboard(
             'admin.dashboard.label',
             'fa fa-home'
@@ -68,7 +75,11 @@ class DashboardController extends AbstractDashboardController
 
         if ($this->isGranted('ROLE_CN2E_ADMIN')) {
 
-            // todo : route d'utilisateurs en attente
+            yield MenuItem::linkToRoute(
+                sprintf('Gestion des comptes (%d)', $pendingCount),
+                'fa fa-user-clock',
+                'admin_user_validation'
+            );
 
             yield MenuItem::linkToRoute(
                 'admin.article.plural',

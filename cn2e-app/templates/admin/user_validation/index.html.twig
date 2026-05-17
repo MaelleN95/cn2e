@@ -1,0 +1,168 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}
+Gestion des utilisateurs
+{% endblock %}
+
+{% block main %}
+
+<form method="get" class="relative max-w-md mb-6" action="{{ path('admin_user_validation') }}">
+
+    <svg viewBox="0 0 24 24" fill="none"  stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground stroke-primary">
+    <path d="m21 21-4.34-4.34"/>
+    <circle cx="11" cy="11" r="8"/>
+    </svg>
+
+    {% for key, value in app.request.query.all %}
+        {% if key != 'query' %}
+            {% if value is iterable %}
+                {% for subKey, subValue in value %}
+                    <input type="hidden" name="{{ key }}[{{ subKey }}]" value="{{ subValue }}">
+                {% endfor %}
+            {% else %}
+                <input type="hidden" name="{{ key }}" value="{{ value }}">
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+
+    <input
+        type="search"
+        name="query"
+        value="{{ query }}"
+        placeholder="Rechercher un utilisateur..."
+        class="w-full max-w-md bg-zinc-950 border border-zinc-700 rounded-lg py-2 pl-12 text-white focus:!border-primary focus:outline-none transition"
+    >
+
+</form>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-xl">
+
+        <h2 class="xl-text font-bold text-white mb-4">
+            En attente ({{ pendingUsers|length }})
+        </h2>
+
+        {% for user in pendingUsers %}
+
+            <div class="bg-zinc-950 border border-zinc-800 p-3 rounded-lg mb-2">
+
+                <a href="{{ path('admin_user_validation_show', {id: user.id}) }}"
+                   class="block">
+
+                   {% if user.requestMessage %}
+                        <div class="mt-2 flex items-center gap-2 text-xs text-blue-300">
+                            <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                            Message utilisateur disponible
+                        </div>
+                    {% endif %}
+
+                    <div class="text-white font-semibold hover:text-primary transition">
+                        {{ user.fullName }}
+                    </div>
+
+                    <div class="text-sm text-gray-400">
+                        {{ user.establishment }}
+                    </div>
+
+                </a>
+
+                {# actions séparées #}
+                <div class="flex gap-2 mt-3 text-sm">
+
+                    <a href="{{ path('admin_user_change_status', {
+                        id: user.id,
+                        status: 'accepted'
+                    }) }}"
+                       class="px-3 py-1 rounded bg-green-600 text-white hover:bg-green-700 transition">
+                        Accepter
+                    </a>
+
+                    <a href="{{ path('admin_user_change_status', {
+                        id: user.id,
+                        status: 'refused'
+                    }) }}"
+                       class="px-3 py-1 rounded bg-red-600 text-white hover:bg-red-700 transition">
+                        Refuser
+                    </a>
+
+                </div>
+
+            </div>
+
+        {% else %}
+            <p class="text-gray-500">Aucun utilisateur</p>
+        {% endfor %}
+
+    </div>
+
+    <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-xl">
+
+        <h2 class="text-lg font-bold text-white mb-4">
+            Acceptés ({{ acceptedUsers|length }})
+        </h2>
+
+        {% for user in acceptedUsers %}
+
+            <div class="bg-zinc-950 border border-zinc-800 p-3 rounded-lg mb-2 flex justify-between items-center">
+
+                <a href="{{ path('admin_user_validation_show', {id: user.id}) }}"
+                   class="block">
+
+                    <div class="text-white font-semibold">
+                        {{ user.fullName }}
+                    </div>
+                </a>
+
+                <a href="{{ path('admin_user_change_status', {
+                    id: user.id,
+                    status: 'refused'
+                }) }}"
+                class="px-3 py-1 text-sm rounded bg-red-600 text-white hover:bg-red-700 transition">
+                    Refuser
+                </a>
+
+            </div>
+
+        {% else %}
+            <p class="text-gray-500">Aucun utilisateur</p>
+        {% endfor %}
+
+    </div>
+
+    <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-xl">
+
+        <h2 class="text-lg font-bold text-white mb-4">
+            Refusés ({{ refusedUsers|length }})
+        </h2>
+
+        {% for user in refusedUsers %}
+
+            <div class="bg-zinc-950 border border-zinc-800 p-3 rounded-lg mb-2 flex justify-between items-center">
+
+                <a href="{{ path('admin_user_validation_show', {id: user.id}) }}"
+                   class="block">
+
+                    <div class="text-white font-semibold">
+                        {{ user.fullName }}
+                    </div>
+                </a>
+
+                <a href="{{ path('admin_user_change_status', {
+                    id: user.id,
+                    status: 'accepted'
+                }) }}"
+                class="px-3 py-1 text-sm rounded bg-green-600 text-white hover:bg-green-700 transition">
+                    Accepter
+                </a>
+
+            </div>
+
+        {% else %}
+            <p class="text-gray-500">Aucun utilisateur</p>
+        {% endfor %}
+
+    </div>
+
+</div>
+{% endblock %}
