@@ -49,7 +49,7 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
             $a = new Article();
 
             $a->setTitle($faker->randomElement($titlePrefixes) . $faker->randomElement($titleSubjects));
-            $a->setSlug($faker->slug());
+            $a->setSlug($faker->slug() . '-' . random_int(1, 9999));
             if ($i <= 20) {
                 $a->setPublishedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 year', 'now')));
             } else {
