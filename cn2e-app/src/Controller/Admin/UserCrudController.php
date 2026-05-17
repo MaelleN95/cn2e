@@ -45,6 +45,87 @@ class UserCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+
+            yield FormField::addFieldset('Gestion des rôles')
+                ->setHelp(
+                    '
+                    <ul>
+                        <li>
+                            <strong>Super administrateur :</strong>
+                            accès total à la plateforme et gestion des administrateurs.
+                        </li>
+
+                        <li>
+                            <strong>Administrateur CN2E :</strong>
+                            gestion des contenus, utilisateurs et validations CN2E.
+                        </li>
+
+                        <li>
+                            <strong>Administrateur local :</strong>
+                            gestion locale de son établissement et formations affiliées.
+                        </li>
+
+                        <li>
+                            <strong>Membre CN2E :</strong>
+                            accès aux contenus réservés aux adhérents.
+                        </li>
+                        
+                        <li>
+                            <strong>Aucun rôle (utilisateur) :</strong>
+                            aucun accès supplémentaire au public.
+                        </li>
+                    </ul>
+                    '
+                );
+
+            yield ChoiceField::new('roles', 'Rôles')
+                ->onlyOnForms() 
+                ->setChoices([
+                    'Super administrateur' => 'ROLE_SUPER_ADMIN',
+                    'Administrateur CN2E' => 'ROLE_CN2E_ADMIN',
+                    'Administrateur local' => 'ROLE_LOCAL_ADMIN',
+                    'Membre CN2E' => 'ROLE_CN2E_MEMBER',
+                ])
+                ->allowMultipleChoices()
+                ->renderExpanded();
+
+        } else {
+
+            yield FormField::addFieldset('Gestion des rôles')
+                ->setHelp(
+                    '
+                    <ul>
+                        <li>
+                            <strong>Administrateur local :</strong>
+                            gestion locale de son établissement et formations affiliées.
+                        </li>
+
+                        <li>
+                            <strong>Membre CN2E :</strong>
+                            accès aux contenus réservés aux adhérents.
+                        </li>
+
+                        <li>
+                            <strong>Aucun rôle (utilisateur) :</strong>
+                            aucun accès supplémentaire au public.
+                        </li>
+                    </ul>
+                    '
+                );
+
+            yield ChoiceField::new('roles', 'Rôles')
+                ->onlyOnForms()
+                ->setChoices([
+                    'Administrateur local' => 'ROLE_LOCAL_ADMIN',
+                    'Membre CN2E' => 'ROLE_CN2E_MEMBER',
+                ])
+                ->allowMultipleChoices()
+                ->renderExpanded();
+        }
+
+        yield FormField::addFieldset('Informations sur l\'utilisateur');
+
         yield TextField::new('lastName', 'admin.user.lastName');
 
         yield TextField::new('firstName', 'admin.user.firstName');
@@ -75,88 +156,6 @@ class UserCrudController extends AbstractCrudController
                     default => 'Utilisateur',
                 };
             });
-
-        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-
-        yield FormField::addFieldset('Gestion des rôles')
-            ->setHelp(
-                '
-                <ul>
-                    <li>
-                        <strong>Super administrateur :</strong>
-                        accès total à la plateforme et gestion des administrateurs.
-                    </li>
-
-                    <li>
-                        <strong>Administrateur CN2E :</strong>
-                        gestion des contenus, utilisateurs et validations CN2E.
-                    </li>
-
-                    <li>
-                        <strong>Administrateur local :</strong>
-                        gestion locale de son établissement et formations affiliées.
-                    </li>
-
-                    <li>
-                        <strong>Membre CN2E :</strong>
-                        accès aux contenus réservés aux adhérents.
-                    </li>
-                    
-                    <li>
-                        <strong>Aucun rôle (utilisateur) :</strong>
-                        aucun accès supplémentaire que le public.
-                    </li>
-                </ul>
-                '
-            );
-
-            yield ChoiceField::new('roles', 'Rôles')
-                ->onlyOnForms() 
-                ->setChoices([
-                    'Super administrateur' => 'ROLE_SUPER_ADMIN',
-                    'Administrateur CN2E' => 'ROLE_CN2E_ADMIN',
-                    'Administrateur local' => 'ROLE_LOCAL_ADMIN',
-                    'Membre CN2E' => 'ROLE_CN2E_MEMBER',
-                ])
-                ->allowMultipleChoices()
-                ->renderExpanded();
-
-        }
-
-        else {
-
-        yield FormField::addFieldset('Gestion des rôles')
-            ->setHelp(
-                '
-                <ul>
-                    <li>
-                        <strong>Administrateur local :</strong>
-                        gestion locale de son établissement et formations affiliées.
-                    </li>
-
-                    <li>
-                        <strong>Membre CN2E :</strong>
-                        accès aux contenus réservés aux adhérents.
-                    </li>
-
-                    <li>
-                        <strong>Aucun rôle (utilisateur) :</strong>
-                        aucun accès supplémentaire que le public.
-                    </li>
-                </ul>
-                '
-            );
-
-            yield ChoiceField::new('roles', 'Rôles')
-                ->onlyOnForms()
-                ->setChoices([
-                    'Administrateur local' => 'ROLE_LOCAL_ADMIN',
-                    'Membre CN2E' => 'ROLE_CN2E_MEMBER',
-                ])
-                ->allowMultipleChoices()
-                ->renderExpanded();
-
-        }
     }
 
     public function persistEntity(
