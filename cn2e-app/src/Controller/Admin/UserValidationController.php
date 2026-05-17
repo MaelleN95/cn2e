@@ -59,20 +59,30 @@ class UserValidationController extends AbstractController
             UserStatus::PENDING => 'en attente',
         };
 
-        $this->addFlash(
-            'success',
-            sprintf(
-                '%s est maintenant %s. Configurez ces droits d\'accès !',
-                $user->getFullName(),
-                $statusLabel
-            )
-        );
-
         if ($status === UserStatus::ACCEPTED) {
+
+            $this->addFlash(
+                'success',
+                sprintf(
+                    '%s est maintenant %s. Configurez ses droits d\'accès !',
+                    $user->getFullName(),
+                    $statusLabel
+                )
+            );
+
             return $this->redirectToRoute('admin_user_edit', [
                 'entityId' => $user->getId(),
             ]);
         }
+
+        $this->addFlash(
+            'success',
+            sprintf(
+                '%s est maintenant %s.',
+                $user->getFullName(),
+                $statusLabel
+            )
+        );
 
         return $this->redirectToRoute('admin_user_validation');
     }
