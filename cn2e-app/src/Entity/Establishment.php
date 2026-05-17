@@ -50,7 +50,7 @@ class Establishment
     private ?float $longitude = 1;
 
     #[Assert\Regex(
-        pattern: '/^\+?[0-9\s\-]{6,20}$/',
+        pattern: '/^0[1-9](?:[ .-]?\d{2}){4}$/',
         message: 'establishment.phone.invalid'
     )]
     #[ORM\Column(length: 20, nullable: true)]

@@ -11,7 +11,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class UserCrudController extends AbstractCrudController
@@ -140,11 +139,6 @@ class UserCrudController extends AbstractCrudController
         yield TextField::new('firstName', 'admin.user.firstName');
 
         yield TextField::new('profession', 'admin.user.profession');
-
-        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-
-            yield TelephoneField::new('phone', 'admin.user.phone');
-        }
 
         yield TextField::new('primaryRole', 'Rôle principal')
             ->onlyOnIndex()

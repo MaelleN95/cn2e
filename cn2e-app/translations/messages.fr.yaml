@@ -93,11 +93,8 @@ admin:
     profession: Profession
     profilePicture: Photo de profil
     cn2eRole: Rôle CN2E
-    phone: Téléphone
     lastLoginAt: Dernière connexion
     status: Statut
     isVerified: Vérifié
     establishment: Établissement
-    validationToken: Token de validation
-    validationTokenExpiresAt: Expiration token
     requestMessage: Message de demande
