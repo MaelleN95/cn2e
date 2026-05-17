@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
-use App\Enum\UserRole;
 use App\Enum\UserStatus;
 use App\Repository\UserRepository;
+use App\Validator\HasCn2eRole;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[HasCn2eRole]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'connexion.email.unique')]
@@ -28,6 +29,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Email(message: 'user.email.invalid')]
     #[ORM\Column(length: 180)]
     private ?string $email = null;
+
+    private const ROLE_PRIORITY = [
+        'ROLE_SUPER_ADMIN' => 4,
+        'ROLE_CN2E_ADMIN' => 3,
+        'ROLE_LOCAL_ADMIN' => 2,
+        'ROLE_CN2E_MEMBER' => 1,
+        'ROLE_USER' => 0,
+    ];
 
     #[ORM\Column]
     private array $roles = [];
@@ -157,28 +166,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function hasRole(UserRole $role): bool
+    public function getPrimaryRole(): string
     {
-        return in_array($role->value, $this->roles, true);
-    }
+        $roles = $this->getRoles();
 
-    public function addRole(UserRole $role): self
-    {
-        if (!$this->hasRole($role)) {
-            $this->roles[] = $role->value;
+        $highestRole = 'ROLE_USER';
+        $highestPriority = 0;
+
+        foreach ($roles as $role) {
+            $priority = self::ROLE_PRIORITY[$role] ?? 0;
+
+            if ($priority > $highestPriority) {
+                $highestPriority = $priority;
+                $highestRole = $role;
+            }
         }
 
-        return $this;
-    }
-
-    public function removeRole(UserRole $role): self
-    {
-        $this->roles = array_filter(
-            $this->roles,
-            fn(string $existingRole) => $existingRole !== $role->value
-        );
-
-        return $this;
+        return $highestRole;
     }
 
     /**
@@ -270,6 +274,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->isCn2eMember = $isCn2eMember;
 
+        if (!$isCn2eMember) {
+            $this->cn2eRole = null;
+        }
+
         return $this;
     }
 
@@ -280,6 +288,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setCn2eRole(?string $cn2eRole): static
     {
+        if (!$this->isCn2eMember) {
+            $this->cn2eRole = null;
+            return $this;
+        }
+
         $this->cn2eRole = $cn2eRole;
 
         return $this;

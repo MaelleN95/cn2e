@@ -3,10 +3,10 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
-use App\Enum\UserRole;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -14,9 +14,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[IsGranted(UserRole::CN2E_ADMIN->value)]
 class UserCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
@@ -27,30 +25,22 @@ class UserCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Utilisateur')
-            ->setEntityLabelInPlural('Utilisateurs');
+            ->showEntityActionsInlined()
+            ->setEntityLabelInSingular('admin.user.singular')
+            ->setEntityLabelInPlural('admin.user.plural');
     }
 
     public function configureActions(Actions $actions): Actions
     {
-        // $resetPassword = Action::new(
-        //     'resetPassword',
-        //     'Réinitialiser le mot de passe'
-        // );
-
         return $actions
-            ->setPermission(
-                Action::DELETE,
-                UserRole::SUPER_ADMIN->value
-            )
-            ->setPermission(
-                Action::NEW,
-                UserRole::SUPER_ADMIN->value
-            );
-            // ->add(
-            //     Crud::PAGE_EDIT,
-            //     $resetPassword
-            // );
+            ->disable(Action::DELETE)
+            ->disable(Action::NEW)
+            ->setPermission(Action::EDIT, 'ROLE_CN2E_ADMIN');
+    }
+
+    public function configureAssets(Assets $assets): Assets
+    {
+        return $assets->addJsFile('controllers/user_form_toggle.js');
     }
 
     public function configureFields(string $pageName): iterable
@@ -61,57 +51,111 @@ class UserCrudController extends AbstractCrudController
 
         yield TextField::new('profession', 'admin.user.profession');
 
-        if ($this->isGranted(UserRole::SUPER_ADMIN->value)) {
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
 
             yield TelephoneField::new('phone', 'admin.user.phone');
         }
 
-        yield BooleanField::new('isCn2eMember', 'admin.user.isCn2eMember');
+        yield BooleanField::new('isCn2eMember', 'admin.user.isCn2eMember')
+            ->onlyOnForms()
+            ->addCssClass('js-user-form-cn2e-member');
 
-        yield TextField::new('cn2eRole', 'admin.user.cn2eRole');
+        yield TextField::new('cn2eRole', 'admin.user.cn2eRole')
+            ->onlyOnForms()
+            ->addCssClass('js-user-form-cn2e-role');
 
-        yield FormField::addFieldset('Gestion des rôles');
+        yield TextField::new('primaryRole', 'Rôle principal')
+            ->onlyOnIndex()
+            ->formatValue(function ($value, User $user) {
+                return match ($user->getPrimaryRole()) {
+                    'ROLE_SUPER_ADMIN' => 'Super Admin',
+                    'ROLE_CN2E_ADMIN' => 'Admin CN2E',
+                    'ROLE_LOCAL_ADMIN' => 'Admin local',
+                    'ROLE_CN2E_MEMBER' => 'Membre CN2E',
+                    default => 'Utilisateur',
+                };
+            });
 
-        yield FormField::addFieldset('')
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+
+        yield FormField::addFieldset('Gestion des rôles')
             ->setHelp(
                 '
                 <ul>
                     <li>
                         <strong>Super administrateur :</strong>
-                        accès complet à la plateforme.
+                        accès total à la plateforme et gestion des administrateurs.
                     </li>
 
                     <li>
                         <strong>Administrateur CN2E :</strong>
-                        gestion des contenus et utilisateurs.
+                        gestion des contenus, utilisateurs et validations CN2E.
+                    </li>
+
+                    <li>
+                        <strong>Administrateur local :</strong>
+                        gestion locale de son établissement et formations affiliées.
                     </li>
 
                     <li>
                         <strong>Membre CN2E :</strong>
-                        accès aux contenus privés.
+                        accès aux contenus réservés aux adhérents.
+                    </li>
+                    
+                    <li>
+                        <strong>Aucun rôle (utilisateur) :</strong>
+                        aucun accès supplémentaire que le public.
                     </li>
                 </ul>
                 '
             );
 
-        if ($this->isGranted(UserRole::SUPER_ADMIN->value)) {
-
             yield ChoiceField::new('roles', 'Rôles')
+                ->onlyOnForms() 
+                ->setChoices([
+                    'Super administrateur' => 'ROLE_SUPER_ADMIN',
+                    'Administrateur CN2E' => 'ROLE_CN2E_ADMIN',
+                    'Administrateur local' => 'ROLE_LOCAL_ADMIN',
+                    'Membre CN2E' => 'ROLE_CN2E_MEMBER',
+                ])
                 ->allowMultipleChoices()
-                ->renderExpanded()
-                ->setChoices(
-                    UserRole::choicesForSuperAdmin()
-                );
+                ->renderExpanded();
+
         }
 
         else {
 
+        yield FormField::addFieldset('Gestion des rôles')
+            ->setHelp(
+                '
+                <ul>
+                    <li>
+                        <strong>Administrateur local :</strong>
+                        gestion locale de son établissement et formations affiliées.
+                    </li>
+
+                    <li>
+                        <strong>Membre CN2E :</strong>
+                        accès aux contenus réservés aux adhérents.
+                    </li>
+
+                    <li>
+                        <strong>Aucun rôle (utilisateur) :</strong>
+                        aucun accès supplémentaire que le public.
+                    </li>
+                </ul>
+                '
+            );
+
             yield ChoiceField::new('roles', 'Rôles')
+                ->onlyOnForms()
+                ->setChoices([
+                    'Administrateur local' => 'ROLE_LOCAL_ADMIN',
+                    'Membre CN2E' => 'ROLE_CN2E_MEMBER',
+                ])
                 ->allowMultipleChoices()
-                ->renderExpanded()
-                ->setChoices(
-                    UserRole::choicesForCn2eAdmin()
-                );
+                ->renderExpanded();
+
         }
     }
 
@@ -150,13 +194,13 @@ class UserCrudController extends AbstractCrudController
          * que le rôle membre.
          */
         if (
-            $this->isGranted(UserRole::CN2E_ADMIN->value)
-            && !$this->isGranted(UserRole::SUPER_ADMIN->value)
+            $this->isGranted('ROLE_CN2E_ADMIN')
+            && !$this->isGranted('ROLE_SUPER_ADMIN')
         ) {
 
             $allowedRoles = [
-                UserRole::CN2E_MEMBER->value,
-                UserRole::LOCAL_ADMIN->value,
+                'ROLE_CN2E_MEMBER',
+                'ROLE_LOCAL_ADMIN',
             ];
 
             $roles = array_intersect(
@@ -165,24 +209,8 @@ class UserCrudController extends AbstractCrudController
             );
         }
 
-        /*
-         * On force toujours le rôle local admin
-         * si l'utilisateur possède un établissement.
-         */
-        if (
-            $user->getEstablishment()
-            && !in_array(
-                UserRole::LOCAL_ADMIN->value,
-                $roles,
-                true
-            )
-        ) {
+        $roles = array_values(array_unique($roles));
 
-            $roles[] = UserRole::LOCAL_ADMIN->value;
-        }
-
-        $user->setRoles(
-            array_unique($roles)
-        );
+        $user->setRoles($roles);
     }
 }
