@@ -17,7 +17,7 @@ export default class extends Controller {
         this.dropdown.className =
             `
             absolute z-50 mt-1 hidden overflow-hidden
-            rounded border border-gray-900
+            rounded border !border-gray-900
             bg-[#0f1115]
 
             md:w-[calc(50vw-2rem)]
@@ -70,7 +70,7 @@ export default class extends Controller {
                 text-gray-200
                 hover:bg-blue-800
                 hover:text-white
-                border-b border-gray-800 last:border-b-0
+                !border-b !border-gray-800 last:!border-b-0
                 `;
 
             div.textContent = item.properties.label;

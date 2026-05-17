@@ -31,13 +31,13 @@ Gestion des utilisateurs
         name="query"
         value="{{ query }}"
         placeholder="Rechercher un utilisateur..."
-        class="w-full max-w-md bg-zinc-950 border border-zinc-700 rounded py-2 pl-12 text-white focus:!border-primary focus:outline-none transition"
+        class="w-full max-w-md bg-zinc-950 border !border-zinc-700 rounded py-2 pl-12 text-white focus:!border-primary focus:outline-none transition"
     >
 
 </form>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-    <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-xl">
+    <div class="bg-zinc-900 border !border-zinc-800 p-4 rounded-xl">
 
         <h2 class="xl-text font-bold text-white mb-4">
             En attente ({{ pendingUsers|length }})
@@ -45,7 +45,7 @@ Gestion des utilisateurs
 
         {% for user in pendingUsers %}
 
-            <div class="bg-zinc-950 border border-zinc-800 p-3 rounded mb-2">
+            <div class="bg-zinc-950 border !border-zinc-800 p-3 rounded mb-2">
 
                 <a href="{{ path('admin_user_validation_show', {id: user.id}) }}"
                    class="block">
@@ -96,7 +96,7 @@ Gestion des utilisateurs
 
     </div>
 
-    <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-xl">
+    <div class="bg-zinc-900 border !border-zinc-800 p-4 rounded-xl">
 
         <h2 class="text-lg font-bold text-white mb-4">
             Acceptés ({{ acceptedUsers|length }})
@@ -104,7 +104,7 @@ Gestion des utilisateurs
 
         {% for user in acceptedUsers %}
 
-            <div class="bg-zinc-950 border border-zinc-800 p-3 rounded mb-2 flex justify-between items-center">
+            <div class="bg-zinc-950 border !border-zinc-800 p-3 rounded mb-2 flex justify-between items-center">
 
                 <a href="{{ path('admin_user_validation_show', {id: user.id}) }}"
                    class="block">
@@ -130,7 +130,7 @@ Gestion des utilisateurs
 
     </div>
 
-    <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-xl">
+    <div class="bg-zinc-900 border !border-zinc-800 p-4 rounded-xl">
 
         <h2 class="text-lg font-bold text-white mb-4">
             Refusés ({{ refusedUsers|length }})
@@ -138,7 +138,7 @@ Gestion des utilisateurs
 
         {% for user in refusedUsers %}
 
-            <div class="bg-zinc-950 border border-zinc-800 p-3 rounded mb-2 flex justify-between items-center">
+            <div class="bg-zinc-950 border !border-zinc-800 p-3 rounded mb-2 flex justify-between items-center">
 
                 <a href="{{ path('admin_user_validation_show', {id: user.id}) }}"
                    class="block">

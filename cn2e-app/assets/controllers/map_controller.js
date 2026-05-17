@@ -229,7 +229,7 @@ export default class extends Controller {
                     p-4
                     shadow-2xl
                     border
-                    border-gray-200
+                    !border-gray-200
                 "
             >
                 <div class="relative flex justify-between">
