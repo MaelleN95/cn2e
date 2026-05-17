@@ -18,15 +18,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Symfony\Bundle\SecurityBundle\Security;
 
 class ArticleCrudController extends AbstractCrudController
 {
-
-    public function __construct(
-        private Security $security,
-    ) {
-    }
 
     public static function getEntityFqcn(): string
     {
