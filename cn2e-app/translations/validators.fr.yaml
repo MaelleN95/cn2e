@@ -123,9 +123,6 @@ user:
   firstname:
     required: "Le prénom est obligatoire."
 
-  phone:
-    invalid: "Le numéro de téléphone est invalide."
-
   status:
     required: "Le statut est obligatoire."
 
