@@ -86,9 +86,32 @@ class ImportEstablishmentsCommand extends Command
 
         $name = trim($etabType . ' ' . $rawName);
 
+        if (empty($rawName) && !empty($city)) {
+            $name = trim($etabType . ' ' . $city);
+
+            $this->infos[] = [
+                'row' => $name,
+                'field' => 'Nom',
+                'message' => 'Nom absent, ville utilisée dans le nom'
+            ];
+        }
+
         $email = $row['adresse mail'] ?? null;
+        $website = $row['URL'] ?? null;
         $address = $row['Adresse'] ?? null;
         $city = $row['Ville'] ?? null;
+
+        if (empty($address) && !empty($city)) {
+            $address = $city;
+
+            $this->infos[] = [
+                'row' => $name,
+                'field' => 'Adresse',
+                'message' => 'Adresse absente, ville utilisée comme adresse'
+            ];
+        }
+        
+        $city = trim($row['Ville'] ?? '') ?: null;
 
         $phone = $row['Téléphone'] ?? null;
 
@@ -130,6 +153,7 @@ class ImportEstablishmentsCommand extends Command
             $establishment = new Establishment();
             $establishment->setName($name);
             $establishment->setEmail($email);
+            $establishment->setWebsite($website);
             $establishment->setAddress($address);
             $establishment->setCity($city);
 
@@ -209,7 +233,7 @@ class ImportEstablishmentsCommand extends Command
 
     private function generateErrorReport(): void
     {
-        $writer = Writer::createFromPath('var/import_errors.csv', 'w+');
+        $writer = Writer::createFromPath('var/import_establishments_errors.csv', 'w+');
 
         $writer->insertOne(['Row', 'Establishment', 'Error', 'Info']);
 
