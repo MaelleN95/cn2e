@@ -220,9 +220,9 @@ export default class extends Controller {
             <div
                 class="
                     absolute
-                    bottom-5
-                    left-5
-                    right-5
+                    bottom-3
+                    left-3
+                    right-3
                     z-[1001]
                     rounded
                     bg-white
@@ -232,57 +232,116 @@ export default class extends Controller {
                     !border-gray-200
                 "
             >
-                <div class="relative flex justify-between">
-                    <div>
-                        <h3 class="font-semibold text-gray-900">
-                            ${this.selected.name}
-                        </h3>
+                <button
+                    data-action="click->map#closePopup"
+                    class="
+                        absolute
+                        right-3
+                        top-1
+                        text-lg
+                        font-semibold
+                        text-gray-500
+                        transition
+                        hover:text-gray-900
+                        cursor-pointer
+                    "
+                    type="button"
+                    aria-label="Fermer"
+                >
+                    ✕
+                </button>
 
-                        <p class="text-sm text-gray-500">
-                            ${this.selected.city}
-                            ${this.selected.region
-                                ? `(${this.selected.region})`
-                                : ''}
-                        </p>
+                <div class="pr-8">
+                    <h3 class="text-base font-semibold text-gray-900">
+                        ${this.selected.name}
+                    </h3>
+
+                    <div class="mt-2 space-y-1 text-sm text-gray-600">
+                        ${
+                            this.selected.address
+                                ? `
+                                    <p>
+                                        ${this.selected.address}
+                                    </p>
+                                `
+                                : ''
+                        }
+
+                        ${
+                            this.selected.phone
+                                ? `
+                                    <div class="flex items-center gap-2">
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            class="shrink-0 text-gray-500 w-4 h-4"
+                                        >
+                                            <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/>
+                                        </svg>
+
+                                        <a
+                                            href="tel:${this.selected.phone}"
+                                            class="hover:text-gray-900 transition"
+                                        >
+                                            ${this.selected.phone}
+                                        </a>
+                                    </div>
+                                `
+                                : ''
+                        }
                     </div>
 
-                    <button
-                        data-action="click->map#closePopup"
-                        class="
-                            absolute
-                            right-1
-                            top-0
-                            text-lg
-                            font-semibold
-                            text-gray-500
-                            transition
-                            hover:text-gray-900
-                        "
-                        type="button"
-                    >
-                        ✕
-                    </button>
-                </div>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        ${
+                            this.selected.website
+                                ? `
+                                    <a
+                                        href="${this.selected.website}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="
+                                            inline-flex
+                                            items-center
+                                            rounded-md
+                                            border
+                                            border-gray-300
+                                            px-3
+                                            py-1.5
+                                            text-sm
+                                            font-medium
+                                            text-gray-700
+                                            transition
+                                            hover:bg-gray-100
+                                        "
+                                    >
+                                        Site web
+                                    </a>
+                                `
+                                : ''
+                        }
 
-                <div class="mt-3">
-                    <a
-                        href="${this.selected.url}"
-                        class="
-                            inline-flex
-                            items-center
-                            rounded-md
-                            bg-blue-600
-                            px-3
-                            py-1.5
-                            text-sm
-                            font-medium
-                            text-white
-                            transition
-                            hover:bg-blue-700
-                        "
-                    >
-                        Voir la fiche
-                    </a>
+                        <a
+                            href="${this.selected.url}"
+                            class="
+                                inline-flex
+                                items-center
+                                rounded-md
+                                bg-primary 
+                                text-primary-foreground 
+                                px-3
+                                py-1.5
+                                rounded 
+                                hover:bg-primary/80 
+                                transition
+                            "
+                        >
+                            Voir la fiche
+                        </a>
+                    </div>
                 </div>
             </div>
         `;

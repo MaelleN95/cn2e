@@ -22,6 +22,9 @@ final class EstablishmentMapController extends AbstractController
                 'name' => $establishment->getName(),
                 'city' => $establishment->getCity(),
                 'region' => $establishment->getRegion(),
+                "address" => $establishment->getAddress(),
+                "phone" => $establishment->getPhone(),
+                "website" => $establishment->getWebsite(),
                 'latitude' => $establishment->getLatitude(),
                 'longitude' => $establishment->getLongitude(),
                 'url' => $urlGenerator->generate(
