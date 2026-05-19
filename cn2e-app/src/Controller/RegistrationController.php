@@ -34,8 +34,17 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, Security $security, UrlGeneratorInterface $urlGenerator): Response
     {
         if ($security->isGranted('IS_AUTHENTICATED_FULLY')) {
-            $this->addFlash('error', 'Vous êtes déjà connecté.');
-            
+            $user = $security->getUser();
+
+            /** @var \App\Entity\User $user */
+            $this->addFlash(
+                'info',
+                sprintf(
+                    'Vous êtes connecté en tant que %s.',
+                    $user->getFullName()
+                )
+            );
+
             return new RedirectResponse($urlGenerator->generate('app_home'));
         }
         

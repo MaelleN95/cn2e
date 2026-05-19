@@ -16,8 +16,17 @@ class SecurityController extends AbstractController
     public function login(Security $security, UrlGeneratorInterface $urlGenerator, AuthenticationUtils $authenticationUtils): Response
     {
         if ($security->isGranted('IS_AUTHENTICATED_FULLY')) {
-            $this->addFlash('warning', 'Vous êtes déjà connecté.');
-            
+            $user = $security->getUser();
+
+            /** @var \App\Entity\User $user */
+            $this->addFlash(
+                'info',
+                sprintf(
+                    'Vous êtes connecté en tant que %s.',
+                    $user->getFullName()
+                )
+            );
+
             return new RedirectResponse($urlGenerator->generate('app_home'));
         }
 
