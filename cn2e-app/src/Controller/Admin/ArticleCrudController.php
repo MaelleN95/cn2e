@@ -62,8 +62,9 @@ class ArticleCrudController extends AbstractCrudController
         yield TextEditorField::new('content', 'admin.article.content')
             ->onlyOnForms();
 
-        yield TextField::new('image', 'admin.article.image')
-            ->onlyOnForms();
+        // TODO Vich
+        // yield TextField::new('image', 'admin.article.image')
+        //     ->onlyOnForms();
 
         yield BooleanField::new('isMembersOnly', 'admin.article.isMembersOnly');
 

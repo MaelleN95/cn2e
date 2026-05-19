@@ -67,6 +67,10 @@ class EventCrudController extends AbstractCrudController
         yield TextEditorField::new('content', 'admin.event.content')
             ->hideOnIndex();
 
+        // TODO Vich
+        // yield TextField::new('image', 'admin.event.image')
+        //     ->onlyOnForms();
+
         yield BooleanField::new('isMembersOnly', 'admin.event.isMembersOnly');
 
         yield BooleanField::new('hasRegistration', 'admin.event.hasRegistration');
