@@ -4,12 +4,20 @@
     <div class="grid md:grid-cols-3 gap-8 mb-8">
       
       <div>
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-10 h-10 bg-white rounded flex items-center justify-center">
-            <span class="text-primary font-semibold text-sm">CN2E</span>
+        <a href="/" 
+          class="flex items-center gap-3 mb-4
+          {% if app.request.get('_route') == 'app_home' %} 
+            pointer-events-none
+          {% endif %}"
+        >
+          <div class="w-10 h-10 flex items-center justify-center">
+            <img
+                src="{{ asset('images/logos/logo-CN2E-white.png') }}"
+                alt="Logo du CN2E"
+            >
           </div>
           <span>Comité National des EREA/LEA et ERPD</span>
-        </div>
+        </a>
 
         <p class="text-primary-foreground/80 text-sm mb-6">
           Instance de coordination et de représentation de l'enseignement adapté
