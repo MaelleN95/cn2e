@@ -9,19 +9,36 @@ on:
       - main
 
 env:
-  PROJECT_NAME: "cn2e-app"
-  PROJECT_DOMAIN: "cn2e.fr"
-  PHP_VERSION: "8.4"
-  DATABASE_URL: ${{ secrets.DATABASE_URL }}
-  DEFAULT_URI: "https://cn2e.fr"
+  PROJECT_NAME: 'cn2e-app'
+  PROJECT_DOMAIN: 'cn2e.fr'
+  PHP_VERSION: '8.4'
+  DEFAULT_URI: 'https://cn2e.fr'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ${{ env.PROJECT_NAME }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Set up PHP & Composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: mbstring, intl, pdo, pdo_mysql, ctype, iconv, xml, zip
+          tools: composer:v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ${{ env.PROJECT_NAME }}/package-lock.json
 
       - name: Restore Symfony private key
         run: |
@@ -29,158 +46,122 @@ jobs:
           echo "${{ secrets.SYMFONY_PRIVATE_KEY }}" > config/secrets/prod/prod.decrypt.private.php
           chmod 600 config/secrets/prod/prod.decrypt.private.php
 
-      - name: Set up PHP & Composer
-        uses: shivammathur/setup-php@v2
-        with:
-            php-version: ${{ env.PHP_VERSION }}
-            extensions: mbstring, intl, pdo, pdo_mysql, ctype, iconv, xml, zip
-            tools: composer:v2
-      
-      - name: Set up SSH key
+      - name: Create .env.prod.local
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.HOSTINGER_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa
-
-      - name: Add Hostinger to known hosts
-        run: |
-          ssh-keyscan -p ${{ secrets.HOSTINGER_SSH_PORT }} ${{ secrets.HOSTINGER_HOST }} >> ~/.ssh/known_hosts
-
-      - name: Verify Composer and PHP versions
-        run: |
-          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
-            php -v &&
-            \$HOME/bin/composer -V
-          "
-
-      - name: Deploy entire ${{ env.PROJECT_NAME }} directory
-        run: |
-          REMOTE_DIR="/home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }}/"
-
-          echo "Création du répertoire distant : $REMOTE_DIR"
-          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} \
-            ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} \
-            "mkdir -p $REMOTE_DIR"
-
-          echo "Déploiement complet du projet Symfony vers $REMOTE_DIR"
-          rsync -avz --delete --exclude 'public/uploads/' -e "ssh -p ${{ secrets.HOSTINGER_SSH_PORT }}" \
-            ${{ env.PROJECT_NAME }}/ \
-            ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }}:$REMOTE_DIR
-
-      - name: Create public_html symlink on server
-        run: |
-          echo "Création du lien symbolique entre le dossier ${{ env.PROJECT_NAME }}/public et /public_html"
-          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
-            rm -rf /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/public_html &&
-            ln -s /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }}/public /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/public_html
-          "
-  
-      - name: Install Composer dependencies on server
-        run: |
-          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} << 'EOF'
-            cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }} || exit 1
-            source ~/.bashrc
-            rm -rf vendor/
-            composer install --no-dev --optimize-autoloader --no-scripts
-            rm -rf var/cache/prod
-          EOF
-
-      - name: Create .env
-        run: |
-          cat <<EOF > .env
-          DATABASE_URL=${{ env.DATABASE_URL }}
+          cat <<EOF > .env.prod.local
+          DATABASE_URL=${{ secrets.DATABASE_URL }}
           MAILER_DSN=${{ secrets.MAILER_DSN }}
           APP_ENV=prod
           APP_DEBUG=0
-          DEFAULT_URI=https://${{ env.PROJECT_DOMAIN }}
+          DEFAULT_URI=${{ env.DEFAULT_URI }}
           MESSENGER_TRANSPORT_DSN=sync://
           CONTACT_FROM=${{ secrets.EMAIL_TO_SEND }}
           CONTACT_TO=${{ secrets.EMAIL_FOR_RECEIVING }}
-          APP_SECRET=${{ secrets.SYMFONY_PRIVATE_KEY }}
+          APP_SECRET=${{ secrets.APP_SECRET }}
           EOF
 
-      - name: Upload .env to server
+      - name: Install Composer dependencies
         run: |
-            scp -P ${{ secrets.HOSTINGER_SSH_PORT }} .env \
-            ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }}:/home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }}/.env
-
-      - name: Importmap install
-        run: |
-          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
-            cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }} &&
-            php bin/console importmap:install --no-interaction
-          "
+          composer install \
+            --no-dev \
+            --optimize-autoloader \
+            --no-interaction \
+            --no-scripts
 
       - name: Install Node dependencies
-        run: |
-          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
-            cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }} &&
-            npm install
-          "
+        run: npm install
 
       - name: Build Tailwind CSS
         run: |
-          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
-            cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }} &&
-            npx tailwindcss -i ./assets/styles/app.css -o ./public/build/app.css --minify
-          " 
-          
-      - name: Asset Map
-        run: |
-          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
-            cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }} &&
-            php bin/console asset-map:compile --env=prod
-          " 
+          mkdir -p public/build
+          npx tailwindcss \
+            -i ./assets/styles/app.css \
+            -o ./public/build/app.css \
+            --minify
 
-      - name: Assets install
-        run: |
-          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
-            cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }} &&
-            php bin/console assets:install public --env=prod
-          "
+      - name: Install importmap assets
+        run: php bin/console importmap:install --env=prod --no-interaction
 
-      - name: Run database create on Hostinger
-        run: |
-          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} << 'EOF'
-            echo "--- AJOUT PATH ---"
-            source ~/.bashrc
-            cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }} || { echo "❌ Dossier non trouvé" && exit 1; }
-            php -d display_errors=1 bin/console cache:clear -vv || echo "❌ Cache clear KO"
-            echo "--- Création DB ---"
-            php -d display_errors=1 bin/console doctrine:database:create --env=prod --if-not-exists -vvv || echo "❌ DB create KO"
-            echo "Fin SSH script"
-          EOF
-          
-      - name: Run migrations and Symfony commands
-        run: |
-          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
-            cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }} &&
-            
-            echo "Vérification des fichiers de migration..."
-            if ls migrations/*.php 1> /dev/null 2>&1; then
-              echo "✅ Migrations détectées."
+      - name: Compile asset map
+        run: php bin/console asset-map:compile --env=prod
 
-              echo "Exécution des migrations..."
-              if php bin/console doctrine:migrations:migrate --no-interaction --env=prod; then
-                echo "✅ Migrations appliquées avec succès."
-              else
-                echo "❌ Erreur lors de l’exécution des migrations."
-                echo "Liste des fichiers de migration :"
-                ls -l migrations/
-                echo "ℹ️ Vérifie les fichiers listés pour détecter la cause de l’erreur."
-                exit 1
+      - name: Install public assets (EAB)
+        run: php bin/console assets:install public --env=prod
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HOSTINGER_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Add Hostinger to known hosts
+        run: |
+          ssh-keyscan -p ${{ secrets.HOSTINGER_SSH_PORT }} \
+            ${{ secrets.HOSTINGER_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Create remote directory
+        run: |
+          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} \
+            ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
+              mkdir -p /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }}
+            "
+
+      - name: Deploy project with rsync
+        run: |
+          rsync -avz --delete \
+            --exclude '.git/' \
+            --exclude '.github/' \
+            --exclude 'node_modules/' \
+            --exclude 'tests/' \
+            --exclude 'var/cache/' \
+            --exclude 'var/log/' \
+            --exclude '.env' \
+            --exclude '.env.*' \
+            --exclude 'public/uploads/' \
+            -e "ssh -p ${{ secrets.HOSTINGER_SSH_PORT }}" \
+            ./ \
+            ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }}:/home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }}/
+
+      - name: Create public_html symlink
+        run: |
+          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} \
+            ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
+              rm -rf /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/public_html
+
+              ln -s \
+                /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }}/public \
+                /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/public_html
+            "
+
+      - name: Run Symfony production commands
+        run: |
+          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} \
+            ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
+              cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }}
+
+              php bin/console doctrine:database:create \
+                --if-not-exists \
+                --env=prod
+
+              if ls migrations/*.php 1> /dev/null 2>&1; then
+                php bin/console doctrine:migrations:migrate \
+                  --no-interaction \
+                  --env=prod
               fi
-            else
-              echo "ℹ️ Aucune migration trouvée, étape ignorée."
-            fi
-            php bin/console cache:clear --no-warmup --env=prod &&
-            php bin/console cache:warmup --env=prod
-          "
+
+              php bin/console cache:clear \
+                --no-warmup \
+                --env=prod
+
+              php bin/console cache:warmup \
+                --env=prod
+            "
 
       - name: Set permissions
         run: |
           ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} \
             ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
-              chmod -R 755 /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/public_html/ &&
-              chmod -R 777 /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }}/var/"
+              chmod -R 755 /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/public_html
+
+              chmod -R 775 /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }}/var
+            "
