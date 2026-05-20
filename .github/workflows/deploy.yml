@@ -23,11 +23,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node (fix Tailwind bundle runtime)
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
       - name: Restore Symfony private key
         run: |
           mkdir -p config/secrets/prod
@@ -116,12 +111,13 @@ jobs:
             cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }} &&
             php bin/console importmap:install --no-interaction
           "
-
+          
       - name: Tailwind build (Symfony bundle)
         run: |
-          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
+          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} \
+          ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
             cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }} &&
-            php bin/console tailwind:build --env=prod
+            TAILWIND_BUN=0 php bin/console tailwind:build --env=prod
           "
 
       - name: Asset Map
