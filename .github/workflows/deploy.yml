@@ -111,12 +111,12 @@ jobs:
             cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }} &&
             php bin/console importmap:install --no-interaction
           "
-          
-      - name: Install bundle assets
+
+      - name: Install tailwind
         run: |
           ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
             cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }} &&
-            php bin/console assets:install public --env=prod
+            php bin/console tailwind:build
           "
 
       - name: Compile assets with Asset Map
@@ -126,11 +126,11 @@ jobs:
             php bin/console asset-map:compile --env=prod
           " 
 
-      - name: Install tailwind
+      - name: Install bundle assets
         run: |
           ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
             cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }} &&
-            php bin/console tailwind:build
+            php bin/console assets:install public --env=prod
           "
 
       - name: Run database create on Hostinger
