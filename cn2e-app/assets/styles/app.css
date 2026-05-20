@@ -1,9 +1,9 @@
-@import "tailwindcss";
-
 @source '../templates/**/*.twig';
 @source '../assets/**/*.{js,ts,jsx,tsx}';
 
 @tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @theme {
   --color-primary: #003399;
