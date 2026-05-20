@@ -46,9 +46,9 @@ jobs:
           echo "${{ secrets.SYMFONY_PRIVATE_KEY }}" > config/secrets/prod/prod.decrypt.private.php
           chmod 600 config/secrets/prod/prod.decrypt.private.php
 
-      - name: Create .env.prod.local
+      - name: Create .env
         run: |
-          cat <<EOF > .env.prod.local
+          cat <<EOF > .env
           DATABASE_URL=${{ secrets.DATABASE_URL }}
           MAILER_DSN=${{ secrets.MAILER_DSN }}
           APP_ENV=prod
@@ -78,15 +78,6 @@ jobs:
             -i ./assets/styles/app.css \
             -o ./public/build/app.css \
             --minify
-
-      - name: Install importmap assets
-        run: php bin/console importmap:install --env=prod --no-interaction
-
-      - name: Compile asset map
-        run: php bin/console asset-map:compile --env=prod
-
-      - name: Install public assets (EAB)
-        run: php bin/console assets:install public --env=prod
 
       - name: Set up SSH key
         run: |
@@ -148,6 +139,47 @@ jobs:
                   --no-interaction \
                   --env=prod
               fi
+
+              php bin/console cache:clear \
+                --no-warmup \
+                --env=prod
+
+              php bin/console cache:warmup \
+                --env=prod
+            "
+
+      - name: Install importmap assets
+        run: |
+          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} \
+            ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
+              cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }}
+
+              php bin/console importmap:install --env=prod --no-interaction
+              "
+
+      - name: Compile asset map
+        run: |
+          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} \
+            ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
+              cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }}
+
+              php bin/console asset-map:compile --env=prod
+              "
+
+      - name: Install public assets (EAB)
+        run: |
+          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} \
+            ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
+              cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }}
+
+              php bin/console assets:install public --env=prod
+              "
+
+      - name: Cache clear + warmup
+        run: |
+          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} \
+            ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
+              cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }}
 
               php bin/console cache:clear \
                 --no-warmup \
