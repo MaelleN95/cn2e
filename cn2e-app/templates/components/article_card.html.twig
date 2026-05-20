@@ -46,11 +46,19 @@
 
       {% if article.author %}
         <div class="flex items-center gap-3">
-          <img
-            src="{{ article.author.profilePicture }}"
-            alt="{{ article.author.firstName }} {{ article.author.lastName }}"
-            class="w-8 h-8 rounded-full object-cover"
-          >
+          {% if article.author.profilePicture %}
+            <img
+              src="{{ article.author.profilePicture }}"
+              alt="{{ article.author.firstName }} {{ article.author.lastName }}"
+              class="w-8 h-8 rounded-full object-cover"
+            >
+          {% else %}
+            <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center border border-border">
+              <span class="text-primary font-semibold text-sm">
+                {{ article.author.firstName|first }}{{ article.author.lastName|first }}
+              </span>
+            </div>
+          {% endif %}
           <div class="text-xs leading-tight">
             <p class="text-muted-foreground">Rédigé par</p>
             <p class="font-medium text-foreground">
