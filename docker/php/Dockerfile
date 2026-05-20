@@ -11,6 +11,18 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-enable imagick \
     && rm -rf /var/lib/apt/lists/*
 
+# Node + npm
+RUN apt-get update && apt-get install -y \
+    curl \
+    gnupg \
+    ca-certificates
+
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
+
+# vérification
+RUN node -v && npm -v
+
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Copy custom PHP config

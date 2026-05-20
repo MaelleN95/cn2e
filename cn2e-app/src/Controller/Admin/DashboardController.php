@@ -31,7 +31,7 @@ class DashboardController extends AbstractDashboardController
     {
         // Inclusion de 'app' pour les controllers Stimulus dansn EAB
         return Assets::new()
-            ->addCssFile('styles/app.css')
+            ->addCssFile('build/app.css')
             ->addAssetMapperEntry('app');
     }
     

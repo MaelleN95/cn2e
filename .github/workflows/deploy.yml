@@ -111,14 +111,12 @@ jobs:
             cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }} &&
             php bin/console importmap:install --no-interaction
           "
-          
-      - name: Tailwind build (Symfony bundle)
-        run: |
-          ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} \
-          ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
-            cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }} &&
-            TAILWIND_BUN=0 php bin/console tailwind:build --env=prod
-          "
+
+      - name: Install Node dependencies
+        run: npm install
+
+      - name: Build Tailwind CSS
+        run: npx tailwindcss -i ./assets/styles/app.css -o ./public/build/app.css --minify
 
       - name: Asset Map
         run: |

@@ -1,0 +1,37 @@
+{
+  "name": "html",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "tailwindcss -i ./assets/styles/app.css -o ./public/build/app.css --minify",
+    "dev": "tailwindcss -i ./assets/styles/app.css -o ./public/build/app.css --watch",
+    "init:tw": "tailwindcss init"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.0",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^4.3.0"
+  },
+  "dependencies": {
+    "baseline-browser-mapping": "^2.10.31",
+    "browserslist": "^4.28.2",
+    "caniuse-lite": "^1.0.30001793",
+    "electron-to-chromium": "^1.5.360",
+    "escalade": "^3.2.0",
+    "fraction.js": "^5.3.4",
+    "nanoid": "^3.3.12",
+    "node-releases": "^2.0.44",
+    "picocolors": "^1.1.1",
+    "postcss-value-parser": "^4.2.0",
+    "source-map-js": "^1.2.1",
+    "update-browserslist-db": "^1.2.3"
+  },
+  "description": ""
+}
