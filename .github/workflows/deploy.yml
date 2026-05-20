@@ -43,7 +43,7 @@ jobs:
       - name: Restore Symfony private key
         run: |
           mkdir -p config/secrets/prod
-          echo "${{ secrets.SYMFONY_PRIVATE_KEY }}" > config/secrets/prod/prod.decrypt.private.php
+          echo "${{ secrets.APP_SECRET }}" > config/secrets/prod/prod.decrypt.private.php
           chmod 600 config/secrets/prod/prod.decrypt.private.php
 
       - name: Create .env
