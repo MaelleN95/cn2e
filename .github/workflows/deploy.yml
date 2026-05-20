@@ -23,6 +23,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup Node (fix Tailwind bundle runtime)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
       - name: Restore Symfony private key
         run: |
           mkdir -p config/secrets/prod
@@ -86,7 +91,7 @@ jobs:
             rm -rf var/cache/prod
           EOF
 
-      - name: Create .env locally
+      - name: Create .env
         run: |
           cat <<EOF > .env
           DATABASE_URL=${{ env.DATABASE_URL }}
@@ -105,28 +110,28 @@ jobs:
             scp -P ${{ secrets.HOSTINGER_SSH_PORT }} .env \
             ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }}:/home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }}/.env
 
-      - name: Install importmap assets on server
+      - name: Importmap install
         run: |
           ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
             cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }} &&
             php bin/console importmap:install --no-interaction
           "
 
-      - name: Install tailwind
+      - name: Tailwind build (Symfony bundle)
         run: |
           ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
             cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }} &&
-            php bin/console tailwind:build
+            php bin/console tailwind:build --env=prod
           "
 
-      - name: Compile assets with Asset Map
+      - name: Asset Map
         run: |
           ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
             cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }} &&
             php bin/console asset-map:compile --env=prod
           " 
 
-      - name: Install bundle assets
+      - name: Assets install
         run: |
           ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
             cd /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/${{ env.PROJECT_NAME }} &&
