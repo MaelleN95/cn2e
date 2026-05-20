@@ -47,11 +47,11 @@
       <div>
         <span class="font-medium">Date : </span>
 
-        {% if event.endDate %}
-          Du {{ event.startDate|format_datetime(locale='fr', pattern="d MMMM yyyy") }}
-          au {{ event.endDate|format_datetime(locale='fr', pattern="d MMMM yyyy") }}
+        {% if event.endDate and event.startDate|date('Y-m-d') != event.endDate|date('Y-m-d') %}
+            Du {{ event.startDate|format_datetime(locale='fr', pattern='d MMMM yyyy') }}
+            au {{ event.endDate|format_datetime(locale='fr', pattern='d MMMM yyyy') }}
         {% else %}
-          {{ event.startDate|format_datetime(locale='fr', pattern="d MMMM yyyy") }}
+            Le {{ event.startDate|format_datetime(locale='fr', pattern='d MMMM yyyy') }}
         {% endif %}
       </div>
     </div>
@@ -73,11 +73,16 @@
             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="w-5 h-5 text-primary">
           <circle cx="12" cy="12" r="10"/>
           <path d="M12 6v6l4 2"/>
-        </svg>
+      </svg>
       <div>
-        <span class="font-medium">Horaires : </span>
-          {# TODO : corriger l'affichage des horaires #}
-          {# {{ event.time }} #}
+          <span class="font-medium">Horaires : </span>
+
+          {% if event.endDate %}
+              De {{ event.startDate|date('H\\hi') }}
+              à {{ event.endDate|date('H\\hi') }}
+          {% else %}
+              À partir de {{ event.startDate|date('H\\hi') }}
+          {% endif %}
       </div>
     </div>
 

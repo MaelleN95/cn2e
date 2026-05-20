@@ -43,9 +43,10 @@
                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="w-4 h-4">
                 <circle cx="12" cy="12" r="10"/>
                 <path d="M12 6v6l4 2"/>
-            </svg>7
-            {# TODO : corriger l'affichage des horaires #}
-            {# {{ event.time }} #}
+            </svg>
+            <div class="text-sm">
+                {{ event.startDate|date('H\\hi') }}
+            </div>
             </span>
         </div>
 
