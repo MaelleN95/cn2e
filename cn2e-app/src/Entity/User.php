@@ -74,9 +74,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'author')]
     private Collection $articles;
 
-    #[Assert\NotNull(message: 'user.establishment.required')]
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Establishment $establishment = null;
 
     // Pour le message optionnel lors du registerForm

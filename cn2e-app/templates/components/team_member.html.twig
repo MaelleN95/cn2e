@@ -39,17 +39,19 @@
         <span>{{ profession }}</span>
       </div>
 
-      <div class="flex items-start gap-2">
-        <svg viewBox="0 0 24 24" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="mt-0.5 w-4 h-4 stroke-primary fill-none">
-          <path d="M10 12h4"/>
-          <path d="M10 8h4"/>
-          <path d="M14 21v-3a2 2 0 0 0-4 0v3"/>
-          <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/>
-          <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/>
-        </svg>
-        <span>{{ etablissement }}</span>
-      </div>
+      {% if etablissement %}
+        <div class="flex items-start gap-2">
+          <svg viewBox="0 0 24 24" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="mt-0.5 w-4 h-4 stroke-primary fill-none">
+            <path d="M10 12h4"/>
+            <path d="M10 8h4"/>
+            <path d="M14 21v-3a2 2 0 0 0-4 0v3"/>
+            <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/>
+            <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/>
+          </svg>
+          <span>{{ etablissement }}</span>
+        </div>
+      {% endif %}
 
       {% if email %}
         <div class="pt-3 border-t border-border flex flex-col gap-2 text-xs">
