@@ -124,7 +124,7 @@ jobs:
                 /home/${{ secrets.HOSTINGER_USERNAME }}/domains/${{ env.PROJECT_DOMAIN }}/public_html
             "
 
-      - name: Run Symfony production commands
+      - name: Run Symfony database commands
         run: |
           ssh -p ${{ secrets.HOSTINGER_SSH_PORT }} \
             ${{ secrets.HOSTINGER_USERNAME }}@${{ secrets.HOSTINGER_HOST }} "
@@ -139,13 +139,6 @@ jobs:
                   --no-interaction \
                   --env=prod
               fi
-
-              php bin/console cache:clear \
-                --no-warmup \
-                --env=prod
-
-              php bin/console cache:warmup \
-                --env=prod
             "
 
       - name: Install importmap assets
