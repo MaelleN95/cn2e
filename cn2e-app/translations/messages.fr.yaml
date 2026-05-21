@@ -77,8 +77,8 @@ admin:
     description: Description
     academicprogram: Formation(s) proposée(s)
   academicprogram:
-    singular: Diplôme
-    plural: Diplômes
+    singular: Formation
+    plural: Formations
     establishments: Établissements proposant cette formation
     level: Niveau
     title: Intitulé
