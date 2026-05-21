@@ -6,8 +6,8 @@
     "test": "tests"
   },
   "scripts": {
-    "build": "tailwindcss -i ./assets/styles/app.css -o ./public/build/app.css --minify",
-    "dev": "tailwindcss -i ./assets/styles/app.css -o ./public/build/app.css --watch",
+    "build": "tailwindcss -i ./tailwind/app.css -o ./public/build/app.css --minify",
+    "dev": "tailwindcss -i ./tailwind/app.css -o ./public/build/app.css --watch",
     "init:tw": "tailwindcss init"
   },
   "keywords": [],
