@@ -73,6 +73,29 @@
     line-height: 1.5;
   }
 
+  .rich-text ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+
+  .rich-text ol {
+    list-style: decimal;
+    padding-left: 1.25rem;
+  }
+
+  .rich-text li {
+    margin: 0.25rem 0;
+  }
+
+  .rich-text a {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  .rich-text a:hover {
+    text-decoration: none;
+  }
+
   /* EAB encadre le formulaire complet en rouge en cas d'erreur sans cette contrainte */
   .form-fieldset.has-fieldset-error {
       border: none !important;
