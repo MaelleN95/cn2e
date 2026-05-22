@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[HasCn2eRole]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[UniqueEntity(fields: ['email'], message: 'connexion.email.unique')]
+#[UniqueEntity(fields: ['email'], message: 'user.email.unique')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
