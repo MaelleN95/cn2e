@@ -62,7 +62,6 @@ class ImportEstablishmentsCommand extends Command
 
             if ($i % 50 === 0) {
                 $this->em->flush();
-                $this->em->clear();
             }
         }
 
@@ -98,8 +97,20 @@ class ImportEstablishmentsCommand extends Command
 
         $email = $row['adresse mail'] ?? null;
         $website = $row['URL'] ?? null;
-        $address = $row['Adresse'] ?? null;
         $city = $row['Ville'] ?? null;
+        $street = trim($row['Adresse'] ?? '');
+        $postalCode = trim($row['Code postal'] ?? '');
+        $city = trim($row['Ville'] ?? '') ?: null;
+
+        $parts = array_filter([
+            $street,
+            $postalCode,
+            $city
+        ]);
+
+        $address = !empty($parts)
+            ? implode(' ', $parts)
+            : null;
 
         if (empty($address) && !empty($city)) {
             $address = $city;
@@ -110,8 +121,6 @@ class ImportEstablishmentsCommand extends Command
                 'message' => 'Adresse absente, ville utilisée comme adresse'
             ];
         }
-        
-        $city = trim($row['Ville'] ?? '') ?: null;
 
         $phone = $row['Téléphone'] ?? null;
 
@@ -126,14 +135,6 @@ class ImportEstablishmentsCommand extends Command
             ];
         }
 
-        if (empty($address)) {
-            $this->infos[] = [
-                'row' => $name,
-                'field' => 'Adresse',
-                'message' => 'Champ vide'
-            ];
-        }
-
         if (empty($city)) {
             $this->infos[] = [
                 'row' => $name,
@@ -144,25 +145,36 @@ class ImportEstablishmentsCommand extends Command
 
         $slug = $slugger->slug($name)->lower();
 
-        $addressHash = md5(($address ?? '') . ($city ?? ''));
+        $addressHash = md5($address ?? '');
 
-        // IDEMPOTENCE / DOUBLON
         $establishment = $this->findExisting($slug, $email, $addressHash);
 
         if (!$establishment) {
             $establishment = new Establishment();
-            $establishment->setName($name);
-            $establishment->setEmail($email);
-            $establishment->setWebsite($website);
-            $establishment->setAddress($address);
-            $establishment->setCity($city);
-
-            $establishment->setPhone($phone);
-
-            $this->geocoder->hydrate($establishment);
-
-            $this->em->persist($establishment);
         }
+        
+        $establishment->setName($name);
+        $establishment->setEmail($email);
+        $establishment->setWebsite($website);
+        $establishment->setAddress($address);
+        $establishment->setCity($city);
+
+        $establishment->setPhone($phone);
+
+        $this->geocoder->hydrate($establishment);
+
+        $this->infos[] = [
+            'row' => $name,
+            'import_address' => $address,
+            'final_address' => implode(' ', array_filter([
+                $establishment->getAddress(),
+                $establishment->getDepartment(),
+                $establishment->getCity(),
+            ])),
+        ];
+
+        $this->em->persist($establishment);
+        
 
         // PROGRAMS
         $this->syncPrograms($establishment, $row);
@@ -214,6 +226,7 @@ class ImportEstablishmentsCommand extends Command
     private function attachProgram(Establishment $establishment, string $level, string $title): void
     {
         $title = trim($title);
+        $title = preg_replace('/\s+/', ' ', $title);
 
         $program = $this->programRepo->findOneBy([
             'level' => $level,
@@ -235,12 +248,19 @@ class ImportEstablishmentsCommand extends Command
     {
         $writer = Writer::createFromPath('var/import_establishments_errors.csv', 'w+');
 
-        $writer->insertOne(['Row', 'Establishment', 'Error', 'Info']);
+        $writer->insertOne([
+            'Establishment',
+            'Import Address',
+            'Final Address',
+            'Error',
+            'Info'
+        ]);
 
         foreach ($this->errors as $error) {
             $writer->insertOne([
-                $error['row'],
                 $error['name'],
+                '',
+                '',
                 $error['error'],
                 ''
             ]);
@@ -248,10 +268,13 @@ class ImportEstablishmentsCommand extends Command
 
         foreach ($this->infos as $info) {
             $writer->insertOne([
+                $info['row'] ?? '',
+                $info['import_address'] ?? '',
+                $info['final_address'] ?? '',
                 '',
-                $info['row'],
-                '',
-                $info['field'] . ' : ' . $info['message']
+                isset($info['field'])
+                    ? $info['field'] . ' : ' . $info['message']
+                    : ''
             ]);
         }
     }
