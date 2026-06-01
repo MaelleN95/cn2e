@@ -10,8 +10,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -139,6 +141,20 @@ class UserCrudController extends AbstractCrudController
         yield TextField::new('firstName', 'admin.user.firstName');
 
         yield TextField::new('profession', 'admin.user.profession');
+
+        yield Field::new('imageFile', 'admin.user.imageFile')
+            ->setFormType(VichImageType::class)
+            ->onlyOnForms()
+            ->setFormTypeOptions([
+                'required' => false,
+                'allow_delete' => true,
+                'download_uri' => false,
+                'image_uri' => true,
+                'attr' => [
+                    'data-controller' => 'image-upload-preview',
+                    'data-action' => 'change->image-upload-preview#onChange',
+                ],
+            ]);
 
         yield TextField::new('primaryRole', 'Rôle principal')
             ->onlyOnIndex()

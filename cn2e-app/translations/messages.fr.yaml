@@ -91,7 +91,7 @@ admin:
     lastName: Nom
     firstName: Prénom
     profession: Profession
-    profilePicture: Photo de profil
+    imageFile: Photo de profil
     cn2eRole: Rôle CN2E
     lastLoginAt: Dernière connexion
     status: Statut
