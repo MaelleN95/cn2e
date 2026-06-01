@@ -64,7 +64,7 @@ class ArticleCrudController extends AbstractCrudController
         yield TextEditorField::new('content', 'admin.article.content')
             ->onlyOnForms();
 
-        yield Field::new('imageFile')
+        yield Field::new('imageFile', 'admin.article.imageFile')
             ->setFormType(VichImageType::class)
             ->onlyOnForms()
             ->setFormTypeOptions([
