@@ -245,7 +245,7 @@
                 fonctionCN2E: member.cn2eRole,
                 etablissement: member.establishment ? member.establishment.name : null,
                 profession: member.profession,
-                photo: member.profilePicture,
+                photo: member.imageName ? asset('uploads/users/' ~ member.imageName) : null,
                 email: member.email
             } %}
         {% endfor %}

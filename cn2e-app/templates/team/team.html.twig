@@ -30,7 +30,7 @@
         fonctionCN2E: user.cn2eRole,
         etablissement: user.establishment ? user.establishment.name : null,
         profession: user.profession,
-        photo: user.profilePicture,
+        photo: user.imageName ? asset('uploads/users/' ~ user.imageName) : null,
         email: user.email
       } %}
     {% endfor %}

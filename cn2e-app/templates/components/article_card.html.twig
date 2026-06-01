@@ -46,9 +46,9 @@
 
       {% if article.author %}
         <div class="flex items-center gap-3">
-          {% if article.author.profilePicture %}
+          {% if article.author.imageName %}
             <img
-              src="{{ article.author.profilePicture }}"
+              src="{{ asset('uploads/users/' ~ article.author.imageName) }}"
               alt="{{ article.author.firstName }} {{ article.author.lastName }}"
               class="w-8 h-8 rounded-full object-cover"
             >
