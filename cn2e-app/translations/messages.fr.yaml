@@ -55,7 +55,7 @@ admin:
     location: Lieu
     shortDescription: Résumé
     content: Contenu
-    image: Image
+    imageFile: Image
     category: Catégorie
     isMembersOnly: Réservé aux membres
     hasRegistration: Inscription requise
