@@ -41,7 +41,7 @@ admin:
     publishedAt: Date de publication
     shortDescription: Résumé
     content: Contenu
-    image: Image
+    imageFile: Image
     category: Catégorie
     isMembersOnly: Réservé aux membres
     author: Auteur
