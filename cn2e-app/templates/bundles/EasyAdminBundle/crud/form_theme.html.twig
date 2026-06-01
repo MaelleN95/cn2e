@@ -3,26 +3,26 @@
 {% block vich_image_widget %}
     {% set formTypeOptions = ea_vars.field.formTypeOptions|default('') %}
     <div class="ea-vich-image space-y-2">
-            <div class="ea-lightbox-thumbnail overflow-hidden rounded border border-border bg-white min-h-[14rem] flex items-center justify-center">
-            {% if image_uri|default('') is not empty %}
-                {% if download_uri|default('') is empty %}
-                    <img class="w-full max-w-full h-auto object-contain max-h-80" style="display:block; cursor: initial;" src="{{ asset_helper is same as(true) ? asset(image_uri) : image_uri }}">
+            <div class="overflow-hidden rounded border !border-zinc-700 bg-[#171717] min-h-[14rem] flex items-center justify-center">
+                {% if image_uri|default('') is not empty %}
+                    {% if download_uri|default('') is empty %}
+                        <img style="display:block; cursor: initial;" src="{{ asset_helper is same as(true) ? asset(image_uri) : image_uri }}" alt="Aperçu de l'image sélectionnée">
+                    {% else %}
+                        {% set _lightbox_id = 'ea-lightbox-' ~ id %}
+
+                        <a href="#" class="block ea-lightbox-thumbnail" data-ea-lightbox-content-selector="#{{ _lightbox_id }}">
+                            <img style="display:block;" src="{{ asset_helper is same as(true) ? asset(image_uri) : image_uri }}" alt="Aperçu de l'image sélectionnée">
+                        </a>
+
+                        <div id="{{ _lightbox_id }}" class="ea-lightbox">
+                            <img src="{{ asset_helper is same as(true) ? asset(download_uri) : download_uri }}" alt="Aperçu de l'image sélectionnée">
+                        </div>
+                    {% endif %}
                 {% else %}
-                    {% set _lightbox_id = 'ea-lightbox-' ~ id %}
-
-                    <a href="#" class="block" data-ea-lightbox-content-selector="#{{ _lightbox_id }}">
-                        <img class="w-full max-w-full h-auto object-contain max-h-80" style="display:block;" src="{{ asset_helper is same as(true) ? asset(image_uri) : image_uri }}">
-                    </a>
-
-                    <div id="{{ _lightbox_id }}" class="ea-lightbox">
-                        <img class="w-full max-w-full h-auto object-contain max-h-96" src="{{ asset_helper is same as(true) ? asset(download_uri) : download_uri }}">
-                    </div>
+                    <div data-preview-placeholder class="text-sm">Aucune image sélectionnée</div>
+                    <img style="display:none;" alt="Aperçu de l'image sélectionnée">
                 {% endif %}
-            {% else %}
-                <div data-preview-placeholder class="text-sm text-slate-500">Aucune image sélectionnée</div>
-                <img class="w-full max-w-full h-auto object-contain max-h-80" style="display:none;" alt="Aperçu de l'image sélectionnée">
-            {% endif %}
-        </div>
+            </div>
 
         {% set file_upload_js %}
             var newFile = document.getElementById('{{ form.file.vars.id }}').files[0];
@@ -39,8 +39,17 @@
             </div>
 
             {% if form.delete is defined %}
-                {{ form_row(form.delete) }}
+                <div class="flex items-center gap-2">
+                    <span class="flex items-center">
+                        {{ form_widget(form.delete) }}
+                    </span>
+
+                    <span class="text-sm leading-none">
+                        {{ form_label(form.delete) }}
+                    </span>
+                </div>
             {% endif %}
+
         </div>
         <div class="small" id="{{ form.file.vars.id }}_new_file_name"></div>
     </div>

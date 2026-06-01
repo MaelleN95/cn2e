@@ -77,7 +77,8 @@ export default class extends Controller {
             'sm:max-h-72',
             'md:max-h-80',
             'lg:max-h-96',
-            'min-w-0'
+            'min-w-0', 
+            'shadow-none',
         ].join(' ');
 
         img.style.maxWidth = '100%';
