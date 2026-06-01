@@ -1,0 +1,47 @@
+{% extends '@!EasyAdmin/crud/form_theme.html.twig' %}
+
+{% block vich_image_widget %}
+    {% set formTypeOptions = ea_vars.field.formTypeOptions|default('') %}
+    <div class="ea-vich-image space-y-2">
+            <div class="ea-lightbox-thumbnail overflow-hidden rounded border border-border bg-white min-h-[14rem] flex items-center justify-center">
+            {% if image_uri|default('') is not empty %}
+                {% if download_uri|default('') is empty %}
+                    <img class="w-full max-w-full h-auto object-contain max-h-80" style="display:block; cursor: initial;" src="{{ asset_helper is same as(true) ? asset(image_uri) : image_uri }}">
+                {% else %}
+                    {% set _lightbox_id = 'ea-lightbox-' ~ id %}
+
+                    <a href="#" class="block" data-ea-lightbox-content-selector="#{{ _lightbox_id }}">
+                        <img class="w-full max-w-full h-auto object-contain max-h-80" style="display:block;" src="{{ asset_helper is same as(true) ? asset(image_uri) : image_uri }}">
+                    </a>
+
+                    <div id="{{ _lightbox_id }}" class="ea-lightbox">
+                        <img class="w-full max-w-full h-auto object-contain max-h-96" src="{{ asset_helper is same as(true) ? asset(download_uri) : download_uri }}">
+                    </div>
+                {% endif %}
+            {% else %}
+                <div data-preview-placeholder class="text-sm text-slate-500">Aucune image sélectionnée</div>
+                <img class="w-full max-w-full h-auto object-contain max-h-80" style="display:none;" alt="Aperçu de l'image sélectionnée">
+            {% endif %}
+        </div>
+
+        {% set file_upload_js %}
+            var newFile = document.getElementById('{{ form.file.vars.id }}').files[0];
+            var fileSizeInMegabytes = newFile.size > 1024 * 1024;
+            var fileSize = fileSizeInMegabytes ? newFile.size / (1024 * 1024) : newFile.size / 1024;
+            document.getElementById('{{ form.file.vars.id }}_new_file_name').innerText = newFile.name + ' (' + fileSize.toFixed(2) + ' ' + (fileSizeInMegabytes ? 'MB' : 'KB') + ')';
+        {% endset %}
+
+        <div class="ea-vich-image-actions flex items-center gap-3">
+            {# the container element is needed to allow customizing the <input type="file" /> #}
+            <div class="btn btn-secondary input-file-container">
+                <twig:ea:Icon name="internal:upload" /> {{ 'action.choose_file'|trans({}, 'EasyAdminBundle') }}
+                {{ form_widget(form.file, {attr: {onchange: file_upload_js}, vich: true}) }}
+            </div>
+
+            {% if form.delete is defined %}
+                {{ form_row(form.delete) }}
+            {% endif %}
+        </div>
+        <div class="small" id="{{ form.file.vars.id }}_new_file_name"></div>
+    </div>
+{% endblock %}
