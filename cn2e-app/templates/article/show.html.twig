@@ -93,10 +93,10 @@
 
     </div>
 
-    {% if article.image %}
+    {% if article.imageName %}
       <div class="mb-8 rounded overflow-hidden">
         <img
-          src="{{ article.image }}"
+          src="{{ asset('uploads/articles/' ~ article.imageName) }}"
           alt="{{ article.title }}"
           class="w-full h-auto object-cover"
         >

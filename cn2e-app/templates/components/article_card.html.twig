@@ -1,10 +1,10 @@
 <a href="{{ path('app_article_show', { slug: article.slug }) }}"
    class="bg-white border border-border rounded overflow-hidden hover:shadow-md transition-shadow group">
 
-  {% if article.image %}
+  {% if article.imageName %}
     <div class="aspect-video overflow-hidden bg-secondary">
       <img
-        src="{{ article.image }}"
+        src="{{ asset('uploads/articles/' ~ article.imageName) }}"
         alt="{{ article.title }}"
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
       >
