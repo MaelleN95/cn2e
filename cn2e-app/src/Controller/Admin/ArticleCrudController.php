@@ -15,9 +15,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class ArticleCrudController extends AbstractCrudController
 {
@@ -62,9 +64,19 @@ class ArticleCrudController extends AbstractCrudController
         yield TextEditorField::new('content', 'admin.article.content')
             ->onlyOnForms();
 
-        // TODO Vich
-        // yield TextField::new('image', 'admin.article.image')
-        //     ->onlyOnForms();
+        yield Field::new('imageFile')
+            ->setFormType(VichImageType::class)
+            ->onlyOnForms()
+            ->setFormTypeOptions([
+                'required' => false,
+                'allow_delete' => true,
+                'download_uri' => false,
+                'image_uri' => true,
+                'attr' => [
+                    'data-controller' => 'image-upload-preview',
+                    'data-action' => 'change->image-upload-preview#onChange',
+                ],
+            ]);
 
         yield BooleanField::new('isMembersOnly', 'admin.article.isMembersOnly');
 
