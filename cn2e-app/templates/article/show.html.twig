@@ -69,9 +69,9 @@
         <span class="hidden sm:inline text-border">•</span>
 
         <div class="flex items-center gap-2">
-          {% if article.author.profilePicture %}
+          {% if article.author.imageName %}
             <img
-              src="{{ article.author.profilePicture }}"
+              src="{{ asset('uploads/users/' ~ article.author.imageName) }}"
               class="w-6 h-6 rounded-full object-cover"
               alt="{{ article.author.firstName }} {{ article.author.lastName }}"
             >
