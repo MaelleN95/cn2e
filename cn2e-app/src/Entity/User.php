@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\ImageUploadTrait;
 use App\Enum\UserStatus;
 use App\Repository\UserRepository;
 use App\Validator\HasCn2eRole;
@@ -9,17 +10,22 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Vich\UploaderBundle\Mapping\Attribute as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[HasCn2eRole]
+#[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'connexion.email.unique')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    use ImageUploadTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -55,8 +61,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $profession = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $profilePicture = null;
+    #[Vich\UploadableField(
+        mapping: 'user_image',
+        fileNameProperty: 'imageName'
+    )]
+    private ?File $imageFile = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $cn2eRole = null;
@@ -183,14 +192,43 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
+     * ATTENTION : l'utilisateur possède un File (photo de profil) qui n'est pas sérialisable, il est donc exclu de la sérialisation. Seules les propriétés nécessaires à l'identification et à la gestion de l'utilisateur sont sérialisées.
+     * Il est important de ne pas sérialiser le mot de passe en clair, même si c'est un hash, pour éviter les risques de sécurité en cas de fuite de données.
      */
     public function __serialize(): array
     {
-        $data = (array) $this;
-        $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
+        return [
+            'id' => $this->id,
+            'email' => $this->email,
+            'password' => hash('crc32c', $this->password),
+            'roles' => $this->roles,
+            'lastName' => $this->lastName,
+            'firstName' => $this->firstName,
+            'profession' => $this->profession,
+            'cn2eRole' => $this->cn2eRole,
+            'status' => $this->status->value,
+            'isVerified' => $this->isVerified,
+            'imageName' => $this->imageName,
+            'lastLoginAt' => $this->lastLoginAt?->format(\DateTimeInterface::ATOM),
+            'requestMessage' => $this->requestMessage,
+        ];
+    }
 
-        return $data;
+    public function __unserialize(array $data): void
+    {
+        $this->id = $data['id'] ?? null;
+        $this->email = $data['email'] ?? null;
+        $this->password = $data['password'] ?? null;
+        $this->roles = $data['roles'] ?? [];
+        $this->lastName = $data['lastName'] ?? null;
+        $this->firstName = $data['firstName'] ?? null;
+        $this->profession = $data['profession'] ?? null;
+        $this->cn2eRole = $data['cn2eRole'] ?? null;
+        $this->status = isset($data['status']) ? UserStatus::from($data['status']) : UserStatus::PENDING;
+        $this->isVerified = $data['isVerified'] ?? false;
+        $this->imageName = $data['imageName'] ?? null;
+        $this->lastLoginAt = isset($data['lastLoginAt']) ? new \DateTimeImmutable($data['lastLoginAt']) : null;
+        $this->requestMessage = $data['requestMessage'] ?? null;
     }
 
     #[\Deprecated]
@@ -231,18 +269,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setProfession(?string $profession): static
     {
         $this->profession = $profession;
-
-        return $this;
-    }
-
-    public function getProfilePicture(): ?string
-    {
-        return $this->profilePicture;
-    }
-
-    public function setProfilePicture(?string $profilePicture): static
-    {
-        $this->profilePicture = $profilePicture;
 
         return $this;
     }
