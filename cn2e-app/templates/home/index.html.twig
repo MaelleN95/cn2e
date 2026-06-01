@@ -49,12 +49,12 @@
                    class="bg-white rounded border border-border hover:shadow-md transition overflow-hidden group
                           {{ loop.index == 1 ? 'md:col-span-2 md:row-span-2' : '' }}">
 
-                    {% if article.image %}
+                    {% if article.imageName %}
 
                         <div class="w-full overflow-hidden bg-secondary
                                     {{ loop.index == 1 ? 'h-80' : 'h-0' }}">
 
-                            <img src="{{ article.image }}"
+                            <img src="{{ asset('uploads/articles/' ~ article.imageName) }}"
                                  alt="{{ article.title }}"
                                  class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
 

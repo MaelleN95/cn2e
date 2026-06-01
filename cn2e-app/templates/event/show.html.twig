@@ -89,9 +89,13 @@
   </div>
 
   {# IMAGE #}
-  {% if event.image %}
+  {% if event.imageName %}
     <div class="mb-8 rounded overflow-hidden">
-      <img src="{{ event.image }}" alt="{{ event.title }}" class="w-full h-auto">
+      <img 
+        src="{{ asset('uploads/events/' ~ event.imageName) }}"
+        alt="{{ event.title }}"
+        class="w-full h-auto"
+      >
     </div>
   {% endif %}
 
