@@ -14,7 +14,7 @@ trait ImageUploadTrait
     #[Vich\UploadableField(mapping: '', fileNameProperty: 'imageName')]
     private ?File $imageFile = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
     public function getImageName(): ?string
