@@ -4,7 +4,14 @@
   {% if article.imageName %}
     <div class="aspect-video overflow-hidden bg-secondary">
       <img
-        src="{{ asset('uploads/articles/' ~ article.imageName) }}"
+        src="{{ asset('uploads/articles/' ~ article.imageName|replace({'.webp': '_medium.webp'}) ) }}"
+        srcset="
+          {{ asset('uploads/articles/' ~ article.imageName|replace({'.webp': '_thumbnail.webp'}) ) }} 100w,
+          {{ asset('uploads/articles/' ~ article.imageName|replace({'.webp': '_small.webp'}) ) }} 300w,
+          {{ asset('uploads/articles/' ~ article.imageName|replace({'.webp': '_medium.webp'}) ) }} 600w,
+          {{ asset('uploads/articles/' ~ article.imageName|replace({'.webp': '_large.webp'}) ) }} 900w
+        "
+        sizes="(max-width: 768px) calc(100vw - 32px) 400px"
         alt="{{ article.title }}"
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
       >
@@ -48,7 +55,7 @@
         <div class="flex items-center gap-3">
           {% if article.author.imageName %}
             <img
-              src="{{ asset('uploads/users/' ~ article.author.imageName) }}"
+              src="{{ asset('uploads/users/' ~ article.author.imageName|replace({'.webp': '_thumbnail.webp'}) ) }}"
               alt="{{ article.author.firstName }} {{ article.author.lastName }}"
               class="w-8 h-8 rounded-full object-cover"
             >

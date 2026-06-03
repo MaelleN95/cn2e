@@ -54,7 +54,15 @@
                         <div class="w-full overflow-hidden bg-secondary
                                     {{ loop.index == 1 ? 'h-80' : 'h-0' }}">
 
-                            <img src="{{ asset('uploads/articles/' ~ article.imageName) }}"
+                            <img 
+                                src="{{ asset('uploads/articles/' ~ article.imageName|replace({'.webp': '_medium.webp'}) ) }}"
+                                srcset="
+                                {{ asset('uploads/articles/' ~ article.imageName|replace({'.webp': '_thumbnail.webp'}) ) }} 100w,
+                                {{ asset('uploads/articles/' ~ article.imageName|replace({'.webp': '_small.webp'}) ) }} 300w,
+                                {{ asset('uploads/articles/' ~ article.imageName|replace({'.webp': '_medium.webp'}) ) }} 600w,
+                                {{ asset('uploads/articles/' ~ article.imageName|replace({'.webp': '_large.webp'}) ) }} 900w
+                                "
+                                sizes="(max-width: 768px) calc(100vw - 32px), 800px"
                                  alt="{{ article.title }}"
                                  class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
 
@@ -245,7 +253,7 @@
                 fonctionCN2E: member.cn2eRole,
                 etablissement: member.establishment ? member.establishment.name : null,
                 profession: member.profession,
-                photo: member.imageName ? asset('uploads/users/' ~ member.imageName) : null,
+                photo: member.imageName ? asset('uploads/users/' ~ member.imageName)|replace({'.webp': '_thumbnail.webp'}) : null,
                 email: member.email
             } %}
         {% endfor %}

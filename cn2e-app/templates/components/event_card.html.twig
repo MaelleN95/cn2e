@@ -70,7 +70,14 @@
     {% if event.imageName %}
         <div class="md:w-80 aspect-[4/3] overflow-hidden bg-secondary">
         <img
-            src="{{ asset('uploads/events/' ~ event.imageName) }}"
+            src="{{ asset('uploads/events/' ~ event.imageName|replace({'.webp': '_medium.webp'}) ) }}"
+            srcset="
+            {{ asset('uploads/events/' ~ event.imageName|replace({'.webp': '_thumbnail.webp'}) ) }} 100w,
+            {{ asset('uploads/events/' ~ event.imageName|replace({'.webp': '_small.webp'}) ) }} 300w,
+            {{ asset('uploads/events/' ~ event.imageName|replace({'.webp': '_medium.webp'}) ) }} 600w,
+            {{ asset('uploads/events/' ~ event.imageName|replace({'.webp': '_large.webp'}) ) }} 900w
+            "
+            sizes="(max-width: 768px) calc(100vw - 32px), 320px"
             alt="{{ event.title }}"
             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         >
