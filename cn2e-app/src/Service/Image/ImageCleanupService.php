@@ -4,7 +4,7 @@ namespace App\Service\Image;
 
 class ImageCleanupService
 {
-    private array $suffixes = ['small', 'medium', 'large'];
+    private array $suffixes = ['thumbnail', 'small', 'medium', 'large'];
 
     public function cleanup(string $path): void
     {
