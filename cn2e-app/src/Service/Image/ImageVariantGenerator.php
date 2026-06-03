@@ -7,9 +7,10 @@ use Imagick;
 class ImageVariantGenerator
 {
     private array $sizes = [
+        'thumbnail' => 100,
         'small' => 300,
-        'medium' => 500,
-        'large' => 700,
+        'medium' => 550,
+        'large' => 800,
     ];
 
     public function generate(string $webpPath): void
