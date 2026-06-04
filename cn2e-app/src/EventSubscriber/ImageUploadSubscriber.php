@@ -66,7 +66,12 @@ class ImageUploadSubscriber implements EventSubscriberInterface
         $webpPath = $this->converter->convert($originalPath);
 
         // suppression original
-        unlink($originalPath);
+        if (
+            $originalPath !== $webpPath &&
+            file_exists($originalPath)
+        ) {
+            unlink($originalPath);
+        }
 
         $newFilename = basename($webpPath);
 
