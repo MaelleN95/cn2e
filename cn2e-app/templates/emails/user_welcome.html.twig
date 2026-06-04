@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Bienvenue sur le CN2E</title>
+</head>
+
+<body style="margin:0; padding:0; background-color:#f5f5f5; font-family:Arial, sans-serif;">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5; padding:40px 0;">
+    <tr>
+        <td align="center">
+
+            <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff; border-radius:8px; overflow:hidden;">
+
+                <tr>
+                    <td style="background:#003399; color:#ffffff; padding:20px 30px;">
+                        <h1 style="margin:0; font-size:20px;">CN2E</h1>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding:30px;">
+
+                        <h2 style="margin-top:0; font-size:18px; color:#111827;">
+                            Bienvenue sur le nouveau site du CN2E !
+                        </h2>
+
+                        <p style="color:#6b7280; font-size:14px; line-height:1.6;">
+                            Bonjour {{ user.firstName }} {{ user.lastName }},
+                        </p>
+
+                        <p style="color:#6b7280; font-size:14px; line-height:1.6;">
+                            J'ai le plaisir de vous annoncer qu'un compte a été créé pour vous sur le nouveau site du CN2E.
+                        </p>
+
+                        <p style="color:#6b7280; font-size:14px; line-height:1.6;">
+                            Voici vos identifiants de connexion :
+                        </p>
+
+                        <table cellpadding="8" cellspacing="0" style="margin:20px 0; border-collapse:collapse;">
+                            <tr>
+                                <td style="font-weight:bold;">Email :</td>
+                                <td>{{ user.email }}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;">Mot de passe :</td>
+                                <td>{{ plainPassword }}</td>
+                            </tr>
+                        </table>
+
+                        <table cellpadding="0" cellspacing="0" style="margin:25px 0;">
+                            <tr>
+
+                                <td style="padding-right:10px;">
+                                    <a href="{{ websiteUrl }}"
+                                    style="display:inline-block; background:#003399; color:#ffffff; padding:12px 18px; border-radius:6px; text-decoration:none; font-size:14px;">
+                                        Accéder au site
+                                    </a>
+                                </td>
+
+                                <td>
+                                    <a href="{{ loginUrl }}"
+                                    style="display:inline-block; background:#111827; color:#ffffff; padding:12px 18px; border-radius:6px; text-decoration:none; font-size:14px;">
+                                        Se connecter
+                                    </a>
+                                </td>
+
+                            </tr>
+                        </table>
+
+                        <p style="color:#6b7280; font-size:14px; line-height:1.6;">
+                            En cas de difficulté pour vous connecter, vous pouvez me contacter à l’adresse
+                            <a href="mailto:contact@koji-dev.fr" style="color:#2563eb;">contact@koji-dev.fr</a>.
+                            Une réponse vous sera apportée dans les plus brefs délais.
+                        </p>
+
+                        <p style="color:#6b7280; font-size:14px; line-height:1.6;">
+                            Pour des raisons de sécurité, il est fortement recommandé de modifier votre mot de passe dès votre première connexion.
+                        </p>
+
+                        <p style="color:#6b7280; font-size:14px; line-height:1.6;">
+                            Il est également déconseillé d’utiliser le même mot de passe sur plusieurs services afin de limiter les risques liés aux fuites de données.
+                        </p>
+
+                        <p style="color:#6b7280; font-size:14px; line-height:1.6;">
+                            Si vous souhaitez demander une modification de vos droits d’accès, merci de contacter le secrétariat du CN2E.
+                        </p>
+
+                    </td>
+                </tr>
+
+            </table>
+
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

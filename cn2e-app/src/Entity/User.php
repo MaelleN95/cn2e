@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[UniqueEntity(fields: ['email'], message: 'connexion.email.unique')]
+#[UniqueEntity(fields: ['email'], message: 'user.email.unique')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use ImageUploadTrait;
