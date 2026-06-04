@@ -13,10 +13,22 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use App\Event\UserCreatedEvent;
+use App\Service\UserCreator;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
+
 
 class UserCrudController extends AbstractCrudController
 {
+    public function __construct(
+        private UserCreator $userCreator,
+        private EventDispatcherInterface $dispatcher,
+    ) {
+    }
+
     public static function getEntityFqcn(): string
     {
         return User::class;
@@ -38,8 +50,8 @@ class UserCrudController extends AbstractCrudController
     {
         return $actions
             ->disable(Action::DELETE)
-            ->disable(Action::NEW)
-            ->setPermission(Action::EDIT, 'ROLE_CN2E_ADMIN');
+            ->setPermission(Action::EDIT, 'ROLE_CN2E_ADMIN')
+            ->setPermission(Action::NEW, 'ROLE_SUPER_ADMIN');
     }
 
     public function configureAssets(Assets $assets): Assets
@@ -49,6 +61,8 @@ class UserCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        $isNew = $pageName === Crud::PAGE_NEW;
+        
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
 
             yield FormField::addFieldset('Gestion des rôles')
@@ -140,6 +154,12 @@ class UserCrudController extends AbstractCrudController
 
         yield TextField::new('firstName', 'admin.user.firstName');
 
+        if ($isNew) {
+            yield EmailField::new('email', 'Email');
+
+            yield AssociationField::new('establishment', 'Établissement');
+        }
+
         yield TextField::new('profession', 'admin.user.profession');
 
         yield Field::new('imageFile', 'admin.user.imageFile')
@@ -173,6 +193,11 @@ class UserCrudController extends AbstractCrudController
         EntityManagerInterface $entityManager,
         $entityInstance
     ): void {
+        $plainPassword = null;
+
+        if ($entityInstance instanceof User) {
+            $plainPassword = $this->userCreator->prepare($entityInstance);
+        }
 
         $this->sanitizeRoles($entityInstance);
 
@@ -180,6 +205,16 @@ class UserCrudController extends AbstractCrudController
             $entityManager,
             $entityInstance
         );
+
+        if ($entityInstance instanceof User && $plainPassword) {
+            $this->dispatcher->dispatch(
+                new UserCreatedEvent(
+                    $entityInstance,
+                    $plainPassword,
+                    $this->getUser()
+                )
+            );
+        }
     }
 
     public function updateEntity(
