@@ -22,6 +22,21 @@ class ImageUploadSubscriber implements EventSubscriberInterface
         ];
     }
 
+    private function getSizes(string $mappingName): array
+    {
+        return match ($mappingName) {
+            'user_image' => [
+                'thumbnail' => 100,
+            ],
+
+            default => [
+                'small' => 300,
+                'medium' => 550,
+                'large' => 800,
+            ],
+        };
+    }
+
     public function onUpload(Event $event): void
     {
         $object = $event->getObject();
@@ -60,6 +75,7 @@ class ImageUploadSubscriber implements EventSubscriberInterface
         }
 
         // 2. génération des images de différentes tailles
-        $this->generator->generate($webpPath);
+        $sizes = $this->getSizes($mapping->getMappingName());
+        $this->generator->generate($webpPath, $sizes);
     }
 }
