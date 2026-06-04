@@ -89,17 +89,19 @@ class SendImportedUsersWelcomeCommand extends Command
                 continue;
             }
 
+            $appUrl = rtrim($_ENV['APP_URL'] ?? $_ENV['DEFAULT_URI'] ?? 'https://cn2e.fr', '/');
+
             $emailMessage = (new TemplatedEmail())
                 ->from(new Address($_ENV['CONTACT_FROM'], 'CN2E'))
                 ->to($email)
                 ->subject('Bienvenue sur le nouveau site du CN2E')
                 ->htmlTemplate('emails/user_welcome.html.twig')
                 ->context([
-                    'user' => $user,
-                    'plainPassword' => $plainPassword,
-                    'websiteUrl' => 'https://cn2e.fr',
-                    'loginUrl' => 'https://cn2e.fr/connexion',
-                ]);
+                        'user' => $user,
+                        'plainPassword' => $plainPassword,
+                        'websiteUrl' => $appUrl,
+                        'loginUrl' => $appUrl . '/connexion',
+                    ]);
 
             $this->mailer->send($emailMessage);
 
