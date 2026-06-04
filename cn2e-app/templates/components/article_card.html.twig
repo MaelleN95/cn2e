@@ -6,10 +6,9 @@
       <img
         src="{{ asset('uploads/articles/' ~ article.imageName|replace({'.webp': '_medium.webp'}) ) }}"
         srcset="
-          {{ asset('uploads/articles/' ~ article.imageName|replace({'.webp': '_thumbnail.webp'}) ) }} 100w,
           {{ asset('uploads/articles/' ~ article.imageName|replace({'.webp': '_small.webp'}) ) }} 300w,
-          {{ asset('uploads/articles/' ~ article.imageName|replace({'.webp': '_medium.webp'}) ) }} 600w,
-          {{ asset('uploads/articles/' ~ article.imageName|replace({'.webp': '_large.webp'}) ) }} 900w
+          {{ asset('uploads/articles/' ~ article.imageName|replace({'.webp': '_medium.webp'}) ) }} 550w,
+          {{ asset('uploads/articles/' ~ article.imageName|replace({'.webp': '_large.webp'}) ) }} 800w
         "
         sizes="(max-width: 768px) calc(100vw - 32px) 400px"
         alt="{{ article.title }}"
