@@ -13,7 +13,17 @@ class ImageVariantGenerator
         $originalWidth = $source->getImageWidth();
         $originalHeight = $source->getImageHeight();
 
-        foreach ($this->sizes as $suffix => $width) {
+        foreach ($sizes as $suffix => $width) {
+
+            if ($originalWidth <= $width) {
+                copy(
+                    $webpPath,
+                    $this->buildPath($webpPath, $suffix)
+                );
+
+                continue;
+            }
+
             $clone = clone $source;
 
             $ratio = $originalHeight / $originalWidth;
