@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use App\Entity\Document;
 use App\Form\DocumentType;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -79,16 +80,13 @@ class ArticleCrudController extends AbstractCrudController
                     'data-action' => 'change->image-upload-preview#onChange',
                 ],
             ]);
+            dump($this->getContext()->getEntity()->getFields());
+
+            dd($this->getContext()->getEntity()->getInstance()->getDocuments());
 
         yield CollectionField::new('documents', 'admin.article.documents')
             ->onlyOnForms()
-            ->setEntryType(DocumentType::class)
-            ->setEntryIsComplex(true)
-            ->setFormTypeOptions([
-                'by_reference' => false,
-            ])
-            ->allowAdd()
-            ->allowDelete();
+            ->setEntryType(DocumentType::class);
 
         yield BooleanField::new('isMembersOnly', 'admin.article.isMembersOnly');
 
