@@ -28,4 +28,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Copy custom PHP config
 COPY conf/docker-php-custom.ini /usr/local/etc/php/conf.d/
 
+# Bash history configuration
+RUN echo 'export HISTFILE=/root/.bash_history' >> /root/.bashrc \
+ && echo 'export HISTSIZE=10000' >> /root/.bashrc \
+ && echo 'export HISTFILESIZE=20000' >> /root/.bashrc \
+ && echo 'shopt -s histappend' >> /root/.bashrc \
+ && echo 'PROMPT_COMMAND="history -a"' >> /root/.bashrc
+
 WORKDIR /var/www/html
