@@ -60,6 +60,11 @@ class Document
         $this->pdfName = $pdfName;
     }
 
+    public function __toString(): string
+    {
+        return $this->pdfName ?? 'Document' . ($this->id ? ' #' . $this->id : '');
+    }
+
     public function getPdfFile(): ?File
     {
         return $this->pdfFile;
