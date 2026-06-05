@@ -8,6 +8,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\String\Slugger\AsciiSlugger;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
@@ -51,6 +53,9 @@ class Article
     )]
     private ?File $imageFile = null;
 
+    #[ORM\OneToMany(mappedBy: 'article', targetEntity: Document::class, cascade: ['persist'], orphanRemoval: true)]
+    private Collection $documents;
+
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $category = null;
 
@@ -65,6 +70,7 @@ class Article
     public function __construct()
     {
         $this->publishedAt = new \DateTimeImmutable();
+        $this->documents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -140,6 +146,11 @@ class Article
 
         return $this;
     }
+
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
+    }    
 
     public function getCategory(): ?string
     {
