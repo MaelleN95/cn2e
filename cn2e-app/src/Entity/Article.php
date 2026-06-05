@@ -53,6 +53,8 @@ class Article
     )]
     private ?File $imageFile = null;
 
+    #[Assert\Valid]
+    #[Assert\Count(max: 5, maxMessage: 'article.documents.max')]
     #[ORM\OneToMany(mappedBy: 'article', targetEntity: Document::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $documents;
 
@@ -150,7 +152,28 @@ class Article
     public function getDocuments(): Collection
     {
         return $this->documents;
-    }    
+    }
+
+    public function addDocument(Document $document): static
+    {
+        if (!$this->documents->contains($document)) {
+            $this->documents->add($document);
+            $document->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocument(Document $document): static
+    {
+        if ($this->documents->removeElement($document)) {
+            if ($document->getArticle() === $this) {
+                $document->setArticle(null);
+            }
+        }
+
+        return $this;
+    }
 
     public function getCategory(): ?string
     {
