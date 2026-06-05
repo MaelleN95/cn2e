@@ -4,9 +4,11 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
 #[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 #[Vich\Uploadable]
 class Document
 {
@@ -22,6 +24,10 @@ class Document
     #[ORM\Column(length: 255)]
     private ?string $pdfName = null;
 
+    #[Assert\File(
+        mimeTypes: ['application/pdf', 'application/x-pdf'],
+        mimeTypesMessage: 'document.pdf.invalid'
+    )]
     #[Vich\UploadableField(mapping: 'article_pdf', fileNameProperty: 'pdfName')]
     private ?File $pdfFile = null;
 
