@@ -62,6 +62,12 @@ class ImageUploadSubscriber implements EventSubscriberInterface
             return;
         }
 
+        $mimeType = mime_content_type($originalPath);
+
+        if (!str_starts_with($mimeType, 'image/')) {
+            return;
+        }
+
         // 1. conversion WebP
         $webpPath = $this->converter->convert($originalPath);
 
