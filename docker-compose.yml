@@ -5,6 +5,7 @@ services:
       context: ./docker/php
     volumes:
       - ./cn2e-app:/var/www/html
+      - cn2e_bash_history:/root
     working_dir: /var/www/html
     depends_on:
       - mariadb
@@ -73,6 +74,7 @@ services:
 
 volumes:
   db_data:
+  cn2e_bash_history:
 
 networks:
   cn2e-network:
