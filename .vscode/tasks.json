@@ -1,0 +1,14 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Dev Init",
+            "type": "shell",
+            "command": "bash bin/dev-start.sh",
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        },
+    ]
+}
+

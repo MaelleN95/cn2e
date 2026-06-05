@@ -58,6 +58,19 @@ services:
     networks:
       - cn2e-network
 
+  tailwind:
+    build:
+      context: ./docker/tailwind
+    container_name: cn2e-tailwind
+    working_dir: /var/www/html
+    volumes:
+      - ./cn2e-app:/var/www/html
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    networks:
+      - cn2e-network
+
 volumes:
   db_data:
 
