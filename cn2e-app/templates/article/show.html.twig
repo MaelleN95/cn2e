@@ -109,6 +109,39 @@
       </div>
     {% endif %}
 
+    {% if article.documents|length > 0 %}
+      <div class="mt-10">
+        <h2 class="text-xl font-semibold mb-4">Documents</h2>
+
+        <div class="space-y-6">
+          {% for doc in article.documents %}
+            <div class="border rounded overflow-hidden">
+
+              <iframe
+                src="{{ asset('uploads/articles/pdfs/' ~ doc.pdfName) }}"
+                class="w-full h-[600px]"
+              ></iframe>
+
+              <div class="p-3 border-t flex justify-between items-center">
+                <span class="text-sm text-muted-foreground">
+                  Aperçu du document
+                </span>
+
+                <a
+                  href="{{ asset('uploads/articles/pdfs/' ~ doc.pdfName) }}"
+                  target="_blank"
+                  class="text-primary hover:underline"
+                >
+                  Télécharger
+                </a>
+              </div>
+
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
     <div class="rich-text space-y-1 leading-relaxed">
       {{ article.content|raw }}
     </div>
