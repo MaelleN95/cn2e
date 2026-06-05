@@ -49,9 +49,18 @@
                             L’utilisateur a reçu un email de bienvenue avec ses identifiants de connexion.
                         </p>
 
-                        <p style="color:#6b7280; font-size:14px; line-height:1.6;">
-                            Pour consulter le compte, vous pouvez vous rendre directement dans l’administration des utilisateurs.
-                        </p>
+                        {% if createdUserAdminUrl %}
+                            <p style="color:#6b7280; font-size:14px; line-height:1.6;">
+                                Pour consulter le compte directement, cliquez sur le lien suivant :
+                            </p>
+                            <p style="margin:20px 0;">
+                                <a href="{{ createdUserAdminUrl }}" style="background:#003399;color:#ffffff;padding:12px 18px;border-radius:6px;text-decoration:none;display:inline-block;">Ouvrir le compte</a>
+                            </p>
+                        {% else %}
+                            <p style="color:#6b7280; font-size:14px; line-height:1.6;">
+                                Pour consulter le compte, rendez-vous dans <a href="{{ adminUserIndexUrl }}" style="color:#003399;">l’administration des utilisateurs</a> et recherchez l’adresse email {{ createdUser.email }}.
+                            </p>
+                        {% endif %}
 
                     </td>
                 </tr>
