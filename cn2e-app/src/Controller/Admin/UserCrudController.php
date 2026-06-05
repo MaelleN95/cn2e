@@ -41,6 +41,7 @@ class UserCrudController extends AbstractCrudController
             ->setEntityLabelInSingular('admin.user.singular')
             ->setEntityLabelInPlural('admin.user.plural')
             ->setPageTitle('index', 'Liste des comptes utilisateurs')
+            ->setPageTitle('new', 'Ajouter un utilisateur')
             ->setPageTitle('edit', function (User $user) {
                 return 'Modifier ' . $user->getFullName();
             });
@@ -212,6 +213,16 @@ class UserCrudController extends AbstractCrudController
                     $entityInstance,
                     $plainPassword,
                     $this->getUser()
+                )
+            );
+
+            $this->addFlash(
+                'success',
+                sprintf(
+                    'Le compte de %s %s (%s) a bien été créé. Un email de création a été envoyé.',
+                    $entityInstance->getFirstName(),
+                    $entityInstance->getLastName(),
+                    $entityInstance->getEmail()
                 )
             );
         }
