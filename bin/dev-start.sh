@@ -11,7 +11,7 @@ if git pull --rebase; then
     echo -e "${GREEN}Git pull OK${NC}"
 else
     echo -e "${RED}Git pull ECHOUÉ (changement ou conflit détecté)${NC}"
-    echo -e "${RED}Tu dois stacher ou commiter manuellement${NC}"
+    echo -e "${RED}Tu dois stasher ou commiter manuellement${NC}"
 fi
 
 echo -e "${YELLOW}Symfony cache & assets...${NC}"
