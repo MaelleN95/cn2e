@@ -172,6 +172,7 @@ class UserCrudController extends AbstractCrudController
                 'download_uri' => false,
                 'image_uri' => true,
                 'attr' => [
+                    'accept' => 'image/*',
                     'data-controller' => 'image-upload-preview',
                     'data-action' => 'change->image-upload-preview#onChange',
                 ],

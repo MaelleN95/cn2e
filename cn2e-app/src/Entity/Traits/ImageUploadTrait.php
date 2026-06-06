@@ -5,12 +5,17 @@ namespace App\Entity\Traits;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Attribute as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
 
 trait ImageUploadTrait
 {
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imageName = null;
 
+    #[Assert\File(
+        mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+        mimeTypesMessage: 'Format d\'image invalide'
+    )]
     #[Vich\UploadableField(mapping: '', fileNameProperty: 'imageName')]
     private ?File $imageFile = null;
 
