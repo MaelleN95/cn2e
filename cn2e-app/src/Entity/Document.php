@@ -26,7 +26,7 @@ class Document
 
     #[Assert\File(
         mimeTypes: ['application/pdf', 'application/x-pdf'],
-        mimeTypesMessage: 'document.pdf.invalid'
+        mimeTypesMessage: 'document.pdfFile.invalid'
     )]
     #[Vich\UploadableField(mapping: 'article_pdf', fileNameProperty: 'pdfName')]
     private ?File $pdfFile = null;
