@@ -101,4 +101,21 @@
       border: none !important;
       box-shadow: none !important;
   }
+
+  .ea-collapse {
+      display: none !important;
+      visibility: inherit !important;
+  }
+
+  .ea-collapse.show {
+      display: block !important;
+  }
+
+  .accordion-button .form-collection-item-collapse-marker {
+      transform: rotate(0deg);
+  }
+
+  .accordion-button:not(.collapsed) .form-collection-item-collapse-marker {
+      transform: rotate(90deg);
+  }
 }
