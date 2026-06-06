@@ -50,6 +50,13 @@ article:
   members_only:
     required: "Le champ 'réservé aux membres' est obligatoire."
 
+  documents:
+    max: "Le nombre maximum de documents est de {{ limit }}."
+
+document:
+  pdfFile:
+    invalid: "Le fichier doit être un PDF valide."
+
 event:
   title:
     required: "Le titre est obligatoire."
