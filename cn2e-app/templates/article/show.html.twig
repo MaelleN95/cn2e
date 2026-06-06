@@ -110,36 +110,120 @@
     {% endif %}
 
     {% if article.documents|length > 0 %}
-      <div class="my-5">
-        <h2 class="text-xl font-semibold mb-4">Documents associés</h2>
+      <div class="my-10">
+        <h2 class="text-2xl font-semibold mb-6">
+          Documents associés
+        </h2>
 
-        <div class="space-y-6">
+        <div class="space-y-8">
           {% for doc in article.documents %}
-            <div class="border border-border rounded overflow-hidden">
+            {# Desktop #}
+            <div class="hidden md:block overflow-hidden rounded-xl border border-border bg-card shadow-sm">
 
-              <div class="p-3 border-b border-border flex justify-between items-center">
-                <span class="text-sm text-muted-foreground">
-                  Aperçu du document
-                </span>
+              <div class="flex flex-col gap-4 border-b border-border p-5 sm:flex-row sm:items-center sm:justify-between">
+
+                <div class="flex items-center gap-3">
+                  <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <svg
+                      viewBox="0 0 24 24"
+                      class="h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                      <path d="M14 2v6h6"/>
+                    </svg>
+                  </div>
+
+                  <div>
+                    <p class="font-medium">
+                      {% if article.documents|length > 1 %}
+                        Document n°{{ loop.index }}
+                      {% else %}
+                        Document PDF
+                      {% endif %}
+                    </p>
+
+                    <p class="text-sm text-muted-foreground">
+                      Aperçu intégré
+                    </p>
+                  </div>
+                </div>
 
                 <a
                   href="{{ asset('uploads/articles/pdfs/' ~ doc.pdfName) }}"
                   target="_blank"
-                  class="text-primary hover:underline inline-flex items-center gap-1"
+                  class="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm transition hover:bg-muted"
                 >
-                  <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <svg
+                    viewBox="0 0 24 24"
+                    class="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
                     <path d="M15 3h6v6"/>
                     <path d="M10 14 21 3"/>
                     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
                   </svg>
-                  Ouvrir dans un nouvel onglet
+
+                  Ouvrir le PDF
                 </a>
+
               </div>
 
               <iframe
                 src="{{ asset('uploads/articles/pdfs/' ~ doc.pdfName) }}"
-                class="w-full h-[300px]"
+                class="h-[450px] w-full bg-white"
               ></iframe>
+
+            </div>
+
+            {# Mobile #}
+            <div class="md:hidden overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+
+              <div class="flex flex-col items-center justify-center gap-4 p-8 text-center">
+
+                <div class="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <svg
+                    viewBox="0 0 24 24"
+                    class="h-7 w-7"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <path d="M14 2v6h6"/>
+                  </svg>
+                </div>
+
+                <div>
+                  <p class="font-medium mb-1">
+                    Aperçu {% if article.documents|length > 1 %} du document n°{{ loop.index }}
+                      {% endif %}indisponible
+                  </p>
+
+                  <p class="text-sm text-muted-foreground">
+                    L'aperçu des documents PDF n'est pas disponible sur téléphone.
+                  </p>
+                </div>
+
+                <a
+                  href="{{ asset('uploads/articles/pdfs/' ~ doc.pdfName) }}"
+                  target="_blank"
+                  class="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-primary-foreground transition hover:opacity-90"
+                >
+                  Ouvrir le document
+                </a>
+
+              </div>
 
             </div>
           {% endfor %}
