@@ -67,7 +67,8 @@ class EventCrudController extends AbstractCrudController
             ->hideOnIndex();
 
         yield TextEditorField::new('content', 'admin.event.content')
-            ->hideOnIndex();
+            ->hideOnIndex()
+            ->addCssClass('rich-text');
 
         yield Field::new('imageFile', 'admin.event.imageFile')
             ->setFormType(VichImageType::class)

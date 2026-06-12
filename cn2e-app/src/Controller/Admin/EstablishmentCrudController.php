@@ -15,7 +15,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -96,8 +96,9 @@ class EstablishmentCrudController extends AbstractCrudController
         yield TextField::new('website', 'admin.establishment.website')
             ->hideOnIndex();
 
-        yield TextareaField::new('description', 'admin.establishment.description')
-            ->hideOnIndex();
+        yield TextEditorField::new('description', 'admin.establishment.description')
+            ->onlyOnForms()
+            ->addCssClass('rich-text');
 
         yield AssociationField::new('academicPrograms', 'admin.establishment.academicprogram')
             ->hideOnIndex()
