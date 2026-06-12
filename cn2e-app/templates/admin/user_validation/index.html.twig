@@ -65,9 +65,13 @@ Gestion des utilisateurs
                         {{ user.establishment }}
                     </div>
 
+                    <div class="text-sm text-gray-500">
+                        {{ user.email }}
+                    </div>
+
                 </a>
 
-                {# actions séparées #}
+                {# actions #}
                 <div class="flex gap-2 mt-3 text-sm">
 
                     <a href="{{ path('admin_user_change_status', {
@@ -112,13 +116,17 @@ Gestion des utilisateurs
                     <div class="text-white font-semibold">
                         {{ user.fullName }}
                     </div>
+
+                    <div class="text-sm text-gray-500">
+                        {{ user.email }}
+                    </div>
                 </a>
 
                 <a href="{{ path('admin_user_change_status', {
                     id: user.id,
                     status: 'refused'
                 }) }}"
-                class="px-3 py-1 text-sm rounded bg-red-600 text-white hover:bg-red-700 transition">
+                class="px-3 py-1 text-sm rounded border !border-red-500 !text-red-500 hover:!border-red-600 hover:!text-red-500 transition">
                     Refuser
                 </a>
 
@@ -146,13 +154,17 @@ Gestion des utilisateurs
                     <div class="text-white font-semibold">
                         {{ user.fullName }}
                     </div>
+
+                    <div class="text-sm text-gray-500">
+                        {{ user.email }}
+                    </div>
                 </a>
 
                 <a href="{{ path('admin_user_change_status', {
                     id: user.id,
                     status: 'accepted'
                 }) }}"
-                class="px-3 py-1 text-sm rounded bg-green-600 text-white hover:bg-green-700 transition">
+                class="px-3 py-1 text-sm rounded border !border-green-500 !text-green-500 hover:!border-green-600 hover:!text-green-600 transition">
                     Accepter
                 </a>
 
