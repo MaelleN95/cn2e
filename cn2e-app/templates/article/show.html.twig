@@ -109,6 +109,10 @@
       </div>
     {% endif %}
 
+    <div class="rich-text space-y-1 leading-relaxed">
+      {{ article.content|raw }}
+    </div>
+
     {% if article.documents|length > 0 %}
       <div class="my-10">
         <h2 class="text-2xl font-semibold mb-6">
@@ -207,7 +211,7 @@
                 <div>
                   <p class="font-medium mb-1">
                     Aperçu {% if article.documents|length > 1 %} du document n°{{ loop.index }}
-                      {% endif %}indisponible
+                      {% else %} du document PDF{% endif %}
                   </p>
 
                   <p class="text-sm text-muted-foreground">
@@ -220,7 +224,7 @@
                   target="_blank"
                   class="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-primary-foreground transition hover:opacity-90"
                 >
-                  Ouvrir le document
+                  Ouvrir dans un nouvel onglet
                 </a>
 
               </div>
@@ -230,10 +234,6 @@
         </div>
       </div>
     {% endif %}
-
-    <div class="rich-text space-y-1 leading-relaxed">
-      {{ article.content|raw }}
-    </div>
 
     <div class="mt-12 pt-8 border-t border-border">
       <a href="{{ path('app_article') }}"
