@@ -86,6 +86,7 @@ class ArticleCrudController extends AbstractCrudController
             ->setEntryType(DocumentType::class)
             ->allowAdd()
             ->allowDelete()
+            ->onlyOnForms()
             ->setFormTypeOptions([
                 'by_reference' => false,
             ]);
