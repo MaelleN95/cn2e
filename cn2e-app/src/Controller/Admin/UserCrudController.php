@@ -155,11 +155,11 @@ class UserCrudController extends AbstractCrudController
 
         yield TextField::new('firstName', 'admin.user.firstName');
 
-        if ($isNew) {
-            yield EmailField::new('email', 'Email');
-
-            yield AssociationField::new('establishment', 'Établissement');
-        }
+        yield EmailField::new('email', 'Email')
+            ->setFormTypeOption('disabled', !$isNew);
+        
+        yield AssociationField::new('establishment', 'Établissement')
+            ->setFormTypeOption('disabled', !$isNew);
 
         yield TextField::new('profession', 'admin.user.profession');
 
