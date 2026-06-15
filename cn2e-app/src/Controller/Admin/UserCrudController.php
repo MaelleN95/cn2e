@@ -3,20 +3,26 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use App\Enum\UserStatus;
+use App\Event\UserCreatedEvent;
+use App\Service\UserCreator;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use App\Event\UserCreatedEvent;
-use App\Service\UserCreator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
@@ -58,6 +64,26 @@ class UserCrudController extends AbstractCrudController
     public function configureAssets(Assets $assets): Assets
     {
         return $assets->addJsFile('controllers/user_form_toggle.js');
+    }
+
+    public function createIndexQueryBuilder(
+        SearchDto $searchDto,
+        EntityDto $entityDto,
+        FieldCollection $fields,
+        FilterCollection $filters
+    ): QueryBuilder {
+        $qb = parent::createIndexQueryBuilder(
+            $searchDto,
+            $entityDto,
+            $fields,
+            $filters
+        );
+
+        $qb
+            ->andWhere('entity.status != :refused')
+            ->setParameter('refused', UserStatus::REFUSED);
+
+        return $qb;
     }
 
     public function configureFields(string $pageName): iterable
