@@ -5,15 +5,18 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use App\Enum\UserStatus;
 use App\Event\UserCreatedEvent;
+use App\Service\PasswordResetMailer;
 use App\Service\UserCreator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminRoute;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
@@ -24,6 +27,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 
@@ -32,6 +37,7 @@ class UserCrudController extends AbstractCrudController
     public function __construct(
         private UserCreator $userCreator,
         private EventDispatcherInterface $dispatcher,
+        private PasswordResetMailer $passwordResetMailer,
     ) {
     }
 
@@ -53,12 +59,53 @@ class UserCrudController extends AbstractCrudController
             });
     }
 
+    #[AdminRoute('reset-password')]
+    public function sendResetPassword(
+        AdminContext $context
+    ): RedirectResponse {
+        /** @var User $user */
+        $user = $context->getEntity()->getInstance();
+
+        try {
+            $this->passwordResetMailer->send($user);
+
+            $this->addFlash(
+                'success',
+                sprintf(
+                    'Un email de réinitialisation a été envoyé à %s.',
+                    $user->getEmail()
+                )
+            );
+        } catch (ResetPasswordExceptionInterface) {
+            $this->addFlash(
+                'warning',
+                'Un email de réinitialisation a déjà été envoyé récemment.'
+            );
+        }
+
+        $referer = $context->getRequest()->headers->get('referer');
+
+        if (!$referer) {
+            return $this->redirectToRoute('admin');
+        }
+
+        return $this->redirect($referer);
+    }
+
     public function configureActions(Actions $actions): Actions
     {
+        $resetPassword = Action::new(
+            'sendResetPassword',
+            'Réinit. le mot de passe'
+        )
+            ->linkToCrudAction('sendResetPassword')
+            ->setIcon('fa fa-key');
+
         return $actions
             ->disable(Action::DELETE)
             ->setPermission(Action::EDIT, 'ROLE_CN2E_ADMIN')
-            ->setPermission(Action::NEW, 'ROLE_SUPER_ADMIN');
+            ->setPermission(Action::NEW, 'ROLE_SUPER_ADMIN')
+            ->add(Crud::PAGE_INDEX, $resetPassword);
     }
 
     public function configureAssets(Assets $assets): Assets
