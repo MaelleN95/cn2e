@@ -46,13 +46,15 @@
         <div data-map-target="popup"></div>
     </div>
 
-    <div class="mb-8">            
+    <div
+        data-controller="search"
+        data-search-delay-value="300"
+        data-search-min-length-value="2"
+    >
+        <div class="mb-8">
             <form method="get"
-                data-turbo-frame="results"
-                data-controller="search"
-                data-search-delay-value="300"
-                data-search-min-length-value="2"
-                data-action="input->search#submit keydown.enter->search#submit"
+                action="{{ path('app_establishment') }}"
+                data-action="input->search#submit keydown.enter->search#submit submit->search#search"
                 class="relative max-w-xl mx-auto"
             >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -65,60 +67,16 @@
                     type="text"
                     name="q"
                     value="{{ search }}"
-                    placeholder="Rechercher par nom, ville ou région..."
+                    placeholder="Rechercher par nom, ville, région ou académie..."
                     class="w-full pl-12 pr-4 py-3 border rounded bg-white border-border focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition"
                 >
             </form>
+        </div>
+
+        <div id="results" data-search-target="results">
+            {% include 'establishment/_results.html.twig' %}
+        </div>
     </div>
-
-    <turbo-frame id="results" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-        {% for establishment in establishments %}
-            <a href="{{ path('app_establishment_show', {slug: establishment.slug}) }}"
-                class="bg-white border border-border rounded p-6 hover:shadow-md transition"
-                data-turbo="false">
-
-                <div class="flex items-start gap-4">
-
-                    <div class="w-12 h-12 bg-primary/10 rounded flex items-center justify-center">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
-                            class="w-6 h-6 text-primary">
-                            <path d="M10 12h4"/>
-                            <path d="M10 8h4"/>
-                            <path d="M14 21v-3a2 2 0 0 0-4 0v3"/>
-                            <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/>
-                            <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/>
-                        </svg>
-                    </div>
-
-                    <div class="flex-1">
-                        <h3 class="font-semibold mb-2">
-                            {{ establishment.name }}
-                        </h3>
-
-                        <p class="text-muted-foreground text-sm mb-1 flex items-center justify-start">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"  stroke-width="2" -linecap="round" stroke-linejoin="round" aria-hidden="true" class="w-4 h-4 inline mr-1">
-                            <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/>
-                            <circle cx="12" cy="10" r="3"/>
-                            </svg>
-                            {{ establishment.city }} ({{ establishment.department }})
-                        </p>
-
-                        <p class="text-muted-foreground text-sm">
-                            {{ establishment.region }}
-                        </p>
-                    </div>
-
-                </div>
-            </a>
-        {% endfor %}
-
-        {% if establishments is empty %}
-                <p class="text-muted-foreground text-center col-span-full py-12">
-                    Aucun établissement trouvé
-                </p>
-        {% endif %}
-    </turbo-frame>
 
 
 </div>
