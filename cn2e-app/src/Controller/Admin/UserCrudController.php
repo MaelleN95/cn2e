@@ -234,7 +234,8 @@ class UserCrudController extends AbstractCrudController
         yield AssociationField::new('establishment', 'Établissement')
             ->setFormTypeOption('disabled', !$isNew);
 
-        yield TextField::new('profession', 'admin.user.profession');
+        yield TextField::new('profession', 'admin.user.profession')
+            ->onlyOnForms();
 
         yield Field::new('imageFile', 'admin.user.imageFile')
             ->setFormType(VichImageType::class)
