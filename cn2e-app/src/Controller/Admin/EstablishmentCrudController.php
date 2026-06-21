@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Establishment;
+use App\Enum\EstablishmentAcademy;
 use App\Service\EstablishmentGeocoder;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
@@ -15,6 +16,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -90,6 +92,9 @@ class EstablishmentCrudController extends AbstractCrudController
         yield TextField::new('city', 'admin.establishment.city')
             ->onlyOnIndex();
 
+        yield ChoiceField::new('academy', 'admin.establishment.academy')
+            ->setChoices($this->getAcademyChoices());
+
         yield TextField::new('phone', 'admin.establishment.phone');
         yield TextField::new('email', 'admin.establishment.email');
 
@@ -145,5 +150,10 @@ class EstablishmentCrudController extends AbstractCrudController
         ->setParameter('establishment', $user->getEstablishment());
 
         return $qb;
+    }
+
+    private function getAcademyChoices(): array
+    {
+        return EstablishmentAcademy::choices();
     }
 }

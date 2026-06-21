@@ -67,6 +67,7 @@ admin:
     city: Ville
     department: Département
     region: Région
+    academy: Académie
     address: Adresse
     addressHash: Hash adresse
     latitude: Latitude

@@ -27,7 +27,8 @@ class EstablishmentRepository extends ServiceEntityRepository
                 $qb->expr()->orX(
                     'e.name LIKE :search',
                     'e.city LIKE :search',
-                    'e.region LIKE :search'
+                    'e.region LIKE :search',
+                    'e.academy LIKE :search'
                 )
             )
             ->setParameter('search', '%' . $search . '%');

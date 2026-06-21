@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\AcademicProgram;
 use App\Entity\Establishment;
+use App\Enum\EstablishmentAcademy;
 use App\Repository\AcademicProgramRepository;
 use App\Repository\EstablishmentRepository;
 use App\Service\EstablishmentGeocoder;
@@ -123,6 +124,7 @@ class ImportEstablishmentsCommand extends Command
         }
 
         $phone = $row['Téléphone'] ?? null;
+        $academy = trim((string) ($row['Académie'] ?? $row['Academie'] ?? ''));
 
         if ($phone) {
             $phone = trim($phone);
@@ -158,6 +160,7 @@ class ImportEstablishmentsCommand extends Command
         $establishment->setWebsite($website);
         $establishment->setAddress($address);
         $establishment->setCity($city);
+        $establishment->setAcademy($this->normalizeAcademy($academy));
 
         $establishment->setPhone($phone);
 
@@ -242,6 +245,38 @@ class ImportEstablishmentsCommand extends Command
         }
 
         $establishment->addAcademicProgram($program);
+    }
+
+    private function normalizeAcademy(?string $academy): ?string
+    {
+        if (!$academy) {
+            return null;
+        }
+
+        $academy = trim($academy);
+        $academy = preg_replace('/^acad[ée]mie(?:\s+de)?\s+/iu', '', $academy) ?? $academy;
+        $academy = trim($academy);
+        $normalizedAcademy = $this->normalizeForCompare($academy);
+
+        foreach (EstablishmentAcademy::cases() as $existingAcademy) {
+            if ($this->normalizeForCompare($existingAcademy->value) === $normalizedAcademy) {
+                return $existingAcademy->value;
+            }
+        }
+
+        return null;
+    }
+
+    private function normalizeForCompare(string $value): string
+    {
+        $value = mb_strtolower(trim($value));
+        $ascii = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $value);
+
+        if ($ascii !== false) {
+            $value = $ascii;
+        }
+
+        return preg_replace('/[^a-z0-9]+/', '', $value) ?? $value;
     }
 
     private function generateErrorReport(): void

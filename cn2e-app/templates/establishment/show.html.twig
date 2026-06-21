@@ -34,6 +34,14 @@
                 {{ establishment.region }}
             </span>
 
+            {% if establishment.academy %}
+                <span>•</span>
+
+                <span>
+                    Académie {{ establishment.academy }}
+                </span>
+            {% endif %}
+
         </div>
     </div>
 
