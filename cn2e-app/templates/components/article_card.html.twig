@@ -12,7 +12,7 @@
         "
         sizes="(max-width: 768px) calc(100vw - 32px) 400px"
         alt="{{ article.title }}"
-        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
       >
     </div>
   {% endif %}
@@ -48,32 +48,7 @@
       {{ article.shortDescription }}
     </p>
 
-    <div class="flex items-center justify-between mt-6 pt-4 border-t border-border">
-
-      {% if article.author %}
-        <div class="flex items-center gap-3">
-          {% if article.author.imageName %}
-            <img
-              src="{{ asset('uploads/users/' ~ article.author.imageName|replace({'.webp': '_thumbnail.webp'}) ) }}"
-              alt="{{ article.author.firstName }} {{ article.author.lastName }}"
-              class="w-8 h-8 rounded-full object-cover"
-            >
-          {% else %}
-            <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center border border-border">
-              <span class="text-primary font-semibold text-xs">
-                {{ article.author.firstName|first }}{{ article.author.lastName|first }}
-              </span>
-            </div>
-          {% endif %}
-          <div class="text-xs leading-tight">
-            <p class="text-muted-foreground">Rédigé par</p>
-            <p class="font-medium text-foreground">
-              {{ article.author.firstName }} {{ article.author.lastName }}
-            </p>
-          </div>
-        </div>
-      {% endif %}
-
+    <div class="text-right mt-6 pt-4 border-t border-border">
       <span class="text-primary inline-flex items-center gap-1 text-sm">
         <span class="group-hover:underline">Lire</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
