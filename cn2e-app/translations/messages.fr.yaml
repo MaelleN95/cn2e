@@ -29,6 +29,17 @@ form:
   reset_password_request:
     email: "Adresse mail"
 
+  profile:
+    last_name: "Nom"
+    first_name: "Prénom"
+    email: "Email professionnel"
+    establishment: "Établissement"
+    select_establishment: "Aucun établissement sélectionné"
+    profession: "Profession / Fonction"
+    select_profession: "Veuillez renseigner votre profession / fonction"
+    cn2e_role: "Rôle au sein du CN2E"
+    image: "Photo de profil"
+
 
 admin:
   dashboard:
