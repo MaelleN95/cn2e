@@ -27,7 +27,7 @@ class SecurityController extends AbstractController
                 )
             );
 
-            return new RedirectResponse($urlGenerator->generate('app_home'));
+            return new RedirectResponse($urlGenerator->generate('app_profile'));
         }
 
         $error = $authenticationUtils->getLastAuthenticationError();
