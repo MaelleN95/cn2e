@@ -36,7 +36,14 @@ class ResetPasswordController extends AbstractController
     #[Route('', name: 'app_forgot_password_request')]
     public function request(Request $request): Response
     {
-        $form = $this->createForm(ResetPasswordRequestFormType::class);
+        $formData = [];
+
+        $currentUser = $this->getUser();
+        if ($currentUser instanceof User && $currentUser->getEmail()) {
+            $formData['email'] = $currentUser->getEmail();
+        }
+
+        $form = $this->createForm(ResetPasswordRequestFormType::class, $formData);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
