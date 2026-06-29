@@ -23,6 +23,7 @@ class ImportEstablishmentsCommand extends Command
 {
     private array $errors = [];
     private array $infos = [];
+    private array $programCache = [];
 
     public function __construct(
         private EntityManagerInterface $em,
@@ -231,6 +232,18 @@ class ImportEstablishmentsCommand extends Command
         $title = trim($title);
         $title = preg_replace('/\s+/', ' ', $title);
 
+        if ($title === null || $title === '') {
+            return;
+        }
+
+        $cacheKey = $this->buildProgramCacheKey($level, $title);
+
+        if (isset($this->programCache[$cacheKey])) {
+            $establishment->addAcademicProgram($this->programCache[$cacheKey]);
+
+            return;
+        }
+
         $program = $this->programRepo->findOneBy([
             'level' => $level,
             'title' => $title
@@ -244,7 +257,14 @@ class ImportEstablishmentsCommand extends Command
             $this->em->persist($program);
         }
 
+        $this->programCache[$cacheKey] = $program;
+
         $establishment->addAcademicProgram($program);
+    }
+
+    private function buildProgramCacheKey(string $level, string $title): string
+    {
+        return $this->normalizeForCompare($level) . '|' . $this->normalizeForCompare($title);
     }
 
     private function normalizeAcademy(?string $academy): ?string
