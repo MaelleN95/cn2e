@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Bienvenue au CN2E</title>
+    <title>Bienvenue au {{ siteInformation.shortName }}</title>
 </head>
 
 <body style="margin:0; padding:0; background-color:#f5f5f5; font-family:Arial, sans-serif;">
@@ -15,7 +15,7 @@
 
                 <tr>
                     <td style="background:#003399; color:#ffffff; padding:20px 30px;">
-                        <h1 style="margin:0; font-size:20px;">CN2E</h1>
+                        <h1 style="margin:0; font-size:20px;">{{ siteInformation.shortName }}</h1>
                     </td>
                 </tr>
 
@@ -23,7 +23,7 @@
                     <td style="padding:30px;">
 
                         <h2 style="margin-top:0; font-size:18px; color:#111827;">
-                            Bienvenue au CN2E !
+                            Bienvenue au {{ siteInformation.shortName }} !
                         </h2>
 
                         <p style="color:#6b7280; font-size:14px; line-height:1.6;">
@@ -31,7 +31,7 @@
                         </p>
 
                         <p style="color:#6b7280; font-size:14px; line-height:1.6;">
-                            J'ai le plaisir de vous annoncer qu'un compte a été créé pour vous sur le site du CN2E.
+                            J'ai le plaisir de vous annoncer qu'un compte a été créé pour vous sur le site du {{ siteInformation.shortName }}.
                         </p>
 
                         <p style="color:#6b7280; font-size:14px; line-height:1.6;">
@@ -70,7 +70,7 @@
                         </table>
 
                         <p style="color:#6b7280; font-size:14px; line-height:1.6;">
-                            En cas de difficulté pour vous connecter, vous pouvez contacter le secrétariat du CN2E à l’adresse <a href="mailto:secretariat.cn2e@gmail.com" style="color:#003399; text-decoration:none;">secretariat.cn2e@gmail.com</a> ou l'administratrice du site à l’adresse <a href="mailto:contact@koji-dev.fr" style="color:#003399; text-decoration:none;">contact@koji-dev.fr</a>.
+                            En cas de difficulté pour vous connecter, vous pouvez contacter le secrétariat du {{ siteInformation.shortName }} à l’adresse <a href="mailto:{{ siteInformation.contactEmail }}" style="color:#003399; text-decoration:none;">{{ siteInformation.contactEmail }}</a> ou l'administratrice du site à l’adresse <a href="mailto:contact@koji-dev.fr" style="color:#003399; text-decoration:none;">contact@koji-dev.fr</a>.
                             Une réponse vous sera apportée dans les plus brefs délais.
                         </p>
 
@@ -83,7 +83,7 @@
                         </p>
 
                         <p style="color:#6b7280; font-size:14px; line-height:1.6;">
-                            Si vous souhaitez demander une modification de vos droits d’accès, merci de contacter le secrétariat du CN2E.
+                            Si vous souhaitez demander une modification de vos droits d’accès, merci de contacter le secrétariat du {{ siteInformation.shortName }}.
                         </p>
 
                     </td>

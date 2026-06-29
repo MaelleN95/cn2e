@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\ProfileFormType;
+use App\Service\SiteInformationAccessor;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +14,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class ProfileController extends AbstractController
 {
+    public function __construct(
+        private SiteInformationAccessor $siteInformationAccessor,
+    ) {
+    }
+
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/mon-profil', name: 'app_profile', methods: ['GET', 'POST'])]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
@@ -24,7 +30,7 @@ final class ProfileController extends AbstractController
         }
 
         if (!$this->isGranted('ROLE_CN2E_MEMBER') && !$this->isGranted('ROLE_LOCAL_ADMIN')) {
-            throw $this->createAccessDeniedException('Cette page est réservée aux membres CN2E.');
+            throw $this->createAccessDeniedException(sprintf('Cette page est réservée aux membres %s.', $this->siteInformationAccessor->getShortName()));
         }
 
         $form = $this->createForm(ProfileFormType::class, $user);

@@ -37,7 +37,7 @@ form:
     select_establishment: "Aucun établissement sélectionné"
     profession: "Profession / Fonction"
     select_profession: "Veuillez renseigner votre profession / fonction"
-    cn2e_role: "Rôle au sein du CN2E"
+    cn2e_role: "Rôle au sein de l'organisation"
     image: "Photo de profil"
 
 
@@ -104,7 +104,7 @@ admin:
     firstName: Prénom
     profession: Profession
     imageFile: Photo de profil
-    cn2eRole: Rôle CN2E
+    cn2eRole: Rôle au sein de l'organisation
     lastLoginAt: Dernière connexion
     status: Statut
     isVerified: Vérifié

@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraint;
 #[Attribute]
 class HasCn2eRole extends Constraint
 {
-    public string $message = 'Un membre du CN2E doit obligatoirement avoir un rôle au sein de l\'équipe';
+    public string $message = 'Un membre de l\'organisation doit obligatoirement avoir un rôle au sein de l\'équipe';
 
     public function getTargets(): string
     {

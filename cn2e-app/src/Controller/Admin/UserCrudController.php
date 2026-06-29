@@ -149,8 +149,8 @@ class UserCrudController extends AbstractCrudController
                         </li>
 
                         <li>
-                            <strong>Administrateur CN2E :</strong>
-                            gestion des contenus, utilisateurs et validations CN2E.
+                            <strong>Administrateur de l\'organisation :</strong>
+                            gestion des contenus, utilisateurs et validations.
                         </li>
 
                         <li>
@@ -159,7 +159,7 @@ class UserCrudController extends AbstractCrudController
                         </li>
 
                         <li>
-                            <strong>Membre CN2E :</strong>
+                            <strong>Membre de l\'organisation :</strong>
                             accès aux contenus réservés aux adhérents.
                         </li>
                         
@@ -175,9 +175,9 @@ class UserCrudController extends AbstractCrudController
                 ->onlyOnForms() 
                 ->setChoices([
                     'Super administrateur' => 'ROLE_SUPER_ADMIN',
-                    'Administrateur CN2E' => 'ROLE_CN2E_ADMIN',
+                    'Administrateur de l\'organisation' => 'ROLE_CN2E_ADMIN',
                     'Administrateur local' => 'ROLE_LOCAL_ADMIN',
-                    'Membre CN2E' => 'ROLE_CN2E_MEMBER',
+                    'Membre de l\'organisation' => 'ROLE_CN2E_MEMBER',
                 ])
                 ->allowMultipleChoices()
                 ->addCssClass('js-user-form-roles')
@@ -195,7 +195,7 @@ class UserCrudController extends AbstractCrudController
                         </li>
 
                         <li>
-                            <strong>Membre CN2E :</strong>
+                            <strong>Membre de l\'organisation :</strong>
                             accès aux contenus réservés aux adhérents.
                         </li>
 
@@ -211,7 +211,7 @@ class UserCrudController extends AbstractCrudController
                 ->onlyOnForms()
                 ->setChoices([
                     'Administrateur local' => 'ROLE_LOCAL_ADMIN',
-                    'Membre CN2E' => 'ROLE_CN2E_MEMBER',
+                    'Membre de l\'organisation' => 'ROLE_CN2E_MEMBER',
                 ])
                 ->allowMultipleChoices()
                 ->addCssClass('js-user-form-roles')
@@ -257,9 +257,9 @@ class UserCrudController extends AbstractCrudController
             ->formatValue(function ($value, User $user) {
                 return match ($user->getPrimaryRole()) {
                     'ROLE_SUPER_ADMIN' => 'Super Admin',
-                    'ROLE_CN2E_ADMIN' => 'Admin CN2E',
+                    'ROLE_CN2E_ADMIN' => 'Admin organisation',
                     'ROLE_LOCAL_ADMIN' => 'Admin local',
-                    'ROLE_CN2E_MEMBER' => 'Membre CN2E',
+                    'ROLE_CN2E_MEMBER' => 'Membre organisation',
                     default => 'Utilisateur',
                 };
             });

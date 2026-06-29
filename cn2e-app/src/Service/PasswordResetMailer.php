@@ -14,6 +14,7 @@ class PasswordResetMailer
     public function __construct(
         private ResetPasswordHelperInterface $resetPasswordHelper,
         private MailerInterface $mailer,
+        private SiteInformationAccessor $siteInformationAccessor,
     ) {
     }
 
@@ -25,7 +26,7 @@ class PasswordResetMailer
         $resetToken = $this->resetPasswordHelper->generateResetToken($user);
 
         $email = (new TemplatedEmail())
-            ->from(new Address($_ENV['CONTACT_FROM'], 'CN2E'))
+            ->from(new Address($this->siteInformationAccessor->getSenderEmail(), $this->siteInformationAccessor->getShortName()))
             ->to((string) $user->getEmail())
             ->subject('Réinitialisation de votre mot de passe')
             ->htmlTemplate('emails/reset_password_email.html.twig')
