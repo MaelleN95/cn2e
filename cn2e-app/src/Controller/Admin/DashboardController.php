@@ -49,7 +49,8 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Administration du site');
+            ->setTitle('Administration')
+            ->setFaviconPath('images/logos/logo-CN2E-admin.png');
     }
 
     public function configureMenuItems(): iterable
