@@ -6,17 +6,17 @@
 
 {% include 'components/breadcrumb.html.twig' with {
   items: [
-    { label: "L'équipe du CN2E" }
+    { label: "L'équipe du " ~ siteInformation.shortName }
   ]
 } %}
 
 <div class="max-w-7xl mx-auto px-4 py-12">
 
   <div class="text-center mb-12">
-    <h1 class="mb-4">L'équipe du CN2E</h1>
+    <h1 class="mb-4">L'équipe du {{ siteInformation.shortName }}</h1>
 
     <p class="text-muted-foreground max-w-3xl mx-auto">
-      Le CN2E réunit des représentants des établissements EREA, LEA et ERPD.
+      Le {{ siteInformation.shortName }} réunit des représentants des établissements EREA, LEA et ERPD.
       Ils contribuent aux travaux du comité et assurent le lien entre les établissements et les instances nationales.
     </p>
   </div>

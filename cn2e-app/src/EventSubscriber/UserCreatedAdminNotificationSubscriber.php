@@ -3,6 +3,7 @@
 namespace App\EventSubscriber;
 
 use App\Event\UserCreatedEvent;
+use App\Service\SiteInformationAccessor;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
@@ -14,6 +15,7 @@ final class UserCreatedAdminNotificationSubscriber implements EventSubscriberInt
     public function __construct(
         private MailerInterface $mailer,
         private UrlGeneratorInterface $urlGenerator,
+        private SiteInformationAccessor $siteInformationAccessor,
     ) {}
 
     public static function getSubscribedEvents(): array
@@ -47,7 +49,7 @@ final class UserCreatedAdminNotificationSubscriber implements EventSubscriberInt
             }
         }
 
-        $from = new Address($_ENV['CONTACT_FROM'], 'CN2E');
+        $from = new Address($this->siteInformationAccessor->getSenderEmail(), $this->siteInformationAccessor->getShortName());
 
         $context = [
             'admin' => $creator,

@@ -21,10 +21,16 @@ final class EstablishmentController extends AbstractController
             $establishments = $repository->findAll();
         }
 
-        return $this->render('establishment/index.html.twig', [
+        $parameters = [
             'establishments' => $establishments,
             'search' => $search,
-        ]);
+        ];
+
+        if ($request->isXmlHttpRequest()) {
+            return $this->render('establishment/_results.html.twig', $parameters);
+        }
+
+        return $this->render('establishment/index.html.twig', $parameters);
     }
 
     #[Route('/etablissements/{slug}', name: 'app_establishment_show')]

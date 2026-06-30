@@ -5,15 +5,18 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use App\Enum\UserStatus;
 use App\Event\UserCreatedEvent;
+use App\Service\PasswordResetMailer;
 use App\Service\UserCreator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminRoute;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
@@ -24,6 +27,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 
@@ -32,6 +37,7 @@ class UserCrudController extends AbstractCrudController
     public function __construct(
         private UserCreator $userCreator,
         private EventDispatcherInterface $dispatcher,
+        private PasswordResetMailer $passwordResetMailer,
     ) {
     }
 
@@ -53,12 +59,53 @@ class UserCrudController extends AbstractCrudController
             });
     }
 
+    #[AdminRoute('reset-password')]
+    public function sendResetPassword(
+        AdminContext $context
+    ): RedirectResponse {
+        /** @var User $user */
+        $user = $context->getEntity()->getInstance();
+
+        try {
+            $this->passwordResetMailer->send($user);
+
+            $this->addFlash(
+                'success',
+                sprintf(
+                    'Un email de réinitialisation a été envoyé à %s.',
+                    $user->getEmail()
+                )
+            );
+        } catch (ResetPasswordExceptionInterface) {
+            $this->addFlash(
+                'warning',
+                'Un email de réinitialisation a déjà été envoyé récemment.'
+            );
+        }
+
+        $referer = $context->getRequest()->headers->get('referer');
+
+        if (!$referer) {
+            return $this->redirectToRoute('admin');
+        }
+
+        return $this->redirect($referer);
+    }
+
     public function configureActions(Actions $actions): Actions
     {
+        $resetPassword = Action::new(
+            'sendResetPassword',
+            'Réinit. le mot de passe'
+        )
+            ->linkToCrudAction('sendResetPassword')
+            ->setIcon('fa fa-key');
+
         return $actions
             ->disable(Action::DELETE)
             ->setPermission(Action::EDIT, 'ROLE_CN2E_ADMIN')
-            ->setPermission(Action::NEW, 'ROLE_SUPER_ADMIN');
+            ->setPermission(Action::NEW, 'ROLE_SUPER_ADMIN')
+            ->add(Crud::PAGE_INDEX, $resetPassword);
     }
 
     public function configureAssets(Assets $assets): Assets
@@ -102,8 +149,8 @@ class UserCrudController extends AbstractCrudController
                         </li>
 
                         <li>
-                            <strong>Administrateur CN2E :</strong>
-                            gestion des contenus, utilisateurs et validations CN2E.
+                            <strong>Administrateur de l\'organisation :</strong>
+                            gestion des contenus, utilisateurs et validations.
                         </li>
 
                         <li>
@@ -112,7 +159,7 @@ class UserCrudController extends AbstractCrudController
                         </li>
 
                         <li>
-                            <strong>Membre CN2E :</strong>
+                            <strong>Membre de l\'organisation :</strong>
                             accès aux contenus réservés aux adhérents.
                         </li>
                         
@@ -128,9 +175,9 @@ class UserCrudController extends AbstractCrudController
                 ->onlyOnForms() 
                 ->setChoices([
                     'Super administrateur' => 'ROLE_SUPER_ADMIN',
-                    'Administrateur CN2E' => 'ROLE_CN2E_ADMIN',
+                    'Administrateur de l\'organisation' => 'ROLE_CN2E_ADMIN',
                     'Administrateur local' => 'ROLE_LOCAL_ADMIN',
-                    'Membre CN2E' => 'ROLE_CN2E_MEMBER',
+                    'Membre de l\'organisation' => 'ROLE_CN2E_MEMBER',
                 ])
                 ->allowMultipleChoices()
                 ->addCssClass('js-user-form-roles')
@@ -148,7 +195,7 @@ class UserCrudController extends AbstractCrudController
                         </li>
 
                         <li>
-                            <strong>Membre CN2E :</strong>
+                            <strong>Membre de l\'organisation :</strong>
                             accès aux contenus réservés aux adhérents.
                         </li>
 
@@ -164,7 +211,7 @@ class UserCrudController extends AbstractCrudController
                 ->onlyOnForms()
                 ->setChoices([
                     'Administrateur local' => 'ROLE_LOCAL_ADMIN',
-                    'Membre CN2E' => 'ROLE_CN2E_MEMBER',
+                    'Membre de l\'organisation' => 'ROLE_CN2E_MEMBER',
                 ])
                 ->allowMultipleChoices()
                 ->addCssClass('js-user-form-roles')
@@ -187,7 +234,8 @@ class UserCrudController extends AbstractCrudController
         yield AssociationField::new('establishment', 'Établissement')
             ->setFormTypeOption('disabled', !$isNew);
 
-        yield TextField::new('profession', 'admin.user.profession');
+        yield TextField::new('profession', 'admin.user.profession')
+            ->onlyOnForms();
 
         yield Field::new('imageFile', 'admin.user.imageFile')
             ->setFormType(VichImageType::class)
@@ -209,9 +257,9 @@ class UserCrudController extends AbstractCrudController
             ->formatValue(function ($value, User $user) {
                 return match ($user->getPrimaryRole()) {
                     'ROLE_SUPER_ADMIN' => 'Super Admin',
-                    'ROLE_CN2E_ADMIN' => 'Admin CN2E',
+                    'ROLE_CN2E_ADMIN' => 'Admin organisation',
                     'ROLE_LOCAL_ADMIN' => 'Admin local',
-                    'ROLE_CN2E_MEMBER' => 'Membre CN2E',
+                    'ROLE_CN2E_MEMBER' => 'Membre organisation',
                     default => 'Utilisateur',
                 };
             });

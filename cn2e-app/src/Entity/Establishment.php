@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\EstablishmentAcademy;
 use App\Repository\EstablishmentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -35,6 +36,10 @@ class Establishment
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $region = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Choice(callback: [EstablishmentAcademy::class, 'values'])]
+    private ?string $academy = null;
 
     // TODO : une fois toutes les adresses mises, nullable : false
     #[Assert\NotBlank(message: 'establishment.address.required')]
@@ -161,6 +166,18 @@ class Establishment
     public function setRegion(string $region): static
     {
         $this->region = $region;
+
+        return $this;
+    }
+
+    public function getAcademy(): ?string
+    {
+        return $this->academy;
+    }
+
+    public function setAcademy(?string $academy): static
+    {
+        $this->academy = $academy;
 
         return $this;
     }

@@ -22,7 +22,7 @@
   </div>
 
   <p class="text-lg text-muted-foreground mb-8">
-    Le CN2E s'engage à assurer la protection des données personnelles collectées via son site
+    Le {{ siteInformation.shortName }} s'engage à assurer la protection des données personnelles collectées via son site
     et à garantir leur traitement conforme au Règlement Général sur la Protection des Données (RGPD).
   </p>
 
@@ -82,7 +82,7 @@
       <ul class="list-disc ml-6 space-y-2 text-muted-foreground">
         <li>Consentement (formulaire de contact)</li>
         <li>Exécution d’un contrat (comptes utilisateurs)</li>
-        <li>Intérêt légitime du CN2E</li>
+        <li>Intérêt légitime du {{ siteInformation.shortName }}</li>
       </ul>
     </section>
 
@@ -90,7 +90,7 @@
       <h2 class="text-2xl font-semibold">4. Destinataires des données</h2>
 
       <p class="text-muted-foreground">
-        Les données sont exclusivement accessibles aux membres habilités du CN2E.
+        Les données sont exclusivement accessibles aux membres habilités du {{ siteInformation.shortName }}.
       </p>
     </section>
 
@@ -117,8 +117,8 @@
         Accès, rectification, suppression, opposition, limitation et portabilité.
       </p>
 
-      <a href="mailto:secretariat.cn2e@gmail.com" class="text-primary hover:underline">
-        secretariat.cn2e@gmail.com
+      <a href="mailto:{{ siteInformation.contactEmail }}" class="text-primary hover:underline">
+        {{ siteInformation.contactEmail }}
       </a>
     </section>
 

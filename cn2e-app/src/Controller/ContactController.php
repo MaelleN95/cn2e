@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Form\ContactType;
+use App\Service\SiteInformationAccessor;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +14,11 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ContactController extends AbstractController
 {
+    public function __construct(
+        private SiteInformationAccessor $siteInformationAccessor,
+    ) {
+    }
+
     #[Route('/contact', name: 'app_contact')]
     public function contact(Request $request, MailerInterface $mailer): Response
     {
@@ -24,7 +30,7 @@ final class ContactController extends AbstractController
             $data = $form->getData();
 
             $email = (new TemplatedEmail())
-                ->from(new Address($_ENV['CONTACT_FROM'], 'Formulaire de contact CN2E'))
+                ->from(new Address($this->siteInformationAccessor->getSenderEmail(),sprintf('Formulaire de contact %s', $this->siteInformationAccessor->getShortName())))
                 ->replyTo(new Address($data['email'], $data['name']))
                 ->to(new Address($_ENV['CONTACT_TO']))
                 ->subject($data['objectMessage'])

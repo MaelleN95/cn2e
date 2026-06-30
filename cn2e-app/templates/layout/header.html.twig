@@ -5,6 +5,7 @@
   { route: 'app_event', label: 'Agenda' },
   { route: 'app_contact', label: 'Contact' }
 ] %}
+{% set canAccessProfile = app.user and (is_granted('ROLE_CN2E_MEMBER') or is_granted('ROLE_LOCAL_ADMIN')) %}
 
 <header
   class="fixed top-0 left-0 w-full z-2000 bg-white border-b border-border shadow-sm transition-transform duration-300"
@@ -26,13 +27,13 @@
           <div class="w-12 h-12 rounded flex items-center justify-center">
             <img
                 src="{{ asset('images/logos/logo-CN2E-black.png') }}"
-                alt="Logo du CN2E"
+                alt="Logo du {{ siteInformation.shortName }}"
             >
           </div>
         </a>
 
         {% if app.user %}
-          <span class="text-primary hidden sm:block">
+          <span class="text-primary block md:hidden xl:block">
             Bonjour, {{ app.user.firstName }} {{ app.user.lastName }}
           </span>
         {% endif %}
@@ -54,10 +55,69 @@
           </a>
         {% endfor %}
 
+        {% if canAccessProfile %}
+          <a href="{{ path('app_profile') }}"
+            class="px-4 py-2 2xl:py-1.5 border border-primary rounded hover:bg-primary hover:text-white transition-colors
+            {% if app.request.get('_route') == 'app_profile' %}
+              bg-primary text-white pointer-events-none
+            {% else %}
+              text-primary hover:text-primary
+            {% endif %}">
+
+            <svg class="w-5 h-5 block 2xl:hidden"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round">
+              <path d="M11.5 15H7a4 4 0 0 0-4 4v2"/>
+              <path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/>
+              <circle cx="10" cy="7" r="4"/>
+            </svg>
+
+            <span class="hidden 2xl:inline">
+              Mon profil
+            </span>
+
+            <span class="sr-only">Mon profil</span>
+
+          </a>
+        {% endif %}
+
         {% if app.user and is_granted('ROLE_LOCAL_ADMIN') %}
           <a href="{{ path('admin') }}"
-            class="px-4 py-2 border border-primary text-primary rounded hover:bg-primary hover:text-white transition-colors">
+            class="px-4 py-1.5 border border-primary text-primary rounded hover:bg-primary hover:text-white transition-colors">
+
+            <span class="lg:block hidden">
               Administration
+            </span>
+
+            <span class="lg:hidden block">
+              <span class="sr-only">Administration</span>
+
+              <svg class="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round">
+                <path d="M12 17v4"/>
+                <path d="m14.305 7.53.923-.382"/>
+                <path d="m15.228 4.852-.923-.383"/>
+                <path d="m16.852 3.228-.383-.924"/>
+                <path d="m16.852 8.772-.383.923"/>
+                <path d="m19.148 3.228.383-.924"/>
+                <path d="m19.53 9.696-.382-.924"/>
+                <path d="m20.772 4.852.924-.383"/>
+                <path d="m20.772 7.148.924.383"/>
+                <path d="M22 13v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/>
+                <path d="M8 21h8"/>
+                <circle cx="18" cy="6" r="3"/>
+              </svg>
+            </span>
+
           </a>
         {% endif %}
 
@@ -134,10 +194,26 @@
         </a>
       {% endfor %}
 
+      {% if canAccessProfile %}
+        <a href="{{ path('app_profile') }}"
+           data-action="click->mobile-menu#close"
+           class="transition-colors">
+          Mon profil
+        </a>
+      {% endif %}
+
+      {% if app.user and is_granted('ROLE_LOCAL_ADMIN') %}
+        <a href="{{ path('admin') }}"
+           data-action="click->mobile-menu#close"
+           class="transition-colors text-primary">
+          Administration
+        </a>
+      {% endif %}
+
       {% if app.user %}
         <a href="{{ path('app_logout') }}"
            data-action="click->mobile-menu#close"
-           class="text-primary hover:underline">
+           class="text-red-800 hover:underline">
           Déconnexion
         </a>
       {% else %}

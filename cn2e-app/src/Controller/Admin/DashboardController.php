@@ -49,7 +49,8 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Administration du CN2E');
+            ->setTitle('Administration')
+            ->setFaviconPath('images/logos/logo-CN2E-admin.png');
     }
 
     public function configureMenuItems(): iterable
@@ -116,6 +117,16 @@ class DashboardController extends AbstractDashboardController
                 'Formations',
                 'fa fa-graduation-cap',
                 'admin_academic_program_index'
+            );
+        }
+
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            yield MenuItem::section('Paramètres');
+
+            yield MenuItem::linkToRoute(
+                'Informations du site',
+                'fa fa-circle-info',
+                'admin_site_information_index'
             );
         }
     }

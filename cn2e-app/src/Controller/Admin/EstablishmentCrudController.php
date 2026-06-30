@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Establishment;
+use App\Enum\EstablishmentAcademy;
 use App\Service\EstablishmentGeocoder;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
@@ -11,19 +12,25 @@ use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Response;
 
 class EstablishmentCrudController extends AbstractCrudController
 {
     public function __construct(
         private EstablishmentGeocoder $geocoder,
-        private Security $security
+        private Security $security,
+        private AdminUrlGenerator $adminUrlGenerator,
     ) {}
 
     public static function getEntityFqcn(): string
@@ -74,6 +81,33 @@ class EstablishmentCrudController extends AbstractCrudController
             ->setPermission(Action::EDIT, 'ESTABLISHMENT_EDIT');
     }
 
+    public function index(AdminContext $context): KeyValueStore|Response
+    {
+        $isCn2eAdmin = $this->isGranted('ROLE_CN2E_ADMIN');
+        $isSuperAdmin = $this->isGranted('ROLE_SUPER_ADMIN');
+        $isLocalAdmin = $this->isGranted('ROLE_LOCAL_ADMIN') && !$isCn2eAdmin && !$isSuperAdmin;
+
+        if (!$isLocalAdmin) {
+            return parent::index($context);
+        }
+
+        /** @var \App\Entity\User|null $user */
+        $user = $this->security->getUser();
+        $establishment = $user?->getEstablishment();
+
+        if (!$establishment) {
+            return parent::index($context);
+        }
+
+        return $this->redirect(
+            $this->adminUrlGenerator
+                ->setController(self::class)
+                ->setAction(Action::EDIT)
+                ->setEntityId($establishment->getId())
+                ->generateUrl()
+        );
+    }
+
     public function configureFields(string $pageName): iterable
     {
         yield TextField::new('name', 'admin.establishment.name');
@@ -89,6 +123,9 @@ class EstablishmentCrudController extends AbstractCrudController
 
         yield TextField::new('city', 'admin.establishment.city')
             ->onlyOnIndex();
+
+        yield ChoiceField::new('academy', 'admin.establishment.academy')
+            ->setChoices($this->getAcademyChoices());
 
         yield TextField::new('phone', 'admin.establishment.phone');
         yield TextField::new('email', 'admin.establishment.email');
@@ -145,5 +182,10 @@ class EstablishmentCrudController extends AbstractCrudController
         ->setParameter('establishment', $user->getEstablishment());
 
         return $qb;
+    }
+
+    private function getAcademyChoices(): array
+    {
+        return EstablishmentAcademy::choices();
     }
 }

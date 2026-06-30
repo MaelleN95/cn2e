@@ -3,6 +3,7 @@
 namespace App\Validator;
 
 use App\Entity\User;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -11,7 +12,8 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 class HasCn2eRoleValidator extends ConstraintValidator
 {
     public function __construct(
-        private Security $security
+        private Security $security,
+        private RequestStack $requestStack,
     ) {}
 
     public function validate(mixed $value, Constraint $constraint): void
@@ -22,6 +24,18 @@ class HasCn2eRoleValidator extends ConstraintValidator
         }
 
         if (!$value instanceof User) {
+            return;
+        }
+
+        $currentUser = $this->security->getUser();
+        $route = $this->requestStack->getCurrentRequest()?->attributes->get('_route');
+
+        // Sur la page de profil personnel, le champ cn2eRole s'affiche en lecture seule.
+        if (
+            $route === 'app_profile'
+            && $currentUser instanceof User
+            && $currentUser->getId() === $value->getId()
+        ) {
             return;
         }
 

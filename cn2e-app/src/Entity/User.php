@@ -84,7 +84,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $articles;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Establishment $establishment = null;
 
     // Pour le message optionnel lors du registerForm

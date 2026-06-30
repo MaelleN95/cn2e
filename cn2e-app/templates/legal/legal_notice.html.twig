@@ -31,17 +31,20 @@
 
       <div class="bg-accent p-6 rounded">
         <p class="mb-2">
-          <strong>Comité National des EREA/LEA et ERPD (CN2E)</strong>
+          <strong>{{ siteInformation.displayName }}</strong>
         </p>
 
-        <p class="text-muted-foreground mb-1">29 Rue de Cronstadt</p>
-        <p class="text-muted-foreground mb-1">75015 Paris</p>
-        <p class="text-muted-foreground mb-1">France</p>
+        <p class="text-muted-foreground mb-1">{{ siteInformation.postalAddressLine1 }}</p>
+        {% if siteInformation.postalAddressLine2 %}
+          <p class="text-muted-foreground mb-1">{{ siteInformation.postalAddressLine2 }}</p>
+        {% endif %}
+        <p class="text-muted-foreground mb-1">{{ siteInformation.postalCode }} {{ siteInformation.city }}</p>
+        <p class="text-muted-foreground mb-1">{{ siteInformation.country }}</p>
 
         <p class="text-muted-foreground mt-3">
           Email :
-          <a href="mailto:secretariat.cn2e@gmail.com" class="text-primary hover:underline">
-            secretariat.cn2e@gmail.com
+          <a href="mailto:{{ siteInformation.contactEmail }}" class="text-primary hover:underline">
+            {{ siteInformation.contactEmail }}
           </a>
         </p>
       </div>
@@ -51,11 +54,11 @@
       <h2 class="text-2xl font-semibold mb-4">2. Responsable de la publication</h2>
 
       <p class="text-muted-foreground mb-4">
-        La responsable de la publication est la présidente du CN2E ou toute personne habilitée.
+        La responsable de la publication est la présidente du {{ siteInformation.shortName }} ou toute personne habilitée.
       </p>
 
       <p class="text-muted-foreground">
-        La gestion éditoriale est assurée par les membres du CN2E et les directeurs des établissements partenaires.
+        La gestion éditoriale est assurée par les membres du {{ siteInformation.shortName }} et les directeurs des établissements partenaires.
       </p>
     </section>
 
@@ -124,7 +127,7 @@
       </p>
 
       <p class="text-muted-foreground mb-4">
-        Sauf mention contraire, ces contenus sont la propriété du CN2E ou de ses partenaires.
+        Sauf mention contraire, ces contenus sont la propriété du {{ siteInformation.shortName }} ou de ses partenaires.
       </p>
 
       <p class="text-muted-foreground">
@@ -136,11 +139,11 @@
       <h2 class="text-2xl font-semibold mb-4">6. Responsabilité</h2>
 
       <p class="text-muted-foreground mb-4">
-        Le CN2E s’efforce de garantir l’exactitude des informations, mais des erreurs peuvent survenir.
+        Le {{ siteInformation.shortName }} s’efforce de garantir l’exactitude des informations, mais des erreurs peuvent survenir.
       </p>
 
       <p class="text-muted-foreground mb-4">
-        Le CN2E ne peut être tenu responsable des dommages liés à l’utilisation du site.
+        Le {{ siteInformation.shortName }} ne peut être tenu responsable des dommages liés à l’utilisation du site.
       </p>
 
       <p class="text-muted-foreground">
@@ -165,8 +168,8 @@
 
       <p class="text-muted-foreground">
         Contact :
-        <a href="mailto:secretariat.cn2e@gmail.com" class="text-primary hover:underline">
-          secretariat.cn2e@gmail.com
+        <a href="mailto:{{ siteInformation.contactEmail }}" class="text-primary hover:underline">
+          {{ siteInformation.contactEmail }}
         </a>
       </p>
     </section>

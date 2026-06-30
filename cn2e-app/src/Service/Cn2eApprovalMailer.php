@@ -13,6 +13,7 @@ class Cn2eApprovalMailer
     public function __construct(
         private MailerInterface $mailer,
         private UrlGeneratorInterface $urlGenerator,
+        private SiteInformationAccessor $siteInformationAccessor,
     ) {
     }
 
@@ -27,7 +28,7 @@ class Cn2eApprovalMailer
         );
 
         $email = (new TemplatedEmail())
-            ->from(new Address($_ENV['CONTACT_FROM'], 'CN2E'))
+            ->from(new Address($this->siteInformationAccessor->getSenderEmail(),$this->siteInformationAccessor->getShortName()))
             ->to(new Address($_ENV['CONTACT_TO']))
             ->subject('Nouvelle demande d’adhésion')
             ->htmlTemplate('emails/cn2e_user_validation.html.twig')

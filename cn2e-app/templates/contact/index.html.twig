@@ -15,7 +15,7 @@
     <h1 class="mb-4">Nous contacter</h1>
     <p class="text-muted-foreground max-w-3xl mx-auto">
       Vous êtes professionnel de l'enseignement adapté, partenaire institutionnel ou souhaitez obtenir
-      des informations sur le CN2E ? N'hésitez pas à nous contacter.
+      des informations sur le {{ siteInformation.shortName }} ? N'hésitez pas à nous contacter.
     </p>
   </div>
 
@@ -101,10 +101,13 @@
             <div>
               <h3 class="mb-2">Adresse</h3>
               <p class="text-muted-foreground">
-                Comité National des EREA/LEA et ERPD - CN2E<br>
-                29 Rue de Cronstadt<br>
-                75015 Paris<br>
-                France
+                {{ siteInformation.displayName }}<br>
+                {{ siteInformation.postalAddressLine1 }}<br>
+                {% if siteInformation.postalAddressLine2 %}
+                  {{ siteInformation.postalAddressLine2 }}<br>
+                {% endif %}
+                {{ siteInformation.postalCode }} {{ siteInformation.city }}<br>
+                {{ siteInformation.country }}
               </p>
             </div>
           </div>
@@ -120,8 +123,8 @@
           </svg>
             <div>
               <h3 class="mb-2">Email</h3>
-              <a href="mailto:secretariat.cn2e@gmail.com" class="text-primary hover:underline">
-                secretariat.cn2e@gmail.com
+              <a href="mailto:{{ siteInformation.contactEmail }}" class="text-primary hover:underline">
+                {{ siteInformation.contactEmail }}
               </a>
             </div>
           </div>

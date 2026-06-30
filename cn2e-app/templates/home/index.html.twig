@@ -17,7 +17,7 @@
     <div class="max-w-7xl mx-auto text-center">
 
         <h1 class="text-4xl md:text-5xl mb-4">
-            Comité National des EREA/LEA et ERPD
+            {{ siteInformation.organizationName }}
         </h1>
 
         <p class="text-xl md:text-2xl mb-8 text-white/90 max-w-3xl mx-auto">
@@ -63,7 +63,7 @@
                                 "
                                 sizes="(max-width: 768px) calc(100vw - 32px), 800px"
                                  alt="{{ article.title }}"
-                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                                 class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-300"
                             >
                         </div>
 
@@ -180,7 +180,7 @@
 
     <div class="max-w-7xl mx-auto">
 
-        <h2 class="text-center mb-12">Le CN2E en bref</h2>
+        <h2 class="text-center mb-12">Le {{ siteInformation.shortName }} en bref</h2>
 
         <div class="grid md:grid-cols-3 gap-8">
 
@@ -235,10 +235,10 @@
 
     <div class="max-w-7xl mx-auto text-center mb-12">
 
-        <h2 class="mb-4">L'équipe du CN2E</h2>
+        <h2 class="mb-4">L'équipe du {{ siteInformation.shortName }}</h2>
 
         <p class="text-muted-foreground max-w-2xl mx-auto">
-            Le bureau du CN2E est composé de professionnels de l'enseignement adapté, pour représenter et coordonner le réseau des EREA/LEA et ERPD.
+            Le bureau du {{ siteInformation.shortName }} est composé de professionnels de l'enseignement adapté, pour représenter et coordonner le réseau des EREA/LEA et ERPD.
         </p>
 
     </div>

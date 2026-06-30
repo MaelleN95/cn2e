@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Establishment;
+use App\Enum\EstablishmentAcademy;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -24,6 +25,7 @@ class EstablishmentFixtures extends Fixture
             $e->setCity($faker->city());
             $e->setDepartment($faker->departmentNumber());
             $e->setRegion($faker->region());
+            $e->setAcademy($faker->randomElement(EstablishmentAcademy::values()));
             $e->setAddress($faker->address());
             $e->setAddressHash(md5($e->getAddress()));
             $e->setLatitude($faker->latitude(42.0, 50.8));

@@ -7,6 +7,7 @@ use App\Enum\UserStatus;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
 use App\Service\Cn2eApprovalMailer;
+use App\Service\SiteInformationAccessor;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,6 +28,7 @@ class RegistrationController extends AbstractController
     public function __construct(
         private EmailVerifier $emailVerifier,
         private Cn2eApprovalMailer $cn2eApprovalMailer,
+        private SiteInformationAccessor $siteInformationAccessor,
     ) {
     }
 
@@ -75,7 +77,7 @@ class RegistrationController extends AbstractController
                 // générer un token de confirmation d'email et envoyer l'email de confirmation
                 $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                     (new TemplatedEmail())
-                        ->from(new Address($_ENV['CONTACT_FROM'], 'CN2E'))
+                        ->from(new Address($this->siteInformationAccessor->getSenderEmail(), $this->siteInformationAccessor->getShortName()))
                         ->to((string) $user->getEmail())
                         ->subject('Confirmez votre adresse email')
                         ->htmlTemplate('emails/confirmation_email.html.twig')
@@ -179,7 +181,7 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_register');
         }
 
-        $this->addFlash('success', 'Votre adresse email a bien été vérifiée. Votre demande est maintenant en attente de validation par l’équipe du CN2E.');
+        $this->addFlash('success', sprintf('Votre adresse email a bien été vérifiée. Votre demande est maintenant en attente de validation par l’équipe du %s.', $this->siteInformationAccessor->getShortName()));
 
         return $this->redirectToRoute('app_login');
     }
@@ -218,7 +220,7 @@ class RegistrationController extends AbstractController
                 'app_verify_email',
                 $user,
                 (new TemplatedEmail())
-                    ->from(new Address($_ENV['CONTACT_FROM'], 'CN2E'))
+                    ->from(new Address($this->siteInformationAccessor->getSenderEmail(), $this->siteInformationAccessor->getShortName()))
                     ->to((string) $user->getEmail())
                     ->subject('Confirmez votre adresse email')
                     ->htmlTemplate('emails/confirmation_email.html.twig')

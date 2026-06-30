@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Repository\UserRepository;
+use App\Service\SiteInformationAccessor;
 use League\Csv\Reader;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -19,6 +20,7 @@ class SendImportedUsersWelcomeCommand extends Command
     public function __construct(
         private MailerInterface $mailer,
         private UserRepository $userRepository,
+        private SiteInformationAccessor $siteInformationAccessor,
     ) {
         parent::__construct();
     }
@@ -92,9 +94,9 @@ class SendImportedUsersWelcomeCommand extends Command
             $appUrl = rtrim($_ENV['APP_URL'] ?? $_ENV['DEFAULT_URI'] ?? 'https://cn2e.fr', '/');
 
             $emailMessage = (new TemplatedEmail())
-                ->from(new Address($_ENV['CONTACT_FROM'], 'CN2E'))
+                ->from(new Address($this->siteInformationAccessor->getSenderEmail(),$this->siteInformationAccessor->getShortName()))
                 ->to($email)
-                ->subject('Bienvenue sur le nouveau site du CN2E')
+                ->subject(sprintf('Bienvenue sur le nouveau site du %s', $this->siteInformationAccessor->getShortName()))
                 ->htmlTemplate('emails/user_welcome.html.twig')
                 ->context([
                         'user' => $user,
