@@ -54,6 +54,7 @@ jobs:
           APP_ENV=prod
           APP_DEBUG=0
           DEFAULT_URI=${{ env.DEFAULT_URI }}
+          ASSET_VERSION=${{ github.sha }}
           MESSENGER_TRANSPORT_DSN=sync://
           CONTACT_FROM=${{ secrets.EMAIL_TO_SEND }}
           CONTACT_TO=${{ secrets.EMAIL_FOR_RECEIVING }}
