@@ -1,3 +1,4 @@
+/* stimulusFetch: 'lazy' */
 import { Controller } from '@hotwired/stimulus';
 import '../vendor/leaflet/leaflet.css';
 import '../vendor/leaflet/leaflet.js';
