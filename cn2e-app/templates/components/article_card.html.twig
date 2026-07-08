@@ -1,5 +1,5 @@
 <a href="{{ path('app_article_show', { slug: article.slug }) }}"
-   class="bg-white border border-border rounded overflow-hidden hover:shadow-md transition-shadow group">
+   class="flex flex-col bg-white border border-border rounded overflow-hidden hover:shadow-md transition-shadow group">
 
   {% if article.imageName %}
     <div class="aspect-video overflow-hidden bg-secondary">
@@ -17,7 +17,7 @@
     </div>
   {% endif %}
 
-  <div class="p-6">
+  <div class="flex flex-col flex-1 p-6">
 
     <div class="flex items-center justify-between mb-3">
 
@@ -33,13 +33,6 @@
           {{ article.publishedAt|format_datetime(locale='fr', pattern="d MMMM yyyy") }}
         </time>
       </div>
-
-      {% if article.category %}
-        <span class="bg-primary/10 text-primary px-3 py-1 rounded text-sm">
-          {{ article.category }}
-        </span>
-      {% endif %}
-
     </div>
 
     <h3 class="mb-3">{{ article.title }}</h3>
@@ -48,7 +41,13 @@
       {{ article.shortDescription }}
     </p>
 
-    <div class="text-right mt-6 pt-4 border-t border-border">
+    <div class="flex items-center justify-between mt-auto pt-4 border-t border-border">
+      {% if article.category %}
+        <span class="bg-primary/10 text-primary px-3 py-1 rounded text-sm">
+          {{ article.category }}
+        </span>
+      {% endif %}
+
       <span class="text-primary inline-flex items-center gap-1 text-sm">
         <span class="group-hover:underline">Lire</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
