@@ -61,11 +61,13 @@ services:
 
   tailwind:
     build:
-      context: ./docker/tailwind
+      context: ./cn2e-app
+      dockerfile: ../docker/tailwind/Dockerfile
     container_name: cn2e-tailwind
     working_dir: /var/www/html
     volumes:
       - ./cn2e-app:/var/www/html
+      - /var/www/html/node_modules
     restart: unless-stopped
     stdin_open: true
     tty: true
