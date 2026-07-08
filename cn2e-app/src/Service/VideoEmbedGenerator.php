@@ -49,7 +49,7 @@ class VideoEmbedGenerator
 
         return match (true) {
             str_contains($host, 'youtube.com') => $this->youtube($url),
-            str_contains($host, 'youtu.be') => $this->youtubeShort($url),
+            str_contains($host, 'youtu.be') => $this->youtubeShared($url),
             str_contains($host, 'dailymotion.com') => $this->dailymotion($url),
             str_contains($host, 'vimeo.com') => $this->vimeo($url),
             default => null,
@@ -67,7 +67,7 @@ class VideoEmbedGenerator
         return 'https://www.youtube.com/embed/' . $params['v'];
     }
 
-    private function youtubeShort(string $url): ?string
+    private function youtubeShared(string $url): ?string
     {
         $path = trim(parse_url($url, PHP_URL_PATH), '/');
 
