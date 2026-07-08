@@ -69,6 +69,11 @@ class Article
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
+    #[Assert\Url(message: 'article.video_url.invalid')]
+    #[Assert\Length(max: 255, maxMessage: 'article.video_url.max')] 
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $videoUrl = null;
+
     public function __construct()
     {
         $this->publishedAt = new \DateTimeImmutable();
@@ -207,6 +212,18 @@ class Article
     public function setAuthor(?User $author): static
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getVideoUrl(): ?string
+    {
+        return $this->videoUrl;
+    }
+
+    public function setVideoUrl(?string $videoUrl): static
+    {
+        $this->videoUrl = $videoUrl;
 
         return $this;
     }

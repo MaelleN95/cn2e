@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Article;
+use App\Form\DocumentType;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
@@ -12,8 +13,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
-use App\Form\DocumentType;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
@@ -21,6 +20,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class ArticleCrudController extends AbstractCrudController
@@ -53,6 +53,8 @@ class ArticleCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        yield BooleanField::new('isMembersOnly', 'admin.article.isMembersOnly');
+
         yield TextField::new('title', 'admin.article.title');
 
         yield DateField::new('publishedAt', 'admin.article.publishedAt')
@@ -91,13 +93,9 @@ class ArticleCrudController extends AbstractCrudController
                 'by_reference' => false,
             ]);
 
-        yield BooleanField::new('isMembersOnly', 'admin.article.isMembersOnly');
-
-
-        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-            yield AssociationField::new('author', 'admin.article.author')
-                ->hideOnForm();
-        }
+        yield UrlField::new('videoUrl', 'admin.article.videoUrl')
+            ->setHelp('Collez uniquement le lien de la vidéo.')
+            ->onlyOnForms();
     }
 
     public function createIndexQueryBuilder(

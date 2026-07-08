@@ -54,8 +54,9 @@ admin:
     content: Contenu
     imageFile: Image
     category: Catégorie
-    isMembersOnly: Réservé aux membres
+    isMembersOnly: Article accessible uniquement aux membres du CN2E
     author: Auteur
+    videoUrl: Url de la vidéo (YouTube, Vimeo, ou Dailymotion)
   event:
     singular: Événement
     plural: Événements

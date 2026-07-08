@@ -113,9 +113,21 @@
       {{ article.content|raw }}
     </div>
 
+    {% if article.videoUrl %}
+      <div class="my-10">
+        <h2 class="font-semibold mb-6">
+          Vidéo associée
+        </h2>
+
+        <div class="aspect-video w-full overflow-hidden rounded border border-border shadow-sm">
+          {{ article.videoUrl|video_embed }}
+        </div>
+      </div>
+    {% endif %}
+
     {% if article.documents|length > 0 %}
       <div class="my-10">
-        <h2 class="text-2xl font-semibold mb-6">
+        <h2 class="font-semibold mb-6">
           Documents associés
         </h2>
 

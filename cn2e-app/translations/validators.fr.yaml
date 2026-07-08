@@ -50,6 +50,10 @@ article:
   members_only:
     required: "Le champ 'réservé aux membres' est obligatoire."
 
+  video_url:
+    invalid: "L'URL de la vidéo n'est pas valide."
+    max: "L'URL de la vidéo ne peut pas dépasser {{ limit }} caractères." 
+
   documents:
     max: "Le nombre maximum de documents est de {{ limit }}."
 
