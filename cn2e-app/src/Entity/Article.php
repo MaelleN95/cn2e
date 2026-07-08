@@ -71,7 +71,7 @@ class Article
 
     #[Assert\Url(message: 'article.video_url.invalid')]
     #[Assert\Length(max: 255, maxMessage: 'article.video_url.max')] 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $videoUrl = null;
 
     public function __construct()
