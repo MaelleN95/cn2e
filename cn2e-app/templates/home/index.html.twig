@@ -45,9 +45,12 @@
 
             {% for article in articles %}
 
-                <a href="{{ path('app_article_show', {slug: article.slug}) }}"
-                   class="bg-white rounded border border-border hover:shadow-md transition overflow-hidden group
-                          {{ loop.index == 1 ? 'md:col-span-2 md:row-span-2' : '' }}">
+                {% if article.isMembersOnly and not is_granted('ROLE_CN2E_MEMBER') %}
+                    {% include 'components/indexpage_article_locked_card.html.twig' with { article: article } %}
+                {% else %}
+                    <a href="{{ path('app_article_show', {slug: article.slug}) }}"
+                       class="bg-white rounded border border-border hover:shadow-md transition overflow-hidden group
+                              {{ loop.index == 1 ? 'md:col-span-2 md:row-span-2' : '' }}">
 
                     {% if article.imageName %}
 
@@ -106,7 +109,8 @@
 
                     </div>
 
-                </a>
+                    </a>
+                {% endif %}
 
             {% endfor %}
 

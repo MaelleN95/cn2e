@@ -1,0 +1,34 @@
+<div class="bg-white border border-border rounded overflow-hidden relative group">
+    <a href="{{ path('app_login') }}" title="Se connecter pour accéder au contenu réservé aux membres">
+        <div class="p-4 bg-secondary/50">
+            <div class="flex items-center justify-center group-hover:scale-105 transition-transform duration-300"> 
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round"
+                    class="w-12 h-12 p-2 text-muted-foreground">
+                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                <span class="text-muted-foreground font-medium">
+                    Contenu réservé aux membres
+                </span>
+            </div>
+        </div>
+
+        <div class="p-6">
+
+            <h3 class="mb-3 text-muted-foreground">
+                {{ article.title }}
+            </h3>
+
+            <p class="text-muted-foreground mb-4 line-clamp-4">
+            {{ article.shortDescription }}
+            </p>
+
+            <a href="{{ path('app_login') }}"
+            class="text-primary group-hover:underline inline-flex items-center gap-1 text-sm">
+            Se connecter pour y accéder
+            </a>
+
+        </div>
+    </a>
+</div>

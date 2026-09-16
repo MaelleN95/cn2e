@@ -14,7 +14,7 @@ final class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(ArticleRepository $articleRepository, EstablishmentRepository $establishmentRepository, UserRepository $userRepository): Response
     {
-        $articles = $articleRepository->findLatestPublic(3);
+        $articles = $articleRepository->findLatest(3);
         $establishments = $establishmentRepository->findAll();
         $team = array_slice($userRepository->findCn2eMembers(), 0, 6);
 
