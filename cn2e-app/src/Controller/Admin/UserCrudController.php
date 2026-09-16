@@ -136,6 +136,14 @@ class UserCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         $isNew = $pageName === Crud::PAGE_NEW;
+        $editedUser = $this->getContext()?->getEntity()->getInstance();
+        $currentUser = $this->getUser();
+        $canChangeEstablishment = $isNew
+            || (
+                $editedUser instanceof User
+                && $currentUser instanceof User
+                && $editedUser->getId() === $currentUser->getId()
+            );
         
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
 
@@ -232,7 +240,7 @@ class UserCrudController extends AbstractCrudController
             ->setFormTypeOption('disabled', !$isNew);
         
         yield AssociationField::new('establishment', 'Établissement')
-            ->setFormTypeOption('disabled', !$isNew);
+            ->setFormTypeOption('disabled', !$canChangeEstablishment);
 
         yield TextField::new('profession', 'admin.user.profession')
             ->onlyOnForms();
