@@ -7,14 +7,13 @@ use App\Repository\EventRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
 #[Vich\Uploadable]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: EventRepository::class)]
-class Event
+class Event implements SluggableInterface
 {
     use ImageUploadTrait;
     
@@ -23,7 +22,7 @@ class Event
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $slug = null;
 
     #[Assert\NotBlank(message: 'event.title.required')]
@@ -89,13 +88,9 @@ class Event
         return $this;
     }
 
-    #[ORM\PrePersist]
-    #[ORM\PreUpdate]
-    public function updateSlug(): void
+    public function getSlugSource(): ?string
     {
-        $this->slug = (new AsciiSlugger())
-            ->slug($this->title)
-            ->lower();
+        return $this->title;
     }
 
     public function getTitle(): ?string

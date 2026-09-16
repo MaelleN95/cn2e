@@ -8,19 +8,17 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: EstablishmentRepository::class)]
-class Establishment
+class Establishment implements SluggableInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
     
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $slug = null;
 
     #[Assert\NotBlank(message: 'establishment.name.required')]
@@ -113,13 +111,9 @@ class Establishment
         return $this;
     }
 
-    #[ORM\PrePersist]
-    #[ORM\PreUpdate]
-    public function updateSlug(): void
+    public function getSlugSource(): ?string
     {
-        $this->slug = (new AsciiSlugger())
-            ->slug($this->name)
-            ->lower();
+        return $this->name;
     }
 
     public function getName(): ?string
